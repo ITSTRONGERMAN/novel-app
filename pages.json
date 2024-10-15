@@ -1,0 +1,43 @@
+{
+	"pages": [{
+			"path": "pages/home/index",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "components/home/mid-area/mid-area",
+			"style": {
+				"navigationBarTitleText": ""
+			}
+		}
+	],
+	// 底部tabbar
+	"tabBar": {
+		// "list": [{
+		// 		"pagePath": "pages/home/index",
+		// 		"text": "书城"
+		// 	},
+		// 	{
+		// 		// "pagePath": "pages/book/book",
+		// 		"text": "书架"
+		// 	},
+		// 	{
+		// 		// "pagePath": "pages/class/class",
+		// 		"text": "分类"
+		// 	},
+		// 	{
+		// 		// "pagePath": "pages/user/user",
+		// 		"text": "我的"
+		// 	}
+		// ]
+	},
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "uni-app",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8",
+		"bounce": "none"
+	},
+	"uniIdRouter": {}
+}

@@ -1,0 +1,77 @@
+<template>
+	<view class="home">
+		<view class="home-top">
+			<view class="status-bar"></view>
+			<view class="search-box">
+				<uv-search shape="round" :showAction="false" disabled></uv-search>
+			</view>
+			<!-- 顶部导航栏 -->
+			<topTabbarVue :value="parseInt(currentActiveTabbar)" @change="handelTopChange" />
+		</view>
+		<!-- 中部内容显示区 -->
+		<midAreaVue :height="midAreaHeight" :length="2" :current="currentActiveTabbar" @pageChange="pageChange">
+			<midAreaItemVue :height="midAreaHeight">
+				<recommedVue />
+				<view class="status-bar"></view>
+				<recommedVue />
+				<view class="status-bar"></view>
+				<recommedVue />
+			</midAreaItemVue>
+			<midAreaItemVue :height="midAreaHeight">
+				2
+			</midAreaItemVue>
+		</midAreaVue>
+		<!-- 底部导航栏 -->
+		<bottomTabbarVue />
+	</view>
+</template>
+
+<script setup>
+	import topTabbarVue from '../../components/top-tabbar/top-tabbar.vue';
+	import bottomTabbarVue from '../../components/bottom-tabbar/bottom-tabbar.nvue';
+	import midAreaVue from '../../components/home/mid-area/mid-area.vue';
+	import midAreaItemVue from '../../components/home/mid-area/mid-area-item.vue';
+	import getSystemInfo from '../../utiles/getSystemInfo';
+	import getSelectorInfo from '../../utiles/getSelectorInfo';
+	import recommedVue from '../../components/home/mid-area/recommed.vue';
+	recommedVue
+	import {
+		onMounted,
+		ref,
+		getCurrentInstance
+	} from 'vue'
+	// 中间区域高度
+	const midAreaHeight = ref(0)
+	// 当前激活的tabBar
+	const currentActiveTabbar = ref(0)
+	onMounted(() => {
+		getMidAreaHeight()
+	})
+	// 计算中部区域高度
+	const getMidAreaHeight = async () => {
+		const instance = await getCurrentInstance();
+		const systemInfo = await getSystemInfo()
+		const topInfo = await getSelectorInfo(instance, ".home-top")
+		midAreaHeight.value = systemInfo.windowHeight - topInfo.height - 50
+	}
+	const pageChange = (e) => {
+		if (e == 'l') {
+			currentActiveTabbar.value--;
+		} else if (e == 'r') {
+			currentActiveTabbar.value++;
+		}
+	}
+	const handelTopChange = (e) => {
+		currentActiveTabbar.value = e.index
+	}
+</script>
+
+<style lang="scss" scoped>
+	.home {
+		.search-box {
+			margin: 30rpx;
+			margin-top: 0;
+			margin-bottom: 10rpx;
+		}
+	}
+</style>

@@ -1,0 +1,16 @@
+{
+    "id": "fish-bear",
+    "name": "xTab",
+    "displayName": "xTab",
+    "version": "1.0.0",
+    "description": "基础tab切换左右滑动切换，要实现其他功能直接稍微修改一下就是，简单的很，试试水，",
+    "keywords": [
+        "tab"
+    ],
+    "dcloudext": {
+        "category": [
+            "前端组件",
+            "通用组件"
+        ]
+    }
+}

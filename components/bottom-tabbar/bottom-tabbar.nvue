@@ -1,0 +1,32 @@
+<template>
+	<uv-tabbar :value="value">
+		<uv-tabbar-item iconSize="25" :text="item.name" :icon="item.icon" v-for="item,index in list"
+			:key="index"></uv-tabbar-item>
+	</uv-tabbar>
+</template>
+
+<script setup>
+	import {
+		ref
+	} from "vue"
+	const value = ref(0)
+	const list = [{
+			name: "首页",
+			icon: 'home-fill'
+		},
+		{
+			name: "分类",
+			icon: "grid-fill"
+		},
+		{
+			name: "我的",
+			icon: "account"
+		}
+	]
+</script>
+
+<style lang="scss">
+	:deep(.uv-tabbar) {
+		box-sizing: border-box;
+	}
+</style>
