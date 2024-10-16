@@ -1307,7 +1307,7 @@ if (uni.restoreGlobal) {
     }
     return target;
   };
-  const _sfc_main$e = {
+  const _sfc_main$h = {
     name: "uv-icon",
     emits: ["click"],
     mixins: [mpMixin, mixin, props$5],
@@ -1368,7 +1368,7 @@ if (uni.restoreGlobal) {
       }
     }
   };
-  function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$g(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock(
       "view",
       {
@@ -1412,7 +1412,7 @@ if (uni.restoreGlobal) {
       /* CLASS */
     );
   }
-  const __easycom_0$4 = /* @__PURE__ */ _export_sfc(_sfc_main$e, [["render", _sfc_render$d], ["__scopeId", "data-v-b7a6dd5d"], ["__file", "D:/APP/novel-app/novel-app/uni_modules/uv-icon/components/uv-icon/uv-icon.vue"]]);
+  const __easycom_0$4 = /* @__PURE__ */ _export_sfc(_sfc_main$h, [["render", _sfc_render$g], ["__scopeId", "data-v-b7a6dd5d"], ["__file", "D:/APP/novel-app/novel-app/uni_modules/uv-icon/components/uv-icon/uv-icon.vue"]]);
   const props$4 = {
     props: {
       value: {
@@ -1540,7 +1540,7 @@ if (uni.restoreGlobal) {
       ...(_h = (_g = uni.$uv) == null ? void 0 : _g.props) == null ? void 0 : _h.search
     }
   };
-  const _sfc_main$d = {
+  const _sfc_main$g = {
     name: "uv-search",
     emits: ["click", "input", "change", "clear", "search", "custom", "focus", "blur", "clickIcon", "update:modelValue"],
     mixins: [mpMixin, mixin, props$4],
@@ -1632,7 +1632,7 @@ if (uni.restoreGlobal) {
       }
     }
   };
-  function _sfc_render$c(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$f(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_uv_icon = resolveEasycom(vue.resolveDynamicComponent("uv-icon"), __easycom_0$4);
     return vue.openBlock(), vue.createElementBlock(
       "view",
@@ -1724,8 +1724,8 @@ if (uni.restoreGlobal) {
       /* STYLE */
     );
   }
-  const __easycom_0$3 = /* @__PURE__ */ _export_sfc(_sfc_main$d, [["render", _sfc_render$c], ["__scopeId", "data-v-46cbdd03"], ["__file", "D:/APP/novel-app/novel-app/uni_modules/uv-search/components/uv-search/uv-search.vue"]]);
-  const _sfc_main$c = {
+  const __easycom_0$3 = /* @__PURE__ */ _export_sfc(_sfc_main$g, [["render", _sfc_render$f], ["__scopeId", "data-v-46cbdd03"], ["__file", "D:/APP/novel-app/novel-app/uni_modules/uv-search/components/uv-search/uv-search.vue"]]);
+  const _sfc_main$f = {
     __name: "top-tabbar",
     props: {
       value: {
@@ -1744,6 +1744,9 @@ if (uni.restoreGlobal) {
         },
         {
           name: "漫画"
+        },
+        {
+          name: "壁纸"
         }
       ];
       const handelChangeTabbarItem = (e) => {
@@ -1754,7 +1757,7 @@ if (uni.restoreGlobal) {
       return __returned__;
     }
   };
-  function _sfc_render$b(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$e(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("view", { class: "top-tapbar" }, [
       vue.createElementVNode("view", { class: "l" }, [
         (vue.openBlock(), vue.createElementBlock(
@@ -1783,7 +1786,7 @@ if (uni.restoreGlobal) {
       )
     ]);
   }
-  const topTabbarVue = /* @__PURE__ */ _export_sfc(_sfc_main$c, [["render", _sfc_render$b], ["__scopeId", "data-v-f08916d4"], ["__file", "D:/APP/novel-app/novel-app/components/top-tabbar/top-tabbar.vue"]]);
+  const topTabbarVue = /* @__PURE__ */ _export_sfc(_sfc_main$f, [["render", _sfc_render$e], ["__scopeId", "data-v-11dcda35"], ["__file", "D:/APP/novel-app/novel-app/components/common/top-tabbar/top-tabbar.vue"]]);
   const props$3 = {
     props: {
       // 是否显示圆点
@@ -1857,7 +1860,7 @@ if (uni.restoreGlobal) {
       ...(_j = (_i = uni.$uv) == null ? void 0 : _i.props) == null ? void 0 : _j.badge
     }
   };
-  const _sfc_main$b = {
+  const _sfc_main$e = {
     name: "uv-badge",
     mixins: [mpMixin, mixin, props$3],
     computed: {
@@ -1903,7 +1906,7 @@ if (uni.restoreGlobal) {
       }
     }
   };
-  function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
     return _ctx.show && ((Number(_ctx.value) === 0 ? _ctx.showZero : true) || _ctx.isDot) ? (vue.openBlock(), vue.createElementBlock(
       "text",
       {
@@ -1916,7 +1919,7 @@ if (uni.restoreGlobal) {
       /* TEXT, CLASS, STYLE */
     )) : vue.createCommentVNode("v-if", true);
   }
-  const __easycom_1$2 = /* @__PURE__ */ _export_sfc(_sfc_main$b, [["render", _sfc_render$a], ["__scopeId", "data-v-91e4945b"], ["__file", "D:/APP/novel-app/novel-app/uni_modules/uv-badge/components/uv-badge/uv-badge.vue"]]);
+  const __easycom_1$2 = /* @__PURE__ */ _export_sfc(_sfc_main$e, [["render", _sfc_render$d], ["__scopeId", "data-v-91e4945b"], ["__file", "D:/APP/novel-app/novel-app/uni_modules/uv-badge/components/uv-badge/uv-badge.vue"]]);
   const props$2 = {
     props: {
       // item标签的名称，作为与uv-tabbar的value参数匹配的标识符
@@ -1957,7 +1960,7 @@ if (uni.restoreGlobal) {
       ...(_l = (_k = uni.$uv) == null ? void 0 : _k.props) == null ? void 0 : _l.tabbarItem
     }
   };
-  const _sfc_main$a = {
+  const _sfc_main$d = {
     name: "uv-tabbar-item",
     mixins: [mpMixin, mixin, props$2],
     emits: ["click", "change"],
@@ -2004,7 +2007,7 @@ if (uni.restoreGlobal) {
       }
     }
   };
-  function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$c(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_uv_icon = resolveEasycom(vue.resolveDynamicComponent("uv-icon"), __easycom_0$4);
     const _component_uv_badge = resolveEasycom(vue.resolveDynamicComponent("uv-badge"), __easycom_1$2);
     return vue.openBlock(), vue.createElementBlock(
@@ -2058,8 +2061,8 @@ if (uni.restoreGlobal) {
       /* STYLE */
     );
   }
-  const __easycom_0$2 = /* @__PURE__ */ _export_sfc(_sfc_main$a, [["render", _sfc_render$9], ["__scopeId", "data-v-f9097980"], ["__file", "D:/APP/novel-app/novel-app/uni_modules/uv-tabbar/components/uv-tabbar-item/uv-tabbar-item.vue"]]);
-  const _sfc_main$9 = {
+  const __easycom_0$2 = /* @__PURE__ */ _export_sfc(_sfc_main$d, [["render", _sfc_render$c], ["__scopeId", "data-v-f9097980"], ["__file", "D:/APP/novel-app/novel-app/uni_modules/uv-tabbar/components/uv-tabbar-item/uv-tabbar-item.vue"]]);
+  const _sfc_main$c = {
     name: "uv-safe-bottom",
     mixins: [mpMixin, mixin],
     data() {
@@ -2077,7 +2080,7 @@ if (uni.restoreGlobal) {
     mounted() {
     }
   };
-  function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$b(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock(
       "view",
       {
@@ -2089,7 +2092,7 @@ if (uni.restoreGlobal) {
       /* CLASS, STYLE */
     );
   }
-  const __easycom_0$1 = /* @__PURE__ */ _export_sfc(_sfc_main$9, [["render", _sfc_render$8], ["__scopeId", "data-v-560f16b2"], ["__file", "D:/APP/novel-app/novel-app/uni_modules/uv-safe-bottom/components/uv-safe-bottom/uv-safe-bottom.vue"]]);
+  const __easycom_0$1 = /* @__PURE__ */ _export_sfc(_sfc_main$c, [["render", _sfc_render$b], ["__scopeId", "data-v-560f16b2"], ["__file", "D:/APP/novel-app/novel-app/uni_modules/uv-safe-bottom/components/uv-safe-bottom/uv-safe-bottom.vue"]]);
   const props$1 = {
     props: {
       // 当前匹配项的name
@@ -2140,7 +2143,7 @@ if (uni.restoreGlobal) {
       ...(_n = (_m = uni.$uv) == null ? void 0 : _m.props) == null ? void 0 : _n.tabbar
     }
   };
-  const _sfc_main$8 = {
+  const _sfc_main$b = {
     name: "uv-tabbar",
     mixins: [mpMixin, mixin, props$1],
     data() {
@@ -2192,7 +2195,7 @@ if (uni.restoreGlobal) {
       }
     }
   };
-  function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_uv_safe_bottom = resolveEasycom(vue.resolveDynamicComponent("uv-safe-bottom"), __easycom_0$1);
     return vue.openBlock(), vue.createElementBlock("view", { class: "uv-tabbar" }, [
       vue.createElementVNode(
@@ -2227,8 +2230,8 @@ if (uni.restoreGlobal) {
       )) : vue.createCommentVNode("v-if", true)
     ]);
   }
-  const __easycom_1$1 = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["render", _sfc_render$7], ["__scopeId", "data-v-cae58123"], ["__file", "D:/APP/novel-app/novel-app/uni_modules/uv-tabbar/components/uv-tabbar/uv-tabbar.vue"]]);
-  const _sfc_main$7 = {
+  const __easycom_1$1 = /* @__PURE__ */ _export_sfc(_sfc_main$b, [["render", _sfc_render$a], ["__scopeId", "data-v-cae58123"], ["__file", "D:/APP/novel-app/novel-app/uni_modules/uv-tabbar/components/uv-tabbar/uv-tabbar.vue"]]);
+  const _sfc_main$a = {
     __name: "bottom-tabbar",
     setup(__props, { expose: __expose }) {
       __expose();
@@ -2252,7 +2255,7 @@ if (uni.restoreGlobal) {
       return __returned__;
     }
   };
-  function _sfc_render$6(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_uv_tabbar_item = resolveEasycom(vue.resolveDynamicComponent("uv-tabbar-item"), __easycom_0$2);
     const _component_uv_tabbar = resolveEasycom(vue.resolveDynamicComponent("uv-tabbar"), __easycom_1$1);
     return vue.openBlock(), vue.createBlock(_component_uv_tabbar, { value: $setup.value }, {
@@ -2276,7 +2279,7 @@ if (uni.restoreGlobal) {
       /* STABLE */
     }, 8, ["value"]);
   }
-  const bottomTabbarVue = /* @__PURE__ */ _export_sfc(_sfc_main$7, [["render", _sfc_render$6], ["__scopeId", "data-v-08830898"], ["__file", "D:/APP/novel-app/novel-app/components/bottom-tabbar/bottom-tabbar.nvue"]]);
+  const bottomTabbarVue = /* @__PURE__ */ _export_sfc(_sfc_main$a, [["render", _sfc_render$9], ["__scopeId", "data-v-27a2a619"], ["__file", "D:/APP/novel-app/novel-app/components/common/bottom-tabbar/bottom-tabbar.nvue"]]);
   const getSystemInfo = () => {
     return new Promise((resolve, reject) => {
       uni.getSystemInfo({
@@ -2286,7 +2289,7 @@ if (uni.restoreGlobal) {
       });
     });
   };
-  const _sfc_main$6 = {
+  const _sfc_main$9 = {
     __name: "mid-area",
     props: {
       height: {
@@ -2372,7 +2375,7 @@ if (uni.restoreGlobal) {
       return __returned__;
     }
   };
-  function _sfc_render$5(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock(
       "view",
       {
@@ -2400,8 +2403,16 @@ if (uni.restoreGlobal) {
       /* STYLE */
     );
   }
-  const ComponentsHomeMidAreaMidArea = /* @__PURE__ */ _export_sfc(_sfc_main$6, [["render", _sfc_render$5], ["__scopeId", "data-v-126196ca"], ["__file", "D:/APP/novel-app/novel-app/components/home/mid-area/mid-area.vue"]]);
-  const _sfc_main$5 = {
+  const ComponentsHomeMidAreaMidArea = /* @__PURE__ */ _export_sfc(_sfc_main$9, [["render", _sfc_render$8], ["__scopeId", "data-v-126196ca"], ["__file", "D:/APP/novel-app/novel-app/components/home/mid-area/mid-area.vue"]]);
+  const getSelectorInfo = (instance, selector) => {
+    return new Promise((resolve, reject) => {
+      const query = uni.createSelectorQuery().in(instance.proxy);
+      query.select(".home-top").boundingClientRect((data) => {
+        resolve(data);
+      }).exec();
+    });
+  };
+  const _sfc_main$8 = {
     __name: "mid-area-item",
     props: {
       height: {
@@ -2412,12 +2423,15 @@ if (uni.restoreGlobal) {
     setup(__props, { expose: __expose }) {
       __expose();
       const props2 = __props;
-      const __returned__ = { props: props2 };
+      const handelMoreData = () => {
+        formatAppLog("log", "at components/home/mid-area/mid-area-item.vue:18", "到底了");
+      };
+      const __returned__ = { props: props2, handelMoreData };
       Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
       return __returned__;
     }
   };
-  function _sfc_render$4(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("view", { class: "item" }, [
       vue.createElementVNode(
         "scroll-view",
@@ -2425,25 +2439,18 @@ if (uni.restoreGlobal) {
           "scroll-y": "",
           class: "scroll-box",
           "refresher-default-style": "black",
-          style: vue.normalizeStyle({ height: `${$props.height}px` })
+          style: vue.normalizeStyle({ height: `${$props.height}px` }),
+          onScrolltolower: $setup.handelMoreData
         },
         [
           vue.renderSlot(_ctx.$slots, "default", {}, void 0, true)
         ],
-        4
-        /* STYLE */
+        36
+        /* STYLE, NEED_HYDRATION */
       )
     ]);
   }
-  const midAreaItemVue = /* @__PURE__ */ _export_sfc(_sfc_main$5, [["render", _sfc_render$4], ["__scopeId", "data-v-ca4c25e2"], ["__file", "D:/APP/novel-app/novel-app/components/home/mid-area/mid-area-item.vue"]]);
-  const getSelectorInfo = (instance, selector) => {
-    return new Promise((resolve, reject) => {
-      const query = uni.createSelectorQuery().in(instance.proxy);
-      query.select(".home-top").boundingClientRect((data) => {
-        resolve(data);
-      }).exec();
-    });
-  };
+  const midAreaItemVue = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["render", _sfc_render$7], ["__scopeId", "data-v-ca4c25e2"], ["__file", "D:/APP/novel-app/novel-app/components/home/mid-area/mid-area-item.vue"]]);
   class MPAnimation {
     constructor(options, _this) {
       this.options = options;
@@ -2556,7 +2563,7 @@ if (uni.restoreGlobal) {
     clearTimeout(_this.timer);
     return new MPAnimation(option, _this);
   }
-  const _sfc_main$4 = {
+  const _sfc_main$7 = {
     name: "uv-transition",
     mixins: [mpMixin, mixin],
     emits: ["click", "change"],
@@ -2804,7 +2811,7 @@ if (uni.restoreGlobal) {
       }
     }
   };
-  function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$6(_ctx, _cache, $props, $setup, $data, $options) {
     return $data.isShow ? (vue.openBlock(), vue.createElementBlock("view", {
       key: 0,
       ref: "ani",
@@ -2816,7 +2823,7 @@ if (uni.restoreGlobal) {
       vue.renderSlot(_ctx.$slots, "default")
     ], 14, ["animation"])) : vue.createCommentVNode("v-if", true);
   }
-  const __easycom_1 = /* @__PURE__ */ _export_sfc(_sfc_main$4, [["render", _sfc_render$3], ["__file", "D:/APP/novel-app/novel-app/uni_modules/uv-transition/components/uv-transition/uv-transition.vue"]]);
+  const __easycom_1 = /* @__PURE__ */ _export_sfc(_sfc_main$7, [["render", _sfc_render$6], ["__file", "D:/APP/novel-app/novel-app/uni_modules/uv-transition/components/uv-transition/uv-transition.vue"]]);
   const props = {
     props: {
       // 图片地址
@@ -2912,7 +2919,7 @@ if (uni.restoreGlobal) {
       ...(_p = (_o = uni.$uv) == null ? void 0 : _o.props) == null ? void 0 : _p.image
     }
   };
-  const _sfc_main$3 = {
+  const _sfc_main$6 = {
     name: "uv-image",
     emits: ["click", "load", "error"],
     mixins: [mpMixin, mixin, props],
@@ -3050,7 +3057,7 @@ if (uni.restoreGlobal) {
       }
     }
   };
-  function _sfc_render$2(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$5(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_uv_icon = resolveEasycom(vue.resolveDynamicComponent("uv-icon"), __easycom_0$4);
     const _component_uv_transition = resolveEasycom(vue.resolveDynamicComponent("uv-transition"), __easycom_1);
     return $data.show ? (vue.openBlock(), vue.createBlock(_component_uv_transition, {
@@ -3138,104 +3145,157 @@ if (uni.restoreGlobal) {
       /* FORWARDED */
     }, 8, ["show", "duration", "cell-child", "custom-style"])) : vue.createCommentVNode("v-if", true);
   }
-  const __easycom_0 = /* @__PURE__ */ _export_sfc(_sfc_main$3, [["render", _sfc_render$2], ["__scopeId", "data-v-8fe9e33e"], ["__file", "D:/APP/novel-app/novel-app/uni_modules/uv-image/components/uv-image/uv-image.vue"]]);
+  const __easycom_0 = /* @__PURE__ */ _export_sfc(_sfc_main$6, [["render", _sfc_render$5], ["__scopeId", "data-v-8fe9e33e"], ["__file", "D:/APP/novel-app/novel-app/uni_modules/uv-image/components/uv-image/uv-image.vue"]]);
   const novelList = [{
-    id: 4878,
-    name: "末世降临？我靠祖传手镯苟成大佬",
-    author: "悠然楠",
-    info: "【末世➕萌宠➕空间➕囤货➕预感➕日常➕无Cp】你切记女主不是重生不是重生！！！言晓薇16岁失去双亲后又失去从小陪伴她长大的奶奶，全家就剩下自己和宠物狗言墩墩。双重打击下言晓薇成功的病了，大病初愈后的言晓薇得到了能预测危险的预感。大学寒假期间回老家以后又无意间发现自家的祖传手镯。言晓薇一心以为自己拿的是穿越剧本，没想到等待她的是天灾，所以当言晓薇手握祖传空间囤满物资（当病毒极致寒冷炎热高温虫灾特大地",
-    cover: "http://www.qiushuxs.com/cover/f691/1e/1ea2142fc88f1bf69a1f15d32ef89d10.jpg",
-    genre: "言情",
+    id: 28243,
+    name: "从恋综开始",
+    author: "艾子言",
+    info: "唐知初一觉醒来发现自己来到了另一个世界，并且身处于一档恋综之中。他好像也不会干别的，那就以恋综为跳板进入娱乐圈吧。巧合的是居然有个女嘉宾是女团出身，既然不是素人，那就嚯嚯你一个月吧。女团出身的陈思漾蛰伏半年之后，好不容易拿到了一个恋综的资源。恋综就恋综吧，那就找个最好看的嚯嚯一个月，演一场综艺版本的爱情偶像剧好了。",
+    cover: "http://www.qiushuxs.com/public/img/2.jpg",
+    genre: "都市",
     status: "连载中",
-    words_count: "86万字"
+    words_count: "61万字"
   }, {
-    id: 4878,
-    name: "寄生",
-    author: "多木木多",
-    info: "【末世➕萌宠➕空间➕囤货➕预感➕日常➕无Cp】你切记女主不是重生不是重生！！！言晓薇16岁失去双亲后又失去从小陪伴她长大的奶奶，全家就剩下自己和宠物狗言墩墩。双重打击下言晓薇成功的病了，大病初愈后的言晓薇得到了能预测危险的预感。大学寒假期间回老家以后又无意间发现自家的祖传手镯。言晓薇一心以为自己拿的是穿越剧本，没想到等待她的是天灾，所以当言晓薇手握祖传空间囤满物资（当病毒极致寒冷炎热高温虫灾特大地",
-    cover: "http://www.qiushuxs.com/cover/f691/37/375991982ff8f0d34629c9c934f31b5f.jpg",
+    id: 1416,
+    name: "狂凤重生：相府第一嫡女",
+    author: "王爷么么哒",
+    info: "因云锦绣的痴傻，错信皇晟樊，助他上位后，却惨遭背叛。他与庶姐早就苟且，亲自下令砍去她的双手双脚，将皇后之位送给贱人。贱人每日对她百般折磨，相府被灭门，当祖父与娘亲的骨灰扔在她的面前，她再也没有活下去的理由。听说有一种死法，极其残忍。让锐器从胸膛刺入，然后纵切开腹，死者若带着极大怨念，歃血诅咒，可获得重生。她毅然以极刑自尽，歃血诅咒：“以此极刑，歃血为咒，若有来生，欠我害我之人，必以血还血。”",
+    cover: "http://www.qiushuxs.com/cover/f691/ee/eed5af6add95a9a6f1252739b1ad8c24.jpg",
     genre: "其他",
     status: "完结",
-    words_count: "69万字"
+    words_count: "202万字"
   }, {
-    id: 4878,
-    name: "末世降临？我靠祖传手镯苟成大佬",
-    author: "悠然楠",
-    info: "【末世➕萌宠➕空间➕囤货➕预感➕日常➕无Cp】你切记女主不是重生不是重生！！！言晓薇16岁失去双亲后又失去从小陪伴她长大的奶奶，全家就剩下自己和宠物狗言墩墩。双重打击下言晓薇成功的病了，大病初愈后的言晓薇得到了能预测危险的预感。大学寒假期间回老家以后又无意间发现自家的祖传手镯。言晓薇一心以为自己拿的是穿越剧本，没想到等待她的是天灾，所以当言晓薇手握祖传空间囤满物资（当病毒极致寒冷炎热高温虫灾特大地",
-    cover: "http://www.qiushuxs.com/cover/f691/1e/1ea2142fc88f1bf69a1f15d32ef89d10.jpg",
-    genre: "其他",
+    id: 14604,
+    name: "世子妃你乖一点",
+    author: "盛十七",
+    info: "上辈子因貌太美而嫁不出去的元姑娘，这一世立誓要寻个权势滔天，能让她仗势欺人的男人嫁了。然后……谢世子主动送上门来了。“圆圆，你嫁了我，只负责美貌如花即可。”元姑娘把玩着自个儿的...",
+    cover: "http://www.qiushuxs.com/cover/f691/b2/b264c38fe3c4092efab48ab1ce030329.jpg",
+    genre: "言情",
     status: "完结",
-    words_count: "69万字"
+    words_count: "496万字"
   }, {
-    id: 4878,
-    name: "末世降临？我靠祖传手镯苟成大佬",
-    author: "悠然楠",
-    info: "【末世➕萌宠➕空间➕囤货➕预感➕日常➕无Cp】你切记女主不是重生不是重生！！！言晓薇16岁失去双亲后又失去从小陪伴她长大的奶奶，全家就剩下自己和宠物狗言墩墩。双重打击下言晓薇成功的病了，大病初愈后的言晓薇得到了能预测危险的预感。大学寒假期间回老家以后又无意间发现自家的祖传手镯。言晓薇一心以为自己拿的是穿越剧本，没想到等待她的是天灾，所以当言晓薇手握祖传空间囤满物资（当病毒极致寒冷炎热高温虫灾特大地",
-    cover: "http://www.qiushuxs.com/cover/f691/1e/1ea2142fc88f1bf69a1f15d32ef89d10.jpg",
+    id: 10353,
+    name: "长生蛊道：从炼出痴情蛊开始",
+    author: "千湖真人",
+    info: "一觉醒来，周遂成了修仙界一个底层炼气士，幸好获得至宝蛊神钵，能炼制各种蛊虫。炼化春秋蛊，能延年益寿，长生不老。炼化金蝉蛊，能生死人，肉白骨。炼化龙象蛊，获得龙象之力，龙象之躯，金刚不坏但是他第一次炼出的蛊虫便是痴情蛊。从此之后，他发现了一条修炼的康庄大道。岁月变化，山河更迭，唯我长生周家永恒。",
+    cover: "http://www.qiushuxs.com/cover/f691/ee/ee6b697270e9457999f3527255f2454a.jpg",
     genre: "其他",
-    status: "完结",
-    words_count: "69万字"
+    status: "连载中",
+    words_count: "511万字"
   }, {
-    id: 4878,
-    name: "末世降临？我靠祖传手镯苟成大佬",
-    author: "悠然楠",
-    info: "【末世➕萌宠➕空间➕囤货➕预感➕日常➕无Cp】你切记女主不是重生不是重生！！！言晓薇16岁失去双亲后又失去从小陪伴她长大的奶奶，全家就剩下自己和宠物狗言墩墩。双重打击下言晓薇成功的病了，大病初愈后的言晓薇得到了能预测危险的预感。大学寒假期间回老家以后又无意间发现自家的祖传手镯。言晓薇一心以为自己拿的是穿越剧本，没想到等待她的是天灾，所以当言晓薇手握祖传空间囤满物资（当病毒极致寒冷炎热高温虫灾特大地",
-    cover: "http://www.qiushuxs.com/cover/f691/1e/1ea2142fc88f1bf69a1f15d32ef89d10.jpg",
+    id: 16531,
+    name: "农家仙园",
+    author: "梅长苏",
+    info: "河湾村青年荣华上学期间，无意间因得罪富二代从而被下黑手打成傻子。哥哥和父母去赶集出车祸去世，留下他和大哥未婚妻苏宁相依为命。有一天发现村里恶霸想要欺负苏宁，去救人时被恶霸打晕，没想到时来运转，得到了异界传承，从此一飞冲天。治病救人、种药草、搞养殖、酿酒、开工厂、带领村民们一起发家致富，实现了共同富裕的伟大目标。把村子打造成最美乡村。",
+    cover: "http://www.qiushuxs.com/cover/f691/a6/a6016251a43e4246623ea1d4e18473c7.jpg",
     genre: "其他",
-    status: "完结",
-    words_count: "69万字"
+    status: "连载中",
+    words_count: "4万字"
   }, {
-    id: 4878,
-    name: "末世降临？我靠祖传手镯苟成大佬",
-    author: "悠然楠",
-    info: "【末世➕萌宠➕空间➕囤货➕预感➕日常➕无Cp】你切记女主不是重生不是重生！！！言晓薇16岁失去双亲后又失去从小陪伴她长大的奶奶，全家就剩下自己和宠物狗言墩墩。双重打击下言晓薇成功的病了，大病初愈后的言晓薇得到了能预测危险的预感。大学寒假期间回老家以后又无意间发现自家的祖传手镯。言晓薇一心以为自己拿的是穿越剧本，没想到等待她的是天灾，所以当言晓薇手握祖传空间囤满物资（当病毒极致寒冷炎热高温虫灾特大地",
-    cover: "http://www.qiushuxs.com/cover/f691/1e/1ea2142fc88f1bf69a1f15d32ef89d10.jpg",
-    genre: "其他",
-    status: "完结",
-    words_count: "69万字"
+    id: 14988,
+    name: "荒沙主宰",
+    author: "黄火青",
+    info: "机械工程师穿越到了武道为尊的世界，掌握了火与沙的力量。水切割、滑翔翼、枪械、航发引擎、动力战甲、浮游炮……结合所学知识，他将上述造物以武道形式复现，一步步揭开此世面纱，踏上人间绝巅。",
+    cover: "http://www.qiushuxs.com/cover/f691/56/563ef4f9e81a08cdc024077f4486e6dd.jpg",
+    genre: "玄幻",
+    status: "连载中",
+    words_count: "88万字"
   }, {
-    id: 4878,
-    name: "末世降临？我靠祖传手镯苟成大佬",
-    author: "悠然楠",
-    info: "【末世➕萌宠➕空间➕囤货➕预感➕日常➕无Cp】你切记女主不是重生不是重生！！！言晓薇16岁失去双亲后又失去从小陪伴她长大的奶奶，全家就剩下自己和宠物狗言墩墩。双重打击下言晓薇成功的病了，大病初愈后的言晓薇得到了能预测危险的预感。大学寒假期间回老家以后又无意间发现自家的祖传手镯。言晓薇一心以为自己拿的是穿越剧本，没想到等待她的是天灾，所以当言晓薇手握祖传空间囤满物资（当病毒极致寒冷炎热高温虫灾特大地",
-    cover: "http://www.qiushuxs.com/cover/f691/1e/1ea2142fc88f1bf69a1f15d32ef89d10.jpg",
+    id: 6683,
+    name: "重生之奋斗人生",
+    author: "纸上飞雪",
+    info: "重回2005年。当人生可以重来一次，再次站在人生十字路口的时候，该如何选择？这是一段过去的青春岁月，杀马特，游戏机，跑马灯，踩空间，偷菜。上一世的遗憾，就...",
+    cover: "http://www.qiushuxs.com/cover/f691/4f/4ff3d71d1db60f2973fc2a2f24967dc7.jpg",
     genre: "其他",
-    status: "完结",
-    words_count: "69万字"
+    status: "连载中",
+    words_count: "766万字"
   }, {
-    id: 4878,
-    name: "末世降临？我靠祖传手镯苟成大佬",
-    author: "悠然楠",
-    info: "【末世➕萌宠➕空间➕囤货➕预感➕日常➕无Cp】你切记女主不是重生不是重生！！！言晓薇16岁失去双亲后又失去从小陪伴她长大的奶奶，全家就剩下自己和宠物狗言墩墩。双重打击下言晓薇成功的病了，大病初愈后的言晓薇得到了能预测危险的预感。大学寒假期间回老家以后又无意间发现自家的祖传手镯。言晓薇一心以为自己拿的是穿越剧本，没想到等待她的是天灾，所以当言晓薇手握祖传空间囤满物资（当病毒极致寒冷炎热高温虫灾特大地",
-    cover: "http://www.qiushuxs.com/cover/f691/1e/1ea2142fc88f1bf69a1f15d32ef89d10.jpg",
-    genre: "其他",
+    id: 11195,
+    name: "星球崛起",
+    author: "星神",
+    info: "因为杀人罪而沦为死囚的安德·瑞奇森接受了一场交易，顶替豪门赫鲁纳家的少爷加入漆黑守望者组织。作为清扫工重获新生的他如今要和各式个性迥异的陌生同伴一同握紧手中的扫把对抗从未知界外涌来的各式污魔，化身一位英雄守护人们居住的漆黑星球。",
+    cover: "http://www.qiushuxs.com/cover/f691/26/26a253fa2230ca4b9603028dd0d0bd88.jpg",
+    genre: "玄幻",
     status: "完结",
-    words_count: "69万字"
+    words_count: "64万字"
   }];
-  const _sfc_main$2 = {
+  const _imports_0 = "/static/images/loading.gif";
+  const _sfc_main$5 = {
+    name: "Loading"
+  };
+  function _sfc_render$4(_ctx, _cache, $props, $setup, $data, $options) {
+    return vue.openBlock(), vue.createElementBlock("view", { class: "loading-container" }, [
+      vue.createElementVNode("image", {
+        src: _imports_0,
+        mode: "aspectFit",
+        class: "_img"
+      })
+    ]);
+  }
+  const loadingVue = /* @__PURE__ */ _export_sfc(_sfc_main$5, [["render", _sfc_render$4], ["__scopeId", "data-v-028c4300"], ["__file", "D:/APP/novel-app/novel-app/components/common/loading/loading.vue"]]);
+  const _sfc_main$4 = {
     __name: "recommed",
     setup(__props, { expose: __expose }) {
       __expose();
-      const __returned__ = { get novelList() {
+      const isLoaded = vue.ref(false);
+      const current = vue.ref(0);
+      const rankList = vue.ref([
+        "推荐榜",
+        "点击榜",
+        "完本榜"
+      ]);
+      vue.onMounted(() => {
+        setTimeout(() => {
+          isLoaded.value = true;
+        }, 500);
+      });
+      const changeRank = (index2) => {
+        current.value = index2;
+        isLoaded.value = false;
+        setTimeout(() => {
+          isLoaded.value = true;
+        }, 500);
+      };
+      const __returned__ = { isLoaded, current, rankList, changeRank, ref: vue.ref, onMounted: vue.onMounted, get novelList() {
         return novelList;
-      } };
+      }, loadingVue };
       Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
       return __returned__;
     }
   };
-  function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_uv_image = resolveEasycom(vue.resolveDynamicComponent("uv-image"), __easycom_0);
     return vue.openBlock(), vue.createElementBlock("view", { class: "recommend" }, [
       vue.createElementVNode("view", { class: "title" }, [
-        vue.createElementVNode("text", { class: "active" }, "推荐榜"),
-        vue.createElementVNode("text", null, "完本榜")
+        (vue.openBlock(true), vue.createElementBlock(
+          vue.Fragment,
+          null,
+          vue.renderList($setup.rankList, (item, index2) => {
+            return vue.openBlock(), vue.createElementBlock("text", {
+              class: vue.normalizeClass([$setup.current == index2 ? "active" : ""]),
+              key: index2,
+              onClick: ($event) => $setup.changeRank(index2)
+            }, vue.toDisplayString(item), 11, ["onClick"]);
+          }),
+          128
+          /* KEYED_FRAGMENT */
+        ))
       ]),
       vue.createElementVNode("view", { class: "list" }, [
+        vue.withDirectives(vue.createVNode(
+          $setup["loadingVue"],
+          null,
+          null,
+          512
+          /* NEED_PATCH */
+        ), [
+          [vue.vShow, !$setup.isLoaded]
+        ]),
         (vue.openBlock(true), vue.createElementBlock(
           vue.Fragment,
           null,
           vue.renderList($setup.novelList, (item, index2) => {
-            return vue.openBlock(), vue.createElementBlock("view", {
+            return vue.withDirectives((vue.openBlock(), vue.createElementBlock("view", {
               class: "list-item",
               key: index2
             }, [
@@ -3296,6 +3356,8 @@ if (uni.restoreGlobal) {
                   )
                 ])
               ])
+            ])), [
+              [vue.vShow, $setup.isLoaded]
             ]);
           }),
           128
@@ -3304,7 +3366,97 @@ if (uni.restoreGlobal) {
       ])
     ]);
   }
-  const recommedVue = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["render", _sfc_render$1], ["__scopeId", "data-v-abb1f8e2"], ["__file", "D:/APP/novel-app/novel-app/components/home/mid-area/recommed.vue"]]);
+  const recommedVue = /* @__PURE__ */ _export_sfc(_sfc_main$4, [["render", _sfc_render$3], ["__scopeId", "data-v-abb1f8e2"], ["__file", "D:/APP/novel-app/novel-app/components/home/mid-area/recommed.vue"]]);
+  const _sfc_main$3 = {
+    __name: "guessyoulike",
+    setup(__props, { expose: __expose }) {
+      __expose();
+      const __returned__ = { get novelList() {
+        return novelList;
+      } };
+      Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
+      return __returned__;
+    }
+  };
+  function _sfc_render$2(_ctx, _cache, $props, $setup, $data, $options) {
+    const _component_uv_image = resolveEasycom(vue.resolveDynamicComponent("uv-image"), __easycom_0);
+    return vue.openBlock(), vue.createElementBlock("view", { class: "guess-like-container" }, [
+      vue.createElementVNode("view", { class: "title" }, "猜你喜欢"),
+      vue.createElementVNode("view", { class: "list" }, [
+        (vue.openBlock(true), vue.createElementBlock(
+          vue.Fragment,
+          null,
+          vue.renderList($setup.novelList, (item) => {
+            return vue.openBlock(), vue.createElementBlock("view", {
+              class: "item",
+              key: item.id
+            }, [
+              vue.createElementVNode("view", { class: "l" }, [
+                vue.createVNode(_component_uv_image, {
+                  src: item.cover,
+                  "lazy-load": "",
+                  observeLazyLoad: "",
+                  fade: "",
+                  loadingIcon: "photo-fill",
+                  duration: "450",
+                  radius: "5",
+                  width: "90",
+                  height: "120"
+                }, null, 8, ["src"])
+              ]),
+              vue.createElementVNode("view", { class: "r" }, [
+                vue.createElementVNode(
+                  "view",
+                  { class: "name" },
+                  vue.toDisplayString(item.name),
+                  1
+                  /* TEXT */
+                ),
+                vue.createElementVNode(
+                  "view",
+                  { class: "info" },
+                  vue.toDisplayString(item.info),
+                  1
+                  /* TEXT */
+                ),
+                vue.createElementVNode("view", { class: "b" }, "完结 69万字")
+              ])
+            ]);
+          }),
+          128
+          /* KEYED_FRAGMENT */
+        ))
+      ])
+    ]);
+  }
+  const guessyoulikeVue = /* @__PURE__ */ _export_sfc(_sfc_main$3, [["render", _sfc_render$2], ["__scopeId", "data-v-a81469f6"], ["__file", "D:/APP/novel-app/novel-app/components/home/mid-area/guessyoulike.vue"]]);
+  const _sfc_main$2 = {
+    __name: "novel",
+    props: {
+      height: {
+        type: Number,
+        required: true
+      }
+    },
+    setup(__props, { expose: __expose }) {
+      __expose();
+      const props2 = __props;
+      const __returned__ = { props: props2, midAreaItemVue, recommedVue, guessyoulikeVue };
+      Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
+      return __returned__;
+    }
+  };
+  function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
+    return vue.openBlock(), vue.createBlock($setup["midAreaItemVue"], { height: $props.height }, {
+      default: vue.withCtx(() => [
+        vue.createVNode($setup["recommedVue"]),
+        vue.createVNode($setup["guessyoulikeVue"])
+      ]),
+      _: 1
+      /* STABLE */
+    }, 8, ["height"]);
+  }
+  const novelVue = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["render", _sfc_render$1], ["__file", "D:/APP/novel-app/novel-app/components/home/novel.vue"]]);
   const _sfc_main$1 = {
     __name: "index",
     setup(__props, { expose: __expose }) {
@@ -3332,11 +3484,11 @@ if (uni.restoreGlobal) {
       };
       const __returned__ = { midAreaHeight, currentActiveTabbar, getMidAreaHeight, pageChange, handelTopChange, topTabbarVue, get bottomTabbarVue() {
         return bottomTabbarVue;
-      }, midAreaVue: ComponentsHomeMidAreaMidArea, midAreaItemVue, get getSystemInfo() {
+      }, midAreaVue: ComponentsHomeMidAreaMidArea, get getSystemInfo() {
         return getSystemInfo;
       }, get getSelectorInfo() {
         return getSelectorInfo;
-      }, recommedVue, onMounted: vue.onMounted, ref: vue.ref, getCurrentInstance: vue.getCurrentInstance };
+      }, novelVue, midAreaItemVue, onMounted: vue.onMounted, ref: vue.ref, getCurrentInstance: vue.getCurrentInstance, provide: vue.provide };
       Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
       return __returned__;
     }
@@ -3355,32 +3507,30 @@ if (uni.restoreGlobal) {
         ]),
         vue.createCommentVNode(" 顶部导航栏 "),
         vue.createVNode($setup["topTabbarVue"], {
-          value: parseInt($setup.currentActiveTabbar),
+          value: $setup.currentActiveTabbar,
           onChange: $setup.handelTopChange
         }, null, 8, ["value"])
       ]),
       vue.createCommentVNode(" 中部内容显示区 "),
       vue.createVNode($setup["midAreaVue"], {
         height: $setup.midAreaHeight,
-        length: 2,
+        length: 3,
         current: $setup.currentActiveTabbar,
         onPageChange: $setup.pageChange
       }, {
         default: vue.withCtx(() => [
+          vue.createCommentVNode(" 小说模块 "),
+          vue.createVNode($setup["novelVue"], { height: $setup.midAreaHeight }, null, 8, ["height"]),
           vue.createVNode($setup["midAreaItemVue"], { height: $setup.midAreaHeight }, {
             default: vue.withCtx(() => [
-              vue.createVNode($setup["recommedVue"]),
-              vue.createElementVNode("view", { class: "status-bar" }),
-              vue.createVNode($setup["recommedVue"]),
-              vue.createElementVNode("view", { class: "status-bar" }),
-              vue.createVNode($setup["recommedVue"])
+              vue.createTextVNode(" 2 ")
             ]),
             _: 1
             /* STABLE */
           }, 8, ["height"]),
           vue.createVNode($setup["midAreaItemVue"], { height: $setup.midAreaHeight }, {
             default: vue.withCtx(() => [
-              vue.createTextVNode(" 2 ")
+              vue.createTextVNode(" 3 ")
             ]),
             _: 1
             /* STABLE */

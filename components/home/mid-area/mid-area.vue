@@ -101,14 +101,13 @@
 
 <style lang="scss" scoped>
 	.home-mid {
-		.content::-webkit-scrollbar {
-			display: none;
-			/* 对于 Webkit 内核的浏览器 (Chrome, Safari) 隐藏滚动条 */
-		}
+		overflow: hidden;
 
 		.content {
 			display: flex;
 			height: 100%;
+
+			overflow: hidden;
 
 			.item {
 				flex: 1;

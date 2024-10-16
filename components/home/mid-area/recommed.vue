@@ -1,11 +1,12 @@
 <template>
 	<view class="recommend">
 		<view class="title">
-			<text class="active">推荐榜</text>
-			<text>完本榜</text>
+			<text :class="[current==index?'active':'']" v-for="item,index in rankList" :key="index"
+				@tap="changeRank(index)">{{item}}</text>
 		</view>
 		<view class="list">
-			<view class="list-item" v-for="item,index in novelList" :key="index">
+			<loadingVue v-show="!isLoaded"></loadingVue>
+			<view class="list-item" v-show="isLoaded" v-for="item,index in novelList" :key="index">
 				<view class="l">
 					<uv-image :src="item.cover" lazy-load observeLazyLoad fade loadingIcon="photo-fill" duration="450"
 						radius="5" width="50" height="60"></uv-image>
@@ -29,7 +30,32 @@
 </template>
 
 <script setup>
+	import {
+		ref,
+		onMounted
+	} from 'vue'
 	import novelList from '../../../fakedata/novelList';
+	import loadingVue from '../../common/loading/loading.vue';
+	// 是否加载完毕
+	const isLoaded = ref(false)
+	const current = ref(0)
+	const rankList = ref([
+		'推荐榜',
+		'点击榜',
+		'完本榜'
+	])
+	onMounted(() => {
+		setTimeout(() => {
+			isLoaded.value = true
+		}, 500)
+	})
+	const changeRank = (index) => {
+		current.value = index
+		isLoaded.value = false
+		setTimeout(() => {
+			isLoaded.value = true
+		}, 500)
+	}
 </script>
 
 <style lang="scss" scoped>
@@ -46,10 +72,13 @@
 			padding-top: 30rpx;
 			padding-left: 30rpx;
 			padding-bottom: 0;
+			transition: all 0.3s;
+			color: $font-gray-color;
 		}
 
 		.active {
-			color: $main-color
+			color: $main-color ;
+			font-weight: bold;
 		}
 
 		.list {
@@ -59,10 +88,24 @@
 			gap: 20rpx;
 			height: 580rpx;
 			flex-wrap: wrap;
+			background-color: #fff;
+
+			@keyframes fadeIn {
+				0% {
+					opacity: 0;
+					/* 初始透明度为0 */
+				}
+
+				100% {
+					opacity: 1;
+					/* 最终透明度为1 */
+				}
+			}
 
 			.list-item {
 				width: 50%;
 				display: flex;
+				animation: fadeIn 0.5s forwards;
 
 				.r {
 					margin-left: 30rpx;
@@ -91,7 +134,7 @@
 
 						text {
 							margin-left: 15rpx;
-							color: #989898;
+							color: $font-gray-color;
 						}
 					}
 				}

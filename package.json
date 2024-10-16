@@ -1,11 +1,14 @@
 {
-    "id": "fish-bear",
-    "name": "xTab",
-    "displayName": "xTab",
-    "version": "1.0.0",
-    "description": "基础tab切换左右滑动切换，要实现其他功能直接稍微修改一下就是，简单的很，试试水，",
+    "id": "waterfall-lazy-image",
+    "name": "瀑布流组件、自动计算比例、简单好用",
+    "displayName": "瀑布流组件、自动计算比例、简单好用",
+    "version": "1.2.0",
+    "description": "瀑布流组件，含动画效果，传width和height则使用传入的加载",
     "keywords": [
-        "tab"
+        "懒加载",
+        "瀑布流",
+        "动画",
+        "特效"
     ],
     "dcloudext": {
         "category": [

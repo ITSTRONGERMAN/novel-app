@@ -11,13 +11,13 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
-.home-mid .content[data-v-126196ca]::-webkit-scrollbar {
-  display: none;
-  /* 对于 Webkit 内核的浏览器 (Chrome, Safari) 隐藏滚动条 */
+.home-mid[data-v-126196ca] {
+  overflow: hidden;
 }
 .home-mid .content[data-v-126196ca] {
   display: flex;
   height: 100%;
+  overflow: hidden;
 }
 .home-mid .content .item[data-v-126196ca] {
   flex: 1;

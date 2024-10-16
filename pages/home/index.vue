@@ -6,19 +6,17 @@
 				<uv-search shape="round" :showAction="false" disabled></uv-search>
 			</view>
 			<!-- 顶部导航栏 -->
-			<topTabbarVue :value="parseInt(currentActiveTabbar)" @change="handelTopChange" />
+			<topTabbarVue :value="currentActiveTabbar" @change="handelTopChange" />
 		</view>
 		<!-- 中部内容显示区 -->
-		<midAreaVue :height="midAreaHeight" :length="2" :current="currentActiveTabbar" @pageChange="pageChange">
-			<midAreaItemVue :height="midAreaHeight">
-				<recommedVue />
-				<view class="status-bar"></view>
-				<recommedVue />
-				<view class="status-bar"></view>
-				<recommedVue />
-			</midAreaItemVue>
+		<midAreaVue :height="midAreaHeight" :length="3" :current="currentActiveTabbar" @pageChange="pageChange">
+			<!-- 小说模块 -->
+			<novelVue :height="midAreaHeight" />
 			<midAreaItemVue :height="midAreaHeight">
 				2
+			</midAreaItemVue>
+			<midAreaItemVue :height="midAreaHeight">
+				3
 			</midAreaItemVue>
 		</midAreaVue>
 		<!-- 底部导航栏 -->
@@ -27,20 +25,20 @@
 </template>
 
 <script setup>
-	import topTabbarVue from '../../components/top-tabbar/top-tabbar.vue';
-	import bottomTabbarVue from '../../components/bottom-tabbar/bottom-tabbar.nvue';
+	import topTabbarVue from '../../components/common/top-tabbar/top-tabbar.vue';
+	import bottomTabbarVue from '../../components/common//bottom-tabbar/bottom-tabbar.nvue';
 	import midAreaVue from '../../components/home/mid-area/mid-area.vue';
-	import midAreaItemVue from '../../components/home/mid-area/mid-area-item.vue';
 	import getSystemInfo from '../../utiles/getSystemInfo';
 	import getSelectorInfo from '../../utiles/getSelectorInfo';
-	import recommedVue from '../../components/home/mid-area/recommed.vue';
-	recommedVue
+	import novelVue from '../../components/home/novel.vue';
+	import midAreaItemVue from '../../components/home/mid-area/mid-area-item.vue';
+	midAreaItemVue
 	import {
 		onMounted,
 		ref,
-		getCurrentInstance
+		getCurrentInstance,
+		provide
 	} from 'vue'
-	// 中间区域高度
 	const midAreaHeight = ref(0)
 	// 当前激活的tabBar
 	const currentActiveTabbar = ref(0)
