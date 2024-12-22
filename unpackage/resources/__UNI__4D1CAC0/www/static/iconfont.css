@@ -1,0 +1,70 @@
+@font-face {
+	font-family: "custom-icon";
+	src:
+		url('data:application/x-font-woff2;charset=utf-8;base64,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') format('woff2');
+}
+
+.custom-icon {
+	font-family: "custom-icon" !important;
+	font-size: 16px;
+	font-style: normal;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+
+.custom-icon-xiang:before {
+	content: "\e600";
+}
+
+.custom-icon-xiangqing:before {
+	content: "\e620";
+}
+
+.custom-icon-fire:before {
+	content: "\e866";
+}
+
+.custom-icon-more:before {
+	content: "\e62f";
+}
+
+.custom-icon-zhiding:before {
+	content: "\eb16";
+}
+
+.custom-icon-content:before {
+	content: "\e63e";
+}
+
+.custom-icon-sun:before {
+	content: "\e6e7";
+}
+
+.custom-icon-moon:before {
+	content: "\e6a3";
+}
+
+.custom-icon-battery-full:before {
+	content: "\e642";
+}
+
+.custom-icon-battery-mid:before {
+	content: "\e639";
+}
+
+.custom-icon-battery-most:before {
+	content: "\e9f2";
+}
+
+.custom-icon-battery-low:before {
+	content: "\e622";
+}
+
+.icon-battery-empty:before {
+	content: "\e637";
+}
+
+.custom-icon-bookshelfshujia:before {
+	content: "\e84a";
+}

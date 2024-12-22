@@ -1,0 +1,119 @@
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+uni-view[data-v-b7a6dd5d], uni-scroll-view[data-v-b7a6dd5d], uni-swiper-item[data-v-b7a6dd5d] {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  flex-grow: 0;
+  flex-basis: auto;
+  align-items: stretch;
+  align-content: flex-start;
+}
+@font-face {
+  font-family: "uvicon-iconfont";
+  src: url("../../assets/uvicons.04d281cc.ttf") format("truetype");
+}
+.uv-icon[data-v-b7a6dd5d] {
+  display: flex;
+  align-items: center;
+}
+.uv-icon--left[data-v-b7a6dd5d] {
+  flex-direction: row-reverse;
+  align-items: center;
+}
+.uv-icon--right[data-v-b7a6dd5d] {
+  flex-direction: row;
+  align-items: center;
+}
+.uv-icon--top[data-v-b7a6dd5d] {
+  flex-direction: column-reverse;
+  justify-content: center;
+}
+.uv-icon--bottom[data-v-b7a6dd5d] {
+  flex-direction: column;
+  justify-content: center;
+}
+.uv-icon__icon[data-v-b7a6dd5d] {
+  font-family: uvicon-iconfont;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.uv-icon__icon--primary[data-v-b7a6dd5d] {
+  color: #3c9cff;
+}
+.uv-icon__icon--success[data-v-b7a6dd5d] {
+  color: #5ac725;
+}
+.uv-icon__icon--error[data-v-b7a6dd5d] {
+  color: #f56c6c;
+}
+.uv-icon__icon--warning[data-v-b7a6dd5d] {
+  color: #f9ae3d;
+}
+.uv-icon__icon--info[data-v-b7a6dd5d] {
+  color: #909399;
+}
+.uv-icon__img[data-v-b7a6dd5d] {
+  height: auto;
+  will-change: transform;
+}
+.uv-icon__label[data-v-b7a6dd5d] {
+  line-height: 1;
+}
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+.chapters_container[data-v-275a8e90] {
+  position: relative;
+}
+.chapters_container .order[data-v-275a8e90] {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  position: fixed;
+  padding: 0.625rem;
+  background-color: #fff;
+}
+.chapters_container .order .l[data-v-275a8e90] {
+  font-size: 0.875rem;
+  color: #8f8f8f;
+}
+.chapters_container .order .r[data-v-275a8e90] {
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3125rem;
+}
+.chapters_container .chapter-list[data-v-275a8e90] {
+  padding-top: 2.45rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9375rem;
+}
+.chapters_container .chapter-list .item[data-v-275a8e90] {
+  padding-left: 0.875rem;
+}

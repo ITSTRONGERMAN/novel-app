@@ -1,0 +1,9 @@
+{
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "uv-loading-page": "../../uni_modules/uv-loading-page/components/uv-loading-page/uv-loading-page",
+    "uv-icon": "../../uni_modules/uv-icon/components/uv-icon/uv-icon",
+    "uv-image": "../../uni_modules/uv-image/components/uv-image/uv-image",
+    "uv-read-more": "../../uni_modules/uv-read-more/components/uv-read-more/uv-read-more"
+  }
+}

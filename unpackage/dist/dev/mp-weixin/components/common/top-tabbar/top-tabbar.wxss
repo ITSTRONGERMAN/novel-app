@@ -1,0 +1,46 @@
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+.top-tapbar.data-v-11dcda35 {
+  height: 88rpx;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+.top-tapbar .line-bar.data-v-11dcda35 {
+  position: absolute;
+  width: 40rpx;
+  transform: translate(54rpx, -50%);
+  bottom: 10%;
+  transition-duration: 0.3s;
+  background-color: #2979ff;
+  height: 6rpx;
+  border-radius: 6rpx;
+}
+.top-tapbar .l.data-v-11dcda35 {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+.top-tapbar .l .item.data-v-11dcda35 {
+  height: 80rpx;
+  line-height: 80rpx;
+  font-size: 34rpx;
+  transition-duration: 0.5s;
+  padding: 0 40rpx;
+  text-align: center;
+}
+.top-tapbar .l .active.data-v-11dcda35 {
+  color: #2979ff;
+  font-weight: bold;
+}

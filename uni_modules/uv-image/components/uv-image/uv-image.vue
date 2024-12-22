@@ -1,63 +1,27 @@
 <template>
-	<uv-transition
-		v-if="show"
-		:show="show"
-		mode="fade"
-		:duration="fade ? duration : 0"
-		:cell-child="cellChild"
-		:custom-style="wrapStyle"
-	>
-		<view
-			class="uv-image"
-			:class="[`uv-image--${elIndex}`]"
-			@tap="onClick"
-			:style="[wrapStyle, backgroundStyle]"
-		>
-			<image
-				v-if="!isError && observeShow"
-				:src="src"
-				:mode="mode"
-				@error="onErrorHandler"
-				@load="onLoadHandler"
-				:show-menu-by-longpress="showMenuByLongpress"
-				:lazy-load="lazyLoad"
-				class="uv-image__image"
-				:style="[imageStyle]"
-				:webp="webp"
-			></image>
-			<view
-				v-if="showLoading && loading"
-				class="uv-image__loading"
-				:style="{
+	<uv-transition v-if="show" :show="show" mode="fade" :duration="fade ? duration : 0" :cell-child="cellChild"
+		:custom-style="wrapStyle">
+		<view class="uv-image" :class="[`uv-image--${elIndex}`]" @tap="onClick" :style="[wrapStyle, backgroundStyle]">
+			<image v-if="!isError && observeShow" :src="src" :mode="mode" @error="onErrorHandler" @load="onLoadHandler"
+				:show-menu-by-longpress="showMenuByLongpress" :lazy-load="lazyLoad" class="uv-image__image"
+				:style="[imageStyle]" :webp="webp"></image>
+			<view v-if="showLoading && loading" class="uv-image__loading" :style="{
 					borderRadius: shape == 'circle' ? '50%' : $uv.addUnit(radius),
 					backgroundColor: bgColor,
 					width: $uv.addUnit(width),
 					height: $uv.addUnit(height)
-				}"
-			>
+				}">
 				<slot name="loading">
-					<uv-icon
-						:name="loadingIcon"
-						:width="width"
-						:height="height"
-					></uv-icon>
+					<uv-icon :name="loadingIcon" :width="width" :height="height"></uv-icon>
 				</slot>
 			</view>
-			<view
-				v-if="showError && isError && !loading"
-				class="uv-image__error"
-				:style="{
+			<view v-if="showError && isError && !loading" class="uv-image__error" :style="{
 					borderRadius: shape == 'circle' ? '50%' : $uv.addUnit(radius),
 					width: $uv.addUnit(width),
 					height: $uv.addUnit(height)
-				}"
-			>
+				}">
 				<slot name="error">
-					<uv-icon
-						:name="errorIcon"
-						:width="width"
-						:height="height"
-					></uv-icon>
+					<uv-icon :name="errorIcon" :width="width" :height="height"></uv-icon>
 				</slot>
 			</view>
 		</view>
@@ -96,7 +60,7 @@
 	 */
 	export default {
 		name: 'uv-image',
-		emits: ['click','load','error'],
+		emits: ['click', 'load', 'error'],
 		mixins: [mpMixin, mixin, props],
 		data() {
 			return {
@@ -131,18 +95,18 @@
 					}
 				}
 			},
-			width(newVal){
+			width(newVal) {
 				// 这样做的目的是避免在更新时候，某些平台动画会恢复关闭状态
 				this.show = false;
-				this.$uv.sleep(2).then(res=>{
+				this.$uv.sleep(2).then(res => {
 					this.show = true;
 				});
 				this.imgWidth = newVal;
 			},
-			height(newVal){
+			height(newVal) {
 				// 这样做的目的是避免在更新时候，某些平台动画会恢复关闭状态
 				this.show = false;
-				this.$uv.sleep(2).then(res=>{
+				this.$uv.sleep(2).then(res => {
 					this.show = true;
 				});
 				this.imgHeight = newVal;
@@ -152,10 +116,10 @@
 			wrapStyle() {
 				let style = {};
 				// 通过调用addUnit()方法，如果有单位，如百分比，px单位等，直接返回，如果是纯粹的数值，则加上rpx单位
-				if(this.mode !== 'heightFix') {
+				if (this.mode !== 'heightFix') {
 					style.width = this.$uv.addUnit(this.imgWidth);
 				}
-				if(this.mode !== 'widthFix') {
+				if (this.mode !== 'widthFix') {
 					style.height = this.$uv.addUnit(this.imgHeight);
 				}
 				// 如果是显示圆形，设置一个很多的半径值即可
@@ -181,8 +145,8 @@
 		},
 		mounted() {
 			this.show = true;
-			this.$nextTick(()=>{
-				if(this.observeLazyLoad) this.observerFn();
+			this.$nextTick(() => {
+				if (this.observeLazyLoad) this.observerFn();
 			})
 		},
 		methods: {
@@ -198,8 +162,8 @@
 			},
 			// 图片加载完成，标记loading结束
 			onLoadHandler(event) {
-				if(this.mode == 'widthFix') this.imgHeight = 'auto'
-				if(this.mode == 'heightFix') this.imgWidth = 'auto'
+				if (this.mode == 'widthFix') this.imgHeight = 'auto'
+				if (this.mode == 'heightFix') this.imgWidth = 'auto'
 				this.loading = false
 				this.isError = false
 				this.$emit('load', event)
@@ -213,7 +177,7 @@
 				};
 			},
 			// 观察图片是否在可见视口
-			observerFn(){
+			observerFn() {
 				// 在需要用到懒加载的页面，在触发底部的时候触发tOnLazyLoadReachBottom事件，保证所有图片进行加载
 				this.$nextTick(() => {
 					uni.$once('onLazyLoadReachBottom', () => {
@@ -252,12 +216,12 @@
 <style lang="scss" scoped>
 	@import '@/uni_modules/uv-ui-tools/libs/css/components.scss';
 	@import '@/uni_modules/uv-ui-tools/libs/css/color.scss';
-	$uv-image-error-top:0px !default;
-	$uv-image-error-left:0px !default;
-	$uv-image-error-width:100% !default;
-	$uv-image-error-hight:100% !default;
-	$uv-image-error-background-color:$uv-bg-color !default;
-	$uv-image-error-color:$uv-tips-color !default;
+	$uv-image-error-top: 0px !default;
+	$uv-image-error-left: 0px !default;
+	$uv-image-error-width: 100% !default;
+	$uv-image-error-hight: 100% !default;
+	$uv-image-error-background-color: $uv-bg-color !default;
+	$uv-image-error-color: $uv-tips-color !default;
 	$uv-image-error-font-size: 46rpx !default;
 
 	.uv-image {
@@ -267,6 +231,7 @@
 		&__image {
 			width: 100%;
 			height: 100%;
+			display: block;
 		}
 
 		&__loading,

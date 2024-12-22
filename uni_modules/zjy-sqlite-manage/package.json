@@ -1,0 +1,86 @@
+{
+    "id": "zjy-sqlite-manage",
+    "displayName": "sqlite-manage数据库可视化管理，内置dbUtils工具类",
+    "version": "1.0.0",
+    "description": "管理sqlite数据库，内置dbUtils工具类实现创建表、删除表，数据增、删、改、查，分页查询等，避免重复造轮子",
+    "keywords": [
+        "sqlite",
+        "数据库",
+        "管理",
+        "可视化"
+    ],
+    "repository": "",
+    "engines": {
+        "HBuilderX": "^3.8.0"
+    },
+    "dcloudext": {
+        "category": [
+            "前端组件",
+            "通用组件"
+        ],
+        "contact": {
+            "qq": ""
+        },
+        "declaration": {
+            "ads": "无",
+            "data": "无",
+            "permissions": "无"
+        },
+        "npmurl": ""
+    },
+    "uni_modules": {
+        "dependencies": [
+            "uni-drawer",
+            "uni-easyinput",
+            "uni-icons",
+            "uni-list",
+            "uni-popup"
+        ],
+        "encrypt": [],
+        "platforms": {
+            "cloud": {
+                "tcb": "u",
+                "aliyun": "u"
+            },
+            "client": {
+                "Vue": {
+                    "vue2": "u",
+                    "vue3": "u"
+                },
+                "App": {
+                    "app-vue": "y",
+                    "app-nvue": "y"
+                },
+                "H5-mobile": {
+                    "Safari": "n",
+                    "Android Browser": "n",
+                    "微信浏览器(Android)": "n",
+                    "QQ浏览器(Android)": "n"
+                },
+                "H5-pc": {
+                    "Chrome": "n",
+                    "IE": "n",
+                    "Edge": "n",
+                    "Firefox": "n",
+                    "Safari": "n"
+                },
+                "小程序": {
+                    "微信": "n",
+                    "阿里": "n",
+                    "百度": "n",
+                    "字节跳动": "n",
+                    "QQ": "n",
+                    "钉钉": "u",
+                    "快手": "u",
+                    "飞书": "u",
+                    "京东": "u"
+                },
+                "快应用": {
+                    "华为": "n",
+                    "联盟": "n"
+                }
+            }
+        }
+    },
+    "name": "sqlite-manage数据库可视化管理，内置增删改查工具类"
+}

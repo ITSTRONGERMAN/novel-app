@@ -1,0 +1,7 @@
+{
+  "component": true,
+  "usingComponents": {
+    "uv-image": "../../../uni_modules/uv-image/components/uv-image/uv-image",
+    "loading-vue": "../../common/loading/loading"
+  }
+}

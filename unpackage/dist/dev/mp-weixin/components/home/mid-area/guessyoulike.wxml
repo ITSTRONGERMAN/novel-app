@@ -1,0 +1,1 @@
+<view class="guess-like-container data-v-a81469f6"><view class="title data-v-a81469f6">猜你喜欢</view><novel-list-vue wx:for="{{a}}" wx:for-item="item" wx:key="a" class="data-v-a81469f6" u-i="{{item.b}}" bind:__l="__l" u-p="{{item.c}}"/></view>

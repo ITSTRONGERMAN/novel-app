@@ -1,0 +1,1 @@
+<view class="top-tapbar bcg-color-white data-v-11dcda35"><view class="l bcg-color-white data-v-11dcda35"><view wx:for="{{a}}" wx:for-item="item" wx:key="c" class="{{['data-v-11dcda35', 'item', item.b, 'bcg-color-white']}}" bindtap="{{item.d}}">{{item.a}}</view></view><view class="line-bar data-v-11dcda35" style="{{b}}"></view></view>

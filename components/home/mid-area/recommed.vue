@@ -6,20 +6,21 @@
 		</view>
 		<view class="list">
 			<loadingVue v-show="!isLoaded"></loadingVue>
-			<view class="list-item" v-show="isLoaded" v-for="item,index in novelList" :key="index">
+			<view class="list-item" @tap="goToNovelDetail(item)" v-show="isLoaded" v-for="item,index in novelList"
+				:key="item.id">
 				<view class="l">
 					<uv-image :src="item.cover" lazy-load observeLazyLoad fade loadingIcon="photo-fill" duration="450"
 						radius="5" width="50" height="60"></uv-image>
 				</view>
 				<view class="r">
 					<view class="name">
-						<text class="num">{{index+1}}</text>
+						<text :class="['num',index<3?'advanced':'']">{{index+1}}</text>
 						{{item.name}}
 					</view>
 					<view class="info">
 						{{item.genre}}
 						<text>{{item.author}}</text>
-						<text>{{item.status}}</text>
+						<!-- <text>{{item.status}}</text> -->
 						<text>{{item.words_count}}</text>
 					</view>
 				</view>
@@ -32,29 +33,47 @@
 <script setup>
 	import {
 		ref,
-		onMounted
+		defineProps,
+		defineEmits,
 	} from 'vue'
-	import novelList from '../../../fakedata/novelList';
 	import loadingVue from '../../common/loading/loading.vue';
-	// 是否加载完毕
-	const isLoaded = ref(false)
-	const current = ref(0)
+	import {
+		useStore
+	} from 'vuex'
+	const store = useStore()
+	const props = defineProps({
+		isLoaded: {
+			default: false,
+			type: Boolean
+		},
+		novelList: {
+			default: () => [],
+			type: Array
+		},
+		current: {
+			type: Number,
+			default: 0
+		}
+	})
+	const emits = defineEmits(['changeRank'])
 	const rankList = ref([
 		'推荐榜',
 		'点击榜',
 		'完本榜'
 	])
-	onMounted(() => {
-		setTimeout(() => {
-			isLoaded.value = true
-		}, 500)
-	})
+	// 切换榜单
 	const changeRank = (index) => {
-		current.value = index
-		isLoaded.value = false
-		setTimeout(() => {
-			isLoaded.value = true
-		}, 500)
+		emits('changeRank', index)
+	}
+	const goToNovelDetail = (detail) => {
+		store.commit('setCurrentNovelDetail', {
+			...detail,
+			type: "novel"
+		})
+		uni.navigateTo({
+			url: '/pages/nove-detail/index',
+			animationType: "slide-in-right"
+		})
 	}
 </script>
 
@@ -62,48 +81,46 @@
 	.recommend {
 		width: 100%;
 		background-color: #fff;
-		border-radius: 10rpx;
+		border-radius: 20rpx;
 		// overflow: hidden;
 
 		.title {
 			display: flex;
 			gap: 20rpx;
-			// font-weight: bold;
 			padding-top: 30rpx;
 			padding-left: 30rpx;
 			padding-bottom: 0;
 			transition: all 0.3s;
-			color: $font-gray-color;
+			color: $gray-color;
 		}
 
 		.active {
-			color: $main-color ;
-			font-weight: bold;
+			color: #000;
+			font-weight: 500;
 		}
 
 		.list {
+			column-count: 2;
+			column-gap: 16px;
 			padding: 20rpx 30rpx;
-			display: flex;
-			flex-direction: column;
-			gap: 20rpx;
 			height: 580rpx;
 			flex-wrap: wrap;
+			gap: 20rpx;
 			background-color: #fff;
+			position: relative;
 
 			@keyframes fadeIn {
 				0% {
 					opacity: 0;
-					/* 初始透明度为0 */
 				}
 
 				100% {
 					opacity: 1;
-					/* 最终透明度为1 */
 				}
 			}
 
 			.list-item {
-				width: 50%;
+				margin-bottom: 20rpx;
 				display: flex;
 				animation: fadeIn 0.5s forwards;
 
@@ -118,23 +135,25 @@
 						display: -webkit-box;
 						-webkit-box-orient: vertical;
 						-webkit-line-clamp: 2;
-						/* 限制为两行 */
 						overflow: hidden;
-						/* 隐藏超出的文本 */
+
+						.advanced {
+							color: $gold-color !important;
+						}
 
 						.num {
-							color: red;
+							color: #000;
 							font-weight: bold;
 						}
 					}
 
 					.info {
 						font-size: 20rpx;
-						color: $main-color;
+						color: $gold-color;
 
 						text {
 							margin-left: 15rpx;
-							color: $font-gray-color;
+							color: $gray-color;
 						}
 					}
 				}

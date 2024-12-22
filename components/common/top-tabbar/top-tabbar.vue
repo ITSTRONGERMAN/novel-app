@@ -1,11 +1,9 @@
 <template>
-	<view class="top-tapbar">
+	<view :id="id" class="top-tapbar ">
 		<view class="l">
-			<view :class="['item',value==index?'active':'']" v-for="item,index in tabBarList" :key="index"
-				@tap="handelChangeTabbarItem({name:item.name,index})">{{item.name}}</view>
-
+			<view :class="['item',value==index?'active':'',]" v-for="item,index in tabBarList" :key="index"
+				@tap="handelChangeTabbarItem({name:item,index})">{{item}}</view>
 		</view>
-		<view class="line-bar" :style="`transform: translate(${54+value*150}rpx, -50%)`"></view>
 	</view>
 </template>
 
@@ -19,63 +17,50 @@
 		value: {
 			type: Number,
 			default: 0,
+		},
+		id: {
+			type: String,
+			default: ''
+		},
+		tabBarList: {
+			type: Array,
+			default: () => []
 		}
 	})
 	const emits = defineEmits(['change'])
-	// 顶部tabbar内容
-	const tabBarList = [{
-			name: "小说",
-		},
-		{
-			name: '漫画'
-
-		}, {
-			name: '壁纸'
-		}
-	]
-
 	// 点击tabbar项
 	const handelChangeTabbarItem = (e) => {
 		emits('change', e)
 	}
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 	.top-tapbar {
 		height: 88rpx;
 		display: flex;
 		align-items: center;
 		position: relative;
-
-		.line-bar {
-			position: absolute;
-			width: 40rpx;
-			transform: translate(54rpx, -50%); // 调整为 -50%
-			bottom: 10%;
-			transition-duration: 0.3s;
-			background-color: $main-color;
-			height: 6rpx;
-			border-radius: 6rpx;
-		}
+		padding: 0 40rpx;
 
 		.l {
 			display: flex;
 			align-items: center;
 			width: 100%;
+			gap: 40rpx;
 
 			.item {
 				height: 80rpx;
 				line-height: 80rpx;
-				font-size: 34rpx;
+				font-size: 32rpx;
 				transition-duration: 0.5s;
-				padding: 0 40rpx;
 				text-align: center;
-
+				color: $gray-color
 			}
 
 			.active {
-				color: $main-color;
-				font-weight: bold;
+				transform: scale(1.1);
+				color: #000;
+				font-weight: 500;
 			}
 		}
 	}

@@ -1,0 +1,1 @@
+<uv-tabbar wx:if="{{b}}" u-s="{{['d']}}" u-i="8828bc22-0" bind:__l="__l" u-p="{{b}}"><uv-tabbar-item wx:for="{{a}}" wx:for-item="item" wx:key="a" u-i="{{item.b}}" bind:__l="__l" u-p="{{item.c}}"></uv-tabbar-item></uv-tabbar>

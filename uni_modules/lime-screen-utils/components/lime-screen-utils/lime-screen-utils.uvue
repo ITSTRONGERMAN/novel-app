@@ -1,0 +1,67 @@
+<template>
+	<view>
+		<text>当前屏幕亮度：{{brightness}}</text>
+		<button @click="onGetScreenBrightness">获取屏幕亮度</button>
+		<button @click="onSetScreenBrightness">设置亮度为0.5</button>
+		<button @click="onSetKeepScreenOn">保持屏幕亮度</button>
+		<button @click="onSetKeepScreenOn2">取消屏幕亮度</button>
+	</view>
+</template>
+
+<script setup>
+	import {
+		setScreenBrightness,
+		SetScreenBrightnessOption,
+		getScreenBrightness,
+		GetScreenBrightnessOption,
+		setKeepScreenOn,
+		SetKeepScreenOnOption
+	} from '@/uni_modules/lime-screen-utils';
+	const brightness = ref(-1)
+
+
+	
+	const onGetScreenBrightness = () => {
+		getScreenBrightness({
+			success(res) {
+				brightness.value = res.value
+				console.log('res', res)
+			}
+		} as GetScreenBrightnessOption)
+	}
+	const onSetScreenBrightness = () => {
+		setScreenBrightness({
+			value: 0.5,
+			success:(res) => {
+				console.log('res', res)
+			}
+		} as SetScreenBrightnessOption)
+	}
+	
+	const onSetKeepScreenOn = () => {
+		setKeepScreenOn({
+			keepScreenOn: true,
+			success(res){
+				console.log('setKeepScreenOn', res)
+			},
+			fail(err) {
+				console.log('err', err)
+			}
+		} as SetKeepScreenOnOption)
+	}
+	const onSetKeepScreenOn2 = () => {
+		setKeepScreenOn({
+			keepScreenOn: false,
+			success(res){
+				console.log('setKeepScreenOn', res)
+			},
+			fail(err) {
+				console.log('err', err)
+			}
+		} as SetKeepScreenOnOption)
+	}
+</script>
+
+<style>
+
+</style>

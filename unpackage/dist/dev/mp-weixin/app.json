@@ -1,0 +1,18 @@
+{
+  "pages": [
+    "pages/home/index",
+    "components/home/mid-area/mid-area",
+    "pages/nove-detail/index",
+    "pages/chapters/chapters",
+    "pages/read/read"
+  ],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "uni-app",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "backgroundColor": "#F8F8F8",
+    "bounce": "none"
+  },
+  "tabBar": {},
+  "usingComponents": {}
+}

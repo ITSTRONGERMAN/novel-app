@@ -1,0 +1,177 @@
+import Activity from "android.app.Activity";
+import Settings from "android.provider.Settings";
+import Window from 'android.view.Window';
+import WindowManager from 'android.view.WindowManager';
+import Build from 'android.os.Build';
+// import PowerManager from 'android.os.PowerManager';
+
+import ContentObserver from "android.database.ContentObserver";
+// import Handler from "android.os.Handler";
+// import Looper from "android.os.Looper";
+
+import {
+	SetScreenBrightnessOption,
+	GeneralCallbackResult,
+	GetScreenBrightnessOption,
+	SetKeepScreenOnOption
+} from '../interface.uts'
+
+const SCREEN_BRIGHTNESS_DEFAULT = (-1).toFloat();
+
+
+class GeneralCallbackResultImpl implements GeneralCallbackResult {
+	errMsg : string
+	constructor(errMsg : string) {
+		this.errMsg = errMsg
+	}
+}
+class GetScreenBrightnessSuccessCallbackOptionImpl implements GetScreenBrightnessSuccessCallbackOption {
+	errMsg : string
+	value : number
+	constructor(value:number,errMsg : string) {
+		this.value = value
+		this.errMsg = errMsg
+	}
+} 
+
+function clamp(value: number, min: number, max: number):number {
+	return Math.max(min, Math.min(value, max))
+}
+// 监听
+class BrightnessContentObserver extends ContentObserver {
+	context : Activity
+	constructor(handler : Handler, context : Activity) {
+		super(handler);
+		this.context = context
+	}
+	override onChange(selfChange : boolean) {
+		// 当观察到数据变化时，执行相应的操作
+		const brightness = Settings.System.getInt(this.context.getContentResolver(), Settings.System.SCREEN_BRIGHTNESS);
+	}
+}
+class ScreenUtils {
+	context : Activity
+	window : Window
+	brightness : number = 0
+	maxBrightness : number
+	minBrightness : number
+	curBrightness : number
+	constructor() {
+		this.context = UTSAndroid.getUniActivity()!
+		this.window = this.context.getWindow()
+		this.curBrightness = this._getScreenBrightness();
+
+		const getResources = UTSAndroid.getAppContext()!.getResources()
+		const brightnessSettingMaximumId = getResources.getIdentifier("config_screenBrightnessSettingMaximum", "integer", "android");
+		const brightnessSettingMinimumId = getResources.getIdentifier("config_screenBrightnessSettingMinimum", "integer", "android");
+		this.maxBrightness = getResources.getInteger(brightnessSettingMaximumId);
+		this.minBrightness = getResources.getInteger(brightnessSettingMinimumId);
+
+		// const handler = new Handler(Looper.getMainLooper());
+		// const brightnessObserver = new BrightnessContentObserver(handler, this.context);
+		// this.context.getContentResolver().registerContentObserver(Settings.System.getUriFor(Settings.System.SCREEN_BRIGHTNESS), false, brightnessObserver);
+
+	}
+	_getScreenBrightness() : number {
+		return Settings.System.getInt(this.context.getContentResolver(), Settings.System.SCREEN_BRIGHTNESS)
+	}
+	setScreenBrightness(option : SetScreenBrightnessOption) {
+		try {
+			let _brightness = clamp(option.value, 0, 1);
+			this.brightness = _brightness;
+			const attributes = this.window.getAttributes();
+			attributes.screenBrightness = _brightness.toFloat();
+			UTSAndroid.getUniActivity()!.getWindow().setAttributes(attributes);
+			// GeneralCallbackResult()
+			option.success?.(new GeneralCallbackResultImpl('成功'))
+			option.complete?.(new GeneralCallbackResultImpl('成功'))
+		} catch (e) {
+			const err = JSON.stringify(e)
+			option.fail?.(new GeneralCallbackResultImpl(err))
+			option.complete?.(new GeneralCallbackResultImpl(err))
+
+		}
+	}
+	getScreenBrightness(option : GetScreenBrightnessOption) {
+		try {
+			const window = this.context.getWindow();
+			const attributes = window.getAttributes();
+			let screenBrightness = attributes.screenBrightness;
+			if (screenBrightness == SCREEN_BRIGHTNESS_DEFAULT) {
+				screenBrightness = (this._getScreenBrightness() / this.maxBrightness).toFloat()
+			}
+			this.brightness = screenBrightness;
+			option.success?.(new GetScreenBrightnessSuccessCallbackOptionImpl(screenBrightness, '成功'))
+			option.complete?.(new GeneralCallbackResultImpl('成功'))
+		} catch (e) {
+			const err = JSON.stringify(e)
+			option.fail?.(new GeneralCallbackResultImpl(err))
+			option.complete?.(new GeneralCallbackResultImpl(err))
+		}
+	}
+	setKeepScreenOn(option:SetKeepScreenOnOption) {
+		try {
+			const window = this.context.getWindow();
+			if(option.keepScreenOn) {
+				window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+			} else {
+				window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+			}
+			option.success?.(new GeneralCallbackResultImpl('成功'))
+			option.complete?.(new GeneralCallbackResultImpl('成功'))
+		} catch (e) {
+			const err = JSON.stringify(e)
+			option.fail?.(new GeneralCallbackResultImpl(err))
+			option.complete?.(new GeneralCallbackResultImpl(err))
+		}
+
+	}
+	private checkSelfPermission() : Promise<boolean> {
+		let permissionNeed = ["android.permission.WRITE_SETTINGS", "android.permission.WAKE_LOCK"]
+		return new Promise((resoleve, reject) => {
+			UTSAndroid.requestSystemPermission(UTSAndroid.getUniActivity()!, permissionNeed, function (allRight : boolean, grantedList : string[]) {
+				if (allRight) {
+					// 权限请求成功			
+					if (allRight) {
+						resoleve(true);
+					} else {
+						reject(grantedList);
+					}
+				} else {
+					//用户拒绝了部分权限
+				}
+			}, function (_ : boolean, grantedList : string[]) {
+				reject(grantedList);
+				//用户拒绝了部分权限
+			})
+		})
+	}
+	private hasWriteSettingsPermission() : boolean {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+			return Settings.System.canWrite(this.context);
+		}
+		return true;
+	}
+	/**
+	* 判断是否开启了自动亮度调节
+	*/
+	isAutoBrightness() : boolean {
+		try {
+			return Settings.System.getInt(this.context.getContentResolver(), Settings.System.SCREEN_BRIGHTNESS_MODE) == Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC;
+		} catch (e) {
+			return false
+		}
+	}
+}
+
+
+const screenUtils = new ScreenUtils();
+export function setScreenBrightness(option : SetScreenBrightnessOption) {
+	screenUtils.setScreenBrightness(option)
+}
+export function getScreenBrightness(option : GetScreenBrightnessOption) {
+	screenUtils.getScreenBrightness(option)
+}
+export function setKeepScreenOn(option: SetKeepScreenOnOption) {
+	screenUtils.setKeepScreenOn(option)
+}

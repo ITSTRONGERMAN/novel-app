@@ -1,0 +1,1 @@
+<view class="item"><scroll-view scroll-y class="scroll-box" refresher-default-style="black" style="{{'height:' + a}}" bindscrolltolower="{{b}}"><slot></slot></scroll-view></view>

@@ -1,0 +1,159 @@
+<template>
+	<view class="demo-block">
+		<text class="demo-block__title-text ultra">Empty 空状态</text>
+		<text class="demo-block__desc-text">空状态时的占位提示。</text>
+		<view class="demo-block__body">
+			<view class="demo-block card">
+				<text class="demo-block__title-text large">基础用法</text>
+				<view class="demo-block__body">
+					<l-empty description="空空如也" :imageSize="[100]"/>
+				</view>
+			</view>
+			<view class="demo-block card">
+				<text class="demo-block__title-text large">通用错误</text>
+				<view class="demo-block__body">
+					<l-empty image="error" description="出错了" />
+				</view>
+			</view>
+			<view class="demo-block card">
+				<text class="demo-block__title-text large">购物车</text>
+				<view class="demo-block__body">
+					<l-empty image="cart" description="购物车空荡荡" />
+				</view>
+			</view>
+			<view class="demo-block card">
+				<text class="demo-block__title-text large">404</text>
+				<view class="demo-block__body">
+					<l-empty image="404" description="糟糕,您要访问的页面已丢失" />
+				</view>
+			</view>
+			<view class="demo-block card">
+				<text class="demo-block__title-text large">网络错误</text>
+				<view class="demo-block__body">
+					<l-empty image="network" description="网络连接异常" />
+				</view>
+			</view>
+			<view class="demo-block card">
+				<text class="demo-block__title-text large">搜索提示</text>
+				<view class="demo-block__body">
+					<l-empty image="search" description="没有找到相关内容" />
+				</view>
+			</view>
+			<view class="demo-block card">
+				<text class="demo-block__title-text large">评论提示</text>
+				<view class="demo-block__body">
+					<l-empty image="comment" description="还没有评论,赶紧抢个沙发" />
+				</view>
+			</view>
+			<view class="demo-block card">
+				<text class="demo-block__title-text large">订单提示</text>
+				<view class="demo-block__body">
+					<l-empty image="order" description="还没有订单哦" />
+				</view>
+			</view>
+			<view class="demo-block card">
+				<text class="demo-block__title-text large">快递提示</text>
+				<view class="demo-block__body">
+					<l-empty image="express" description="还没有快递" />
+				</view>
+			</view>
+			<view class="demo-block card">
+				<text class="demo-block__title-text large">消息提示</text>
+				<view class="demo-block__body">
+					<l-empty image="message" description="暂无消息哦" />
+				</view>
+			</view>
+			<view class="demo-block card">
+				<text class="demo-block__title-text large">优惠券提示</text>
+				<view class="demo-block__body">
+					<l-empty image="coupon" description="没有优惠券呢" />
+				</view>
+			</view>
+			<view class="demo-block card">
+				<text class="demo-block__title-text large">地址提示</text>
+				<view class="demo-block__body">
+					<l-empty image="address" description="您还没填写收货地址哦!" />
+				</view>
+			</view>
+			<view class="demo-block card">
+				<text class="demo-block__title-text large">自定义大小</text>
+				<view class="demo-block__body">
+					<l-empty image-size="100" description="描述文字" />
+				</view>
+			</view>
+			<view class="demo-block card">
+				<text class="demo-block__title-text large">自定义图片</text>
+				<view class="demo-block__body">
+					<l-empty image="https://manhattan.didistatic.com/static/manhattan/do1_JX7bcfXqLpStKRv31xlp"
+						image-size="100" description="不太确定自己错在了哪里..." />
+				</view>
+			</view>
+			<view class="demo-block card">
+				<text class="demo-block__title-text large">底部内容</text>
+				<view class="demo-block__body">
+					<l-empty description="描述文字">
+					  <button type="primary" class="bottom-button">按钮</button>
+					</l-empty>
+				</view>
+			</view>
+		</view>
+	</view>
+</template>
+<script>
+</script>
+<style lang="scss">
+	.demo-block {
+		margin: 32px 10px 0;
+
+		// overflow: visible;
+		&.card {
+			background-color: white;
+			padding: 30rpx;
+			margin-bottom: 20rpx;
+		}
+
+		&__title {
+			margin: 0;
+			margin-top: 8px;
+
+			&-text {
+				color: rgba(0, 0, 0, 0.6);
+				font-weight: 400;
+				font-size: 14px;
+				line-height: 16px;
+
+				&.large {
+					color: rgba(0, 0, 0, 0.9);
+					font-size: 18px;
+					font-weight: 700;
+					line-height: 26px;
+				}
+
+				&.ultra {
+					color: rgba(0, 0, 0, 0.9);
+					font-size: 24px;
+					font-weight: 700;
+					line-height: 32px;
+				}
+			}
+		}
+
+		&__desc-text {
+			color: rgba(0, 0, 0, 0.6);
+			margin: 8px 16px 0 0;
+			font-size: 14px;
+			line-height: 22px;
+		}
+
+		&__body {
+			margin: 16px 0;
+			overflow: visible;
+
+			.demo-block {
+				// margin-top: 0px;
+				margin: 0;
+				margin-bottom: 10px;
+			}
+		}
+	}
+</style>

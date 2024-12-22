@@ -1,0 +1,1 @@
+<view class="loading-container data-v-028c4300"><image wx:if="{{a}}" src="{{b}}" mode="aspectFit" class="recommend-loading-img data-v-028c4300"></image><view wx:elif="{{c}}" class="{{['data-v-028c4300', 'pulldown-loading', d]}}"></view></view>

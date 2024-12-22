@@ -6,9 +6,13 @@ $uni-color-primary: #007aff;
 $uni-color-success: #4cd964;
 $uni-color-warning: #f0ad4e;
 $uni-color-error: #dd524d;
-// 主色调
+// 自定义颜色
 $main-color: rgb(41, 121, 255);
 $font-gray-color: #989898;
+$linear-color: linear-gradient(45deg, rgba(250, 223, 209,0.5), rgba(205, 254, 209,0.5));
+$gold-color: #D4AB63;
+$gray-color: #94a3b8;
+$red-color: #D33D22;
 /* 文字基本颜色 */
 $uni-text-color:#333;//基本色
 $uni-text-color-inverse:#fff;//反色

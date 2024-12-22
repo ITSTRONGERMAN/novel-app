@@ -1,43 +1,110 @@
 {
 	"pages": [{
-			"path": "pages/home/index",
+			"path": "pages/home/index"
+		},
+		{
+			"path": "components/home/mid-area/mid-area"
+		},
+		{
+			"path": "pages/nove-detail/index"
+		},
+		{
+			"path": "pages/chapters/chapters",
 			"style": {
-				"navigationStyle": "custom"
+				"navigationStyle": "default"
 			}
 		},
 		{
-			"path": "components/home/mid-area/mid-area",
-			"style": {
-				"navigationBarTitleText": ""
+			"path": "pages/read/read"
+		},
+		{
+			"path": "pages/bookshelf/bookshelf"
+		},
+		{
+			"path": "pages/class/class"
+		},
+		{
+			"path": "pages/user/user"
+		},
+		{
+			"path": "pages/search/search"
+		},
+		{
+			"path": "pages/comic-read/comic-read"
+		},
+		{
+			"path" : "pages/history/history",
+			"style" : 
+			{
+				"navigationBarTitleText" : "浏览历史"
+			}
+		},
+		{
+			"path" : "pages/aboutus/aboutus",
+			"style" : 
+			{
+				"navigationBarTitleText" : ""
 			}
 		}
 	],
 	// 底部tabbar
 	"tabBar": {
-		// "list": [{
-		// 		"pagePath": "pages/home/index",
-		// 		"text": "书城"
-		// 	},
-		// 	{
-		// 		// "pagePath": "pages/book/book",
-		// 		"text": "书架"
-		// 	},
-		// 	{
-		// 		// "pagePath": "pages/class/class",
-		// 		"text": "分类"
-		// 	},
-		// 	{
-		// 		// "pagePath": "pages/user/user",
-		// 		"text": "我的"
-		// 	}
-		// ]
+		"color": "#808080",
+		"selectedColor": "#000",
+		"borderStyle": "black",
+		"backgroundColor": "#ffffff",
+		"height": "50px",
+		"fontSize": "14px",
+		"iconWidth": "24px",
+		"spacing": "3px",
+		"list": [{
+				"iconPath": "static/icons/home.png",
+				"selectedIconPath": "static/icons/home_select.png",
+				"pagePath": "pages/home/index",
+				"text": "首页"
+			}, {
+				"iconPath": "/static/icons/book.png",
+				"selectedIconPath": "/static/icons/book_select.png",
+				"pagePath": "pages/bookshelf/bookshelf",
+				"text": "书架"
+			},
+			{
+				"iconPath": "/static/icons/class.png",
+				"selectedIconPath": "/static/icons/class_select.png",
+				"pagePath": "pages/class/class",
+				"text": "分类"
+			},
+			{
+				"iconPath": "/static/icons/user.png",
+				"selectedIconPath": "/static/icons/user_select.png",
+				"pagePath": "pages/user/user",
+				"text": "我的"
+			}
+		]
 	},
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
+		"navigationStyle": "custom",
 		"navigationBarTitleText": "uni-app",
 		"navigationBarBackgroundColor": "#F8F8F8",
+		"pageOrientation": "portrait",
 		"backgroundColor": "#F8F8F8",
-		"bounce": "none"
+		"bounce": "none",
+		"app-plus": {
+			"safearea": {
+				"bottom": {
+					"offset": "none"
+				}
+			}
+		}
 	},
-	"uniIdRouter": {}
+	"uniIdRouter": {},
+	"condition": { //模式配置，仅开发期间生效
+		"current": 0, //当前激活的模式(list 的索引项)
+		"list": [{
+			"name": "", //模式名称
+			"path": "", //启动页面，必选
+			"query": "" //启动参数，在页面的onLoad函数里面得到
+		}]
+	}
 }

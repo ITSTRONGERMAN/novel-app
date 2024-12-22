@@ -1,0 +1,11 @@
+{
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "uv-search": "../../uni_modules/uv-search/components/uv-search/uv-search",
+    "top-tabbar-vue": "../../components/common/top-tabbar/top-tabbar",
+    "bottom-tabbar-vue": "../../components/common/bottom-tabbar/bottom-tabbar",
+    "mid-area-vue": "../../components/home/mid-area/mid-area",
+    "novel-vue": "../../components/home/novel",
+    "mid-area-item-vue": "../../components/home/mid-area/mid-area-item"
+  }
+}

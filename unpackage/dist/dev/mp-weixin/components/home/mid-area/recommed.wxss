@@ -1,0 +1,82 @@
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+.recommend.data-v-abb1f8e2 {
+  width: 100%;
+  background-color: #fff;
+  border-radius: 10rpx;
+}
+.recommend .title.data-v-abb1f8e2 {
+  display: flex;
+  gap: 20rpx;
+  padding-top: 30rpx;
+  padding-left: 30rpx;
+  padding-bottom: 0;
+  transition: all 0.3s;
+  color: #989898;
+}
+.recommend .active.data-v-abb1f8e2 {
+  color: #2979ff;
+  font-weight: bold;
+}
+.recommend .list.data-v-abb1f8e2 {
+  padding: 20rpx 30rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+  height: 580rpx;
+  flex-wrap: wrap;
+  background-color: #fff;
+}
+@keyframes fadeIn-abb1f8e2 {
+0% {
+    opacity: 0;
+    /* 初始透明度为0 */
+}
+100% {
+    opacity: 1;
+    /* 最终透明度为1 */
+}
+}
+.recommend .list .list-item.data-v-abb1f8e2 {
+  width: 50%;
+  display: flex;
+  animation: fadeIn-abb1f8e2 0.5s forwards;
+}
+.recommend .list .list-item .r.data-v-abb1f8e2 {
+  margin-left: 30rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.recommend .list .list-item .r .name.data-v-abb1f8e2 {
+  font-size: 24rpx;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  /* 限制为两行 */
+  overflow: hidden;
+  /* 隐藏超出的文本 */
+}
+.recommend .list .list-item .r .name .num.data-v-abb1f8e2 {
+  color: red;
+  font-weight: bold;
+}
+.recommend .list .list-item .r .info.data-v-abb1f8e2 {
+  font-size: 20rpx;
+  color: #2979ff;
+}
+.recommend .list .list-item .r .info text.data-v-abb1f8e2 {
+  margin-left: 15rpx;
+  color: #989898;
+}

@@ -1,0 +1,45 @@
+
+	/*每个页面公共css */
+.status-bar{
+	height: var(--status-bar-height);
+}
+*{
+	box-sizing: border-box;
+}
+.bcg-color{
+	background-color: #F6F6F6;
+}
+.bcg-color-white{
+	background-color: #fff;
+}
+@font-face {
+	font-family: "custom-icon";
+	/* Project id 4716732 */
+	src: url('data:application/x-font-woff2;charset=utf-8;base64,d09GMgABAAAAAAQMAAsAAAAACmwAAAPAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHFQGYACDXgqGeIVqATYCJAMcCxAABCAFhQsHbxsLCREVnGXIPhLjGMr/bSlDLG6C5+E933ODNkve0melA6B0lD8hd8RvN5eDLRE2wvx22Omn70j/d/7SlGEUTuEERjH8/UyXCVjPvvAAR5wVtN0d7SzKUqOsIglL4ED0HrIpMzKw438KApgUpiJK9Zr1m2P37zJ8IIloGMMF4krp36dXFwzeiIbQBUPjaXqkdlsWooMyS7kGLPC/Xr5QVAxQ0FWMazXuWaM7F4OZn36rbsgF9RnucE2wtQLogArkX5hZpuNOFzWU5/eVZtnf1GgO2BgoeIKZwVLBMsGqH+t++h0KQbrZGCrYZh3oCCrd//PQQDwQZRigWys8BymyIegQLAVBIFgGggrBqhAU+FhXDpg+/QbxM1N6yfY2EAlSAKQBhc7vVlDNAi0+WouOd4XWO8SERYeNm3MO3LMm7i0zcvYd0QN3rag5t1HElMDyLGMpmrtsMStExinh6hirsNt2rVcUc861Un3KsKEFTTnXa+ByKkt/10CxFet3m/bse/fc+/ct35w9GxIPN7ZnXzkcOHLV8h10m9uzd65NOOQWXrpuV9UaDx8GHjxobR8JFI3vdfmQe/BSg8Ol0nanPkvdndbOX8PvOC382f4WjkPVuc/qbDVWG46tzva/ZCvVF7c7fuJ4ZalTB+l18aQ+frN2abtZtPU4x2svGoVfn6vPjvefjHO8aJXFLN67m7Tbu2fZw/2KPZ3Uc1Xki+KtixVt1ce6auuixV9Eruox+Mn/PSnWxXIXrZQ9jYdGP8u37dVMXywPom6iHMV4IBQC3VG+gy9Jd1gm/ntuRa7Ofd528pX/Z1g3P/K27OznvixkbH1fd9R8gIECjYV/Rn973QmRnnRHDYBXE/mIWc/2xbFa6xrCSxU5DwUwTS+EiDeSF8OpoxqXg2ARFQMFL6lAxcKBa+jCcB1dDu5B1wQm+WgiGGz78XDmiJYD8PMBIMTyBQo2V4FKLD+4hv7DdLLocA86CZi0lOxsFn6ZsWNUghb0G2pDg7MaxAQv1Ef6zGcsQ6dYbI5id2Rfw0jI4rQkc8IBub99/KPMRRw4ph6Ow14Pu45gZGrQSFyJjNskcWWfEhvqJzsYRCEgFkDzBqgxEAPOPU0wBDwC0RMh3+cMUhLoUDDehZL4HYR5ZU0WBsiISZvBTzwQNO1wgft5HpTkCIIDbCV3cwPHJduRzkwSwFi+WQNiEGKqDvGRLQlp55oq42nV/W2fAJgYz/CKIqpoootHvGJgdFUiyO90HUgymhwwxVrRpitR6yvsnFMQmlpNJg==') format('woff2');
+}
+.custom-icon {
+	font-family: "custom-icon" !important;
+	font-size: 16px;
+	font-style: normal;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+.custom-icon-battery-full:before {
+	content: "\e642";
+}
+.custom-icon-battery-mid:before {
+	content: "\e639";
+}
+.custom-icon-battery-most:before {
+	content: "\e9f2";
+}
+.custom-icon-battery-low:before {
+	content: "\e622";
+}
+.icon-battery-empty:before {
+	content: "\e637";
+}
+.custom-icon-bookshelfshujia:before {
+	content: "\e84a";
+}
+page{--status-bar-height:25px;--top-window-height:0px;--window-top:0px;--window-bottom:0px;--window-left:0px;--window-right:0px;--window-magin:0px}[data-c-h="true"]{display: none !important;}
