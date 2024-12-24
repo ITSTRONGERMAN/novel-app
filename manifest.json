@@ -23,8 +23,7 @@
 		},
 		/* 模块配置 */
 		"modules": {
-			"SQLite": {},
-			"VideoPlayer": {}
+			"SQLite": {}
 		},
 		/* 应用发布信息 */
 		"distribute": {
@@ -58,7 +57,8 @@
 			"sdkConfigs": {
 				"share": {},
 				"payment": {},
-				"maps": {}
+				"maps": {},
+				"oauth": {}
 			},
 			"icons": {
 				"android": {

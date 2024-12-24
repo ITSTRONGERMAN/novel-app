@@ -5,8 +5,8 @@
 			<view class="login-contanier">
 				<image src="../../static/logo.png" mode="" class="headImg"></image>
 				<view class="userInfo">
-					<view class="user-name">登录/注册</view>
-					<view class="edit-info">编辑资料</view>
+					<view class="user-name" @tap="goToLogin">登录/注册</view>
+					<view class="edit-info" v-if="false">编辑资料</view>
 				</view>
 			</view>
 		</view>
@@ -26,7 +26,7 @@
 				<view class="b">阅读时长</view>
 			</view>
 			<view class="readInfo-item">
-				<view class="t">3<text class="small-font">个</text></view>
+				<view class="t">0<text class="small-font">个</text></view>
 				<view class="b">我的评论</view>
 			</view>
 			<view class="readInfo-item">
@@ -66,7 +66,7 @@
 				</view>
 				<view class="config-list-item">
 					<uv-icon name="dashang" custom-prefix="custom-icon" size="26"></uv-icon>
-					<view class="txt">打赏</view>
+					<view class="txt">打赏作者</view>
 				</view>
 			</view>
 		</view>
@@ -109,7 +109,7 @@
 	// 分享APP
 	const handelShareApp = () => {
 		uni.shareWithSystem({
-			summary: '番猫小说，\n热门、漫画小说免费看\n官网地址：https://www.douyin.com/?recommend=1',
+			summary: '番猫小说\n免费开源好用得阅读APP\n热门小说、漫画免费看\n官网地址：https://www.douyin.com/?recommend=1\ngithub地址：https://github.com/ITSTRONGERMAN/novel-app',
 			success() {
 
 			},
@@ -126,6 +126,16 @@
 		uni.navigateTo({
 			url: "/pages/history/history"
 		})
+	}
+	// 前往登录页
+	const goToLogin = () => {
+		uni.navigateTo({
+			url: "/pages/login/login"
+		})
+	}
+	// 打赏
+	const reward = () => {
+
 	}
 </script>
 

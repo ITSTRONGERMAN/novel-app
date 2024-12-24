@@ -6,7 +6,7 @@
 			<view class="action-list">
 				<view class="btn">
 					<view v-if="isEditMode" @tap="isEditMode=false">取消</view>
-					<uv-icon v-else name="arrow-left" size="24" @tap="back"></uv-icon>
+					<uv-icon v-else name="arrow-left" size="48rpx" @tap="back"></uv-icon>
 				</view>
 				<view class="title">浏览历史</view>
 				<view class="btn" style="text-align: right;">
@@ -38,14 +38,14 @@
 		<!-- 底部操纵栏 -->
 		<view class="operation-contaniner" v-if="!isMounted||isEditMode">
 			<view class="l" @tap="addToBookShell(null,1)">
-				<uv-icon name="jiarushujia" color="#000" custom-prefix="custom-icon" size="24"></uv-icon>
+				<uv-icon name="jiarushujia" color="#000" custom-prefix="custom-icon" size="48rpx"></uv-icon>
 				<view class="txt">
 					加入书架
 				</view>
 				<view class="count">({{checkedCount}})</view>
 			</view>
 			<view class="r" @tap="modal.open()">
-				<uv-icon name="trash" size="26" color="#F66B32"></uv-icon>
+				<uv-icon name="trash" size="52rpx" color="#F66B32"></uv-icon>
 				<view class="txt" style="color: #F66B32;">
 					删除
 				</view>

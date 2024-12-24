@@ -86,51 +86,78 @@ uni-view[data-v-b7a6dd5d], uni-scroll-view[data-v-b7a6dd5d], uni-swiper-item[dat
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
-.about-contanier[data-v-5c2e2cf7] {
+.input[data-v-021724e2] {
+  padding: 0.78125rem 1.25rem;
+  background-color: #F6F6F4;
+  border-radius: 3.125rem;
+  display: flex;
+  gap: 0.625rem;
+  align-items: center;
+}
+.input uni-input[data-v-021724e2] {
+  flex: 1;
+}
+.input .icon[data-v-021724e2] {
+  padding: 0.25rem;
+  border-radius: 50%;
+  background-color: #E2E2E0;
+}
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+.login-container[data-v-e4e4508d] {
   width: 100vw;
   height: 100vh;
 }
-.about-contanier .header[data-v-5c2e2cf7] {
+.login-container .header[data-v-e4e4508d] {
   padding: 0 0.625rem;
 }
-.about-contanier .icon-box[data-v-5c2e2cf7] {
-  padding: 3.125rem 0;
+.login-container .icon-box[data-v-e4e4508d] {
+  padding: 2.5rem 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.625rem;
 }
-.about-contanier .icon-box uni-image[data-v-5c2e2cf7] {
+.login-container .icon-box uni-image[data-v-e4e4508d] {
   box-shadow: 0 0 0.46875rem rgba(0, 0, 0, 0.1);
-  width: 4.6875rem;
-  height: 4.6875rem;
+  width: 5.625rem;
+  height: 5.625rem;
   border-radius: 0.625rem;
 }
-.about-contanier .icon-box .name[data-v-5c2e2cf7] {
-  font-size: 1.125rem;
+.login-container .form[data-v-e4e4508d] {
+  display: block;
+  width: 85vw;
+  margin: 0 auto;
 }
-.about-contanier .about-list[data-v-5c2e2cf7] {
-  background-color: #fff;
-}
-.about-contanier .about-list .about-item[data-v-5c2e2cf7] {
-  padding: 0.9375rem;
-  border-bottom: 0.0625rem solid #eee;
-  font-size: 1rem;
-  transition: all 0.3s;
+.login-container .form .inner-box[data-v-e4e4508d] {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: 1.25rem;
 }
-.about-contanier .about-list .about-item .content[data-v-5c2e2cf7] {
+.login-container .form .inner-box .btn-group[data-v-e4e4508d] {
+  display: flex;
+  justify-content: center;
+  gap: 0.9375rem;
+}
+.login-container .form .inner-box .btn-group .btn[data-v-e4e4508d] {
   flex: 1;
-  display: -webkit-box;
-  text-overflow: ellipsis;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 1;
-  overflow: hidden;
+  background-color: #F7713C;
+  color: #fff;
+  border-radius: 9.375rem;
+  transition: all 0.3s;
+  border: none;
 }
-.about-contanier .about-list .about-item[data-v-5c2e2cf7]:active {
-  background-color: #F6F6F6;
-}
-.about-contanier .about-list .about-item[data-v-5c2e2cf7]:last-child {
-  border-bottom: none;
+.login-container .form .inner-box .btn-group .btn[data-v-e4e4508d]:active {
+  background-color: #F9965F;
 }

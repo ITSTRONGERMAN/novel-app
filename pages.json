@@ -33,14 +33,27 @@
 			"path": "pages/comic-read/comic-read"
 		},
 		{
-			"path" : "pages/history/history",
-			"style" : 
-			{
-				"navigationBarTitleText" : "浏览历史"
+			"path": "pages/history/history"
+		},
+		{
+			"path": "pages/aboutus/aboutus"
+		},
+		{
+			"path": "pages/aboutus/childpage/disclaimer/disclaimer",
+			"style": {
+				"navigationBarTitleText": "免责声明",
+				"navigationStyle": "default"
 			}
 		},
 		{
-			"path" : "pages/aboutus/aboutus",
+			"path" : "pages/login/login",
+			"style" : 
+			{
+				"navigationBarTitleText" : ""
+			}
+		},
+		{
+			"path" : "pages/reward/reward",
 			"style" : 
 			{
 				"navigationBarTitleText" : ""
