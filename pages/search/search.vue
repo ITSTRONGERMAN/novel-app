@@ -9,14 +9,14 @@
 		<!-- 搜索提示内容区 -->
 		<scroll-view :scroll-y="true" class="search-result" :style="{height:searchResultHeight+'px'}"
 			v-if="searchResult.length>0&&!issearchValEmpty&&!showResult">
-			<view @tap="handelSearch(item.name)" class="search-item" v-for="item in searchResult" :key="item.id">
+			<view @tap="goToNovelDetail(item)" class="search-item" v-for="item in searchResult" :key="item.id">
 				<uv-icon size="22" name="search" color="#ccc"></uv-icon>
 				<view class="name" v-html="item.name"></view>
-				<view class="type">{{item.type}}</view>
+				<view class="type">{{chineseName[item.type]}}</view>
 			</view>
 		</scroll-view>
 		<!-- 默认显示 -->
-		<defaultVue v-if="!showResult&&searchResult.length==0||issearchValEmpty" @handelSearch="handelSearch"
+		<defaultVue v-if="!showResult&&searchResult.length==0&&issearchValEmpty" @handelSearch="handelSearch"
 			@clearHistory="clearHistory" :hotSearchList="hotSearchList" :historyList="searchHistoryList" />
 		<!-- 搜索结果 -->
 		<resultVue v-if="showResult" :keyword="issearchValEmpty?placeholder:searchVal"
@@ -33,10 +33,14 @@
 		watch
 	} from 'vue'
 	import {
+		useStore
+	} from 'vuex'
+	import {
 		onLoad,
 		onBackPress
 	} from '@dcloudio/uni-app'
 	import {
+		getHotComicList,
 		getHotNovelList,
 		searchBook,
 		searchNovel
@@ -54,6 +58,11 @@
 		addSearchHistory,
 		clearHistory,
 	} = useSearchHistory()
+	const store = useStore()
+	const chineseName = {
+		novel: "小说",
+		comic: "漫画"
+	}
 	// 当前推荐小说
 	const placeholder = ref('')
 	// 搜索框的值
@@ -66,8 +75,9 @@
 		novel_name = '',
 	}) => {
 		placeholder.value = novel_name
-		const hotRes = await getHotNovelList()
-		hotSearchList.value = hotRes.data.data
+		const novelHotRes = await getHotNovelList()
+		const comicHotRes = await getHotComicList()
+		hotSearchList.value = [...novelHotRes.data.data, ...comicHotRes.data.data]
 	})
 	onMounted(async () => {
 		const instance = getCurrentInstance()
@@ -103,6 +113,7 @@
 			addSearchHistory(newKeyword)
 		}
 		showResult.value = true
+		searchResult.value = []
 	}
 	// 搜索结果
 	const searchResult = ref([])
@@ -115,6 +126,17 @@
 				...item,
 				name: parseSearchResult(item.name, searchVal.value)
 			}
+		})
+	}
+	const goToNovelDetail = (detail) => {
+		const removeHtmlTags = (str) => str.replace(/<[^>]+>/g, '')
+		store.commit('setCurrentNovelDetail', {
+			...detail,
+			name: removeHtmlTags(detail.name),
+		})
+		uni.navigateTo({
+			url: '/pages/nove-detail/index',
+			animationType: "slide-in-right"
 		})
 	}
 </script>

@@ -159,7 +159,10 @@
 			await deleteFromBookShell(store.state.currentNovelDetail.id, novel.value.type)
 			isAdded.value = false
 		} else {
-			await insterBookShell(store.state.currentNovelDetail, novel.value.type)
+			await insterBookShell({
+				novel_id: novel.value.id,
+				...novel.value
+			})
 			isAdded.value = true
 		}
 	}

@@ -178,7 +178,7 @@ uni-view[data-v-b7a6dd5d], uni-scroll-view[data-v-b7a6dd5d], uni-swiper-item[dat
 .user-contanier .config-list .inner-box[data-v-0f7520f0] {
   display: grid;
   grid-gap: 0.625rem;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
 }
 .user-contanier .config-list .inner-box .config-list-item[data-v-0f7520f0] {
   padding: 0.3125rem 0;

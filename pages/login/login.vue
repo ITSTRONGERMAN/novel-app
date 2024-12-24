@@ -7,26 +7,37 @@
 			</view>
 		</view>
 		<view class="icon-box">
-			<image src="../../static/logo.png" mode=""></image>
+			<image src="../../static/images/logo.png" mode=""></image>
 		</view>
-		<form class="form" @submit.prevent="onSubmit">
+		<view class="form">
 			<view class="inner-box">
-				<inputVue type="text" placeholder="请输入您的账号" v-model="accountVal"></inputVue>
+				<inputVue role="login" prop="account" @updateValue="updateValue" type="text" placeholder="请输入您的账号"
+					:modelValue="formInfo.login.account">
+				</inputVue>
+				<inputVue role="login" prop="password" @updateValue="updateValue" type="password" placeholder="请输入您的密码"
+					:modelValue="formInfo.login.password"></inputVue>
 				<view class="btn-group">
-					<button open-type="submit" class="btn">登录</button>
+					<button @tap="onSubmit" open-type="submit" class="btn">登录</button>
+					<button class="btn">注册</button>
 				</view>
 			</view>
-		</form>
+		</view>
 	</view>
 </template>
 
 <script setup>
 	import {
+		reactive,
 		ref
 	} from 'vue'
 	import inputVue from './components/input.vue';
 
-	const accountVal = ref('21313'); // 账号绑定的值
+	const formInfo = reactive({
+		login: {
+			account: '',
+			password: ''
+		}
+	})
 
 	// 返回上一页
 	const back = () => {
@@ -35,8 +46,15 @@
 
 	// 提交表单数据
 	const onSubmit = () => {
-		console.log(123);
+		console.log(formInfo.login);
 	};
+	const updateValue = ({
+		key,
+		value,
+		role
+	}) => {
+		formInfo[role][key] = value
+	}
 </script>
 
 <style lang="scss" scoped>
@@ -74,12 +92,14 @@
 				gap: 40rpx;
 
 				.btn-group {
+					width: 100%;
 					display: flex;
 					justify-content: center;
+					flex-direction: column;
 					gap: 30rpx;
 
 					.btn {
-						flex: 1;
+						width: 100%;
 						background-color: #F7713C;
 						color: #fff;
 						border-radius: 300rpx;

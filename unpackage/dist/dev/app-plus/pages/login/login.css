@@ -146,12 +146,14 @@ uni-view[data-v-b7a6dd5d], uni-scroll-view[data-v-b7a6dd5d], uni-swiper-item[dat
   gap: 1.25rem;
 }
 .login-container .form .inner-box .btn-group[data-v-e4e4508d] {
+  width: 100%;
   display: flex;
   justify-content: center;
+  flex-direction: column;
   gap: 0.9375rem;
 }
 .login-container .form .inner-box .btn-group .btn[data-v-e4e4508d] {
-  flex: 1;
+  width: 100%;
   background-color: #F7713C;
   color: #fff;
   border-radius: 9.375rem;

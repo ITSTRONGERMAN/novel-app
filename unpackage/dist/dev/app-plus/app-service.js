@@ -10017,6 +10017,7 @@ if (uni.restoreGlobal) {
   );
   const searchBook = (keyword) => server(`/book/search?keyword=${keyword}`);
   const comicBoyRank = (gender) => server(`/comic/rank?gender=${gender}`);
+  const getHotComicList = () => server("/comic/hotcomic");
   const getComicByCategory = (categoryName, size = 10) => server(
     `/comic/category?className=${categoryName}&size=${size}`
   );
@@ -11474,7 +11475,10 @@ if (uni.restoreGlobal) {
           await deleteFromBookShell(store2.state.currentNovelDetail.id, novel.value.type);
           isAdded.value = false;
         } else {
-          await insterBookShell(store2.state.currentNovelDetail, novel.value.type);
+          await insterBookShell({
+            novel_id: novel.value.id,
+            ...novel.value
+          });
           isAdded.value = true;
         }
       };
@@ -15265,7 +15269,7 @@ if (uni.restoreGlobal) {
     ]);
   }
   const PagesClassClass = /* @__PURE__ */ _export_sfc(_sfc_main$j, [["render", _sfc_render$i], ["__scopeId", "data-v-23c40782"], ["__file", "D:/APP/novel-app/novel-app/pages/class/class.vue"]]);
-  const _imports_0 = "/static/logo.png";
+  const _imports_0 = "/static/images/logo.png";
   const _sfc_main$i = {
     __name: "user",
     setup(__props, { expose: __expose }) {
@@ -15308,6 +15312,9 @@ if (uni.restoreGlobal) {
         });
       };
       const reward = () => {
+        uni.navigateTo({
+          url: "/pages/reward/reward"
+        });
       };
       const __returned__ = { store: store2, readInfo, handelShareApp, handelAboutApp, goToHistory, goToLogin, reward, ref: vue.ref, onMounted: vue.onMounted, reactive: vue.reactive, get EventBus() {
         return EventBus;
@@ -15336,6 +15343,7 @@ if (uni.restoreGlobal) {
             class: "headImg"
           }),
           vue.createElementVNode("view", { class: "userInfo" }, [
+            vue.createCommentVNode(' <view class="user-name">番猫免费小说</view> '),
             vue.createElementVNode("view", {
               class: "user-name",
               onClick: $setup.goToLogin
@@ -15410,16 +15418,6 @@ if (uni.restoreGlobal) {
             }),
             vue.createElementVNode("view", { class: "txt" }, "分享应用")
           ]),
-          vue.createElementVNode("view", {
-            class: "config-list-item",
-            onClick: $setup.handelAboutApp
-          }, [
-            vue.createVNode(_component_uv_icon, {
-              name: "info-circle",
-              size: "26"
-            }),
-            vue.createElementVNode("view", { class: "txt" }, "关于番猫")
-          ]),
           vue.createElementVNode("view", { class: "config-list-item" }, [
             vue.createVNode(_component_uv_icon, {
               name: "clear",
@@ -15430,26 +15428,39 @@ if (uni.restoreGlobal) {
           ]),
           vue.createElementVNode("view", { class: "config-list-item" }, [
             vue.createVNode(_component_uv_icon, {
-              name: "setting",
-              size: "26"
-            }),
-            vue.createElementVNode("view", { class: "txt" }, "设置")
-          ]),
-          vue.createElementVNode("view", { class: "config-list-item" }, [
-            vue.createVNode(_component_uv_icon, {
               name: "bug",
               "custom-prefix": "custom-icon",
               size: "26"
             }),
             vue.createElementVNode("view", { class: "txt" }, "bug报错")
           ]),
-          vue.createElementVNode("view", { class: "config-list-item" }, [
+          vue.createElementVNode("view", {
+            class: "config-list-item",
+            onClick: $setup.reward
+          }, [
             vue.createVNode(_component_uv_icon, {
               name: "dashang",
               "custom-prefix": "custom-icon",
               size: "26"
             }),
             vue.createElementVNode("view", { class: "txt" }, "打赏作者")
+          ]),
+          vue.createElementVNode("view", { class: "config-list-item" }, [
+            vue.createVNode(_component_uv_icon, {
+              name: "setting",
+              size: "26"
+            }),
+            vue.createElementVNode("view", { class: "txt" }, "设置")
+          ]),
+          vue.createElementVNode("view", {
+            class: "config-list-item",
+            onClick: $setup.handelAboutApp
+          }, [
+            vue.createVNode(_component_uv_icon, {
+              name: "info-circle",
+              size: "26"
+            }),
+            vue.createElementVNode("view", { class: "txt" }, "关于番猫")
           ])
         ])
       ])
@@ -15970,36 +15981,25 @@ if (uni.restoreGlobal) {
           offset: 0,
           list: [],
           listHeight: 0,
-          loadingParam: {
-            status: "loading",
-            loadingText: "努力加载中",
-            loadmoreText: "轻轻上拉",
-            nomoreText: "实在没有了"
-          }
+          loaded: false,
+          loadingStatus: "loading",
+          loadError: false
         },
         comic: {
           size: 10,
           offset: 0,
           list: [],
           listHeight: 0,
-          loadingParam: {
-            status: "loading",
-            loadingText: "努力加载中",
-            loadmoreText: "轻轻上拉",
-            nomoreText: "实在没有了"
-          }
+          loaded: false,
+          loadingStatus: "loading",
+          loadError: false
         }
       });
       const scrollViewHeight = vue.ref(0);
       vue.watch(currentPage, async (newVal) => {
         if (!newVal.hasShown) {
           if (newVal.name == "comic") {
-            const searchComicRes = await searchComic(props2.keyword, 0, 10);
-            searchResultList[newVal.name].list = searchComicRes.data.data.map((item) => ({
-              ...item,
-              name: parseSearchResult(item.name, props2.keyword),
-              type: "comic"
-            }));
+            await getNovelList(props2.keyword);
           }
           pageList.value[currentActiveTabbar.value] = {
             ...newVal,
@@ -16019,44 +16019,51 @@ if (uni.restoreGlobal) {
       });
       const getNovelList = async () => {
         const currentPageName = currentPage.value.name;
-        if (searchResultList[currentPageName].loadingParam.status == "nomore")
-          return;
-        let searchRes = null;
-        if (currentPageName == "novel") {
-          searchRes = await searchNovel(
-            props2.keyword,
-            props2.keyword,
-            searchResultList[currentPageName].offset,
-            searchResultList[currentPageName].size
-          );
-        } else if (currentPageName == "novel") {
-          searchRes = await searchComic();
+        try {
+          if (searchResultList[currentPageName].loadingStatus == "nomore")
+            return;
+          let searchRes = null;
+          const offset = searchResultList[currentPageName].offset;
+          const size = searchResultList[currentPageName].size;
+          if (currentPageName == "novel") {
+            searchRes = await searchNovel(props2.keyword, props2.keyword, offset, size);
+          } else if (currentPageName == "comic") {
+            searchRes = await searchComic(props2.keyword, offset, size);
+          }
+          const list = searchRes.data.data.map((item) => ({
+            ...item,
+            name: parseSearchResult(item.name, props2.keyword),
+            type: currentPageName
+          }));
+          if (list.length == 0) {
+            searchResultList[currentPageName].loadingStatus = "nomore";
+          }
+          searchResultList[currentPageName].loaded = true;
+          searchResultList[currentPageName].list = [...searchResultList[currentPageName].list, ...list];
+        } catch (error2) {
+          searchResultList[currentPageName].loaded = true;
+          searchResultList[currentPageName].loadError = true;
         }
-        const list = searchRes.data.data.map((item) => ({
-          ...item,
-          name: parseSearchResult(item.name, props2.keyword),
-          type: currentPageName
-        }));
-        if (list.length == 0) {
-          searchResultList[currentPageName].loadingParam.status = "nomore";
-        }
-        searchResultList[currentPageName].list = [...searchResultList[currentPageName].list, ...list];
       };
       const onReachBottom = async () => {
         searchResultList[currentPage.value.name].offset += searchResultList[currentPage.value.name].size;
         await getNovelList();
       };
       const onNovelListLayout = (e) => {
-        searchResultList.novel.listHeight = e.height;
+        searchResultList[currentPage.value].listHeight = e.height;
       };
-      const onComicListLayout = (e) => {
-        searchResultList.comic.listHeight = e.height;
+      const reload = async () => {
+        const currentPageName = currentPage.value.name;
+        searchResultList[currentPageName].loadError = false;
+        searchResultList[currentPageName].loaded = false;
+        await getNovelList();
+        searchResultList[currentPageName].loaded = true;
       };
-      const __returned__ = { currentActiveTabbar, pageChange, handelTopChange, tabBarList, pageList, currentPage, searchResultList, scrollViewHeight, props: props2, init, getNovelList, onReachBottom, onNovelListLayout, onComicListLayout, getCurrentInstance: vue.getCurrentInstance, onMounted: vue.onMounted, ref: vue.ref, reactive: vue.reactive, watch: vue.watch, topTabbar, novelList, get getSelectorInfo() {
+      const __returned__ = { currentActiveTabbar, pageChange, handelTopChange, tabBarList, pageList, currentPage, searchResultList, scrollViewHeight, props: props2, init, getNovelList, onReachBottom, onNovelListLayout, reload, getCurrentInstance: vue.getCurrentInstance, onMounted: vue.onMounted, ref: vue.ref, reactive: vue.reactive, watch: vue.watch, topTabbar, novelList, get getSelectorInfo() {
         return getSelectorInfo;
       }, midArea: ComponentsHomeMidAreaMidArea, midAreaItem: midAreaItemVue, get useSlide() {
         return useSlide;
-      }, get searchComic() {
+      }, loadingVue, get searchComic() {
         return searchComic;
       }, get searchNovel() {
         return searchNovel;
@@ -16082,78 +16089,74 @@ if (uni.restoreGlobal) {
       vue.createVNode($setup["midArea"], {
         background: "#fff",
         height: $setup.scrollViewHeight,
-        length: 2,
+        length: $setup.tabBarList.length,
         current: $setup.currentActiveTabbar,
         onPageChange: $setup.pageChange
       }, {
         default: vue.withCtx(() => [
           vue.createCommentVNode(" 小说 "),
-          vue.createVNode($setup["midAreaItem"], {
-            refresh: false,
-            onOnScrollToLower: $setup.getNovelList
-          }, {
-            default: vue.withCtx(() => [
-              vue.createElementVNode("view", { class: "result-container" }, [
-                $setup.searchResultList.novel.list.length == 0 ? (vue.openBlock(), vue.createBlock(_component_l_empty, {
-                  key: 0,
-                  description: "没有找到相关内容"
-                })) : (vue.openBlock(), vue.createElementBlock(
-                  vue.Fragment,
-                  { key: 1 },
-                  [
-                    vue.createVNode($setup["novelList"], {
-                      novelList: $setup.searchResultList.novel.list,
-                      onOnLayout: $setup.onNovelListLayout
-                    }, null, 8, ["novelList"]),
-                    $setup.searchResultList.novel.listHeight > $setup.scrollViewHeight ? (vue.openBlock(), vue.createBlock(_component_uv_load_more, {
+          (vue.openBlock(true), vue.createElementBlock(
+            vue.Fragment,
+            null,
+            vue.renderList($setup.pageList, (page2, index2) => {
+              return vue.openBlock(), vue.createBlock(
+                $setup["midAreaItem"],
+                {
+                  key: index2,
+                  refresh: false,
+                  onOnScrollToLower: $setup.getNovelList
+                },
+                {
+                  default: vue.withCtx(() => [
+                    $setup.searchResultList[page2.name].loadError ? (vue.openBlock(), vue.createBlock(_component_l_empty, {
                       key: 0,
-                      status: $setup.searchResultList.novel.loadingParam.status,
-                      "loading-text": $setup.searchResultList.novel.loadingParam.loadingText,
-                      "loadmore-text": $setup.searchResultList.novel.loadingParam.loadmoreText,
-                      "nomore-text": $setup.searchResultList.novel.loadingParam.nomoreText
-                    }, null, 8, ["status", "loading-text", "loadmore-text", "nomore-text"])) : vue.createCommentVNode("v-if", true)
-                  ],
-                  64
-                  /* STABLE_FRAGMENT */
-                ))
-              ])
-            ]),
-            _: 1
-            /* STABLE */
-          }),
-          vue.createCommentVNode(" 漫画区 "),
-          vue.createVNode($setup["midAreaItem"], { refresh: false }, {
-            default: vue.withCtx(() => [
-              $setup.searchResultList.comic.list.length == 0 ? (vue.openBlock(), vue.createBlock(_component_l_empty, {
-                key: 0,
-                description: "没有找到相关内容"
-              })) : (vue.openBlock(), vue.createElementBlock(
-                vue.Fragment,
-                { key: 1 },
-                [
-                  vue.createVNode($setup["novelList"], {
-                    novelList: $setup.searchResultList.comic.list,
-                    onOnLayout: $setup.onComicListLayout
-                  }, null, 8, ["novelList"]),
-                  $setup.searchResultList.comic.listHeight > $setup.scrollViewHeight ? (vue.openBlock(), vue.createBlock(_component_uv_load_more, {
-                    key: 0,
-                    status: $setup.searchResultList.comic.loadingParam.status,
-                    "loading-text": $setup.searchResultList.comic.loadingParam.loadingText,
-                    "loadmore-text": $setup.searchResultList.comic.loadingParam.loadmoreText,
-                    "nomore-text": $setup.searchResultList.comic.loadingParam.nomoreText
-                  }, null, 8, ["status", "loading-text", "loadmore-text", "nomore-text"])) : vue.createCommentVNode("v-if", true)
-                ],
-                64
-                /* STABLE_FRAGMENT */
-              ))
-            ]),
-            _: 1
-            /* STABLE */
-          })
+                      onClick: $setup.reload,
+                      image: "network",
+                      description: "网络连接异常,请点击重试"
+                    })) : vue.createCommentVNode("v-if", true),
+                    !$setup.searchResultList[page2.name].loaded ? (vue.openBlock(), vue.createBlock($setup["loadingVue"], { key: 1 })) : vue.createCommentVNode("v-if", true),
+                    $setup.searchResultList[page2.name].loaded && !$setup.searchResultList[page2.name].loadError ? (vue.openBlock(), vue.createElementBlock("view", {
+                      key: 2,
+                      class: "result-container"
+                    }, [
+                      $setup.searchResultList[page2.name].list.length == 0 ? (vue.openBlock(), vue.createBlock(_component_l_empty, {
+                        key: 0,
+                        description: "没有找到相关内容"
+                      })) : (vue.openBlock(), vue.createElementBlock(
+                        vue.Fragment,
+                        { key: 1 },
+                        [
+                          vue.createVNode($setup["novelList"], {
+                            novelList: $setup.searchResultList[page2.name].list,
+                            onOnLayout: $setup.onNovelListLayout
+                          }, null, 8, ["novelList"]),
+                          $setup.searchResultList[page2.name].listHeight > $setup.scrollViewHeight ? (vue.openBlock(), vue.createBlock(_component_uv_load_more, {
+                            key: 0,
+                            status: $setup.searchResultList[page2.name].loadingStatus,
+                            "loading-text": "努力加载中",
+                            "loadmore-text": "轻轻上拉",
+                            "nomore-text": "实在没有了"
+                          }, null, 8, ["status"])) : vue.createCommentVNode("v-if", true)
+                        ],
+                        64
+                        /* STABLE_FRAGMENT */
+                      ))
+                    ])) : vue.createCommentVNode("v-if", true)
+                  ]),
+                  _: 2
+                  /* DYNAMIC */
+                },
+                1024
+                /* DYNAMIC_SLOTS */
+              );
+            }),
+            128
+            /* KEYED_FRAGMENT */
+          ))
         ]),
         _: 1
         /* STABLE */
-      }, 8, ["height", "current", "onPageChange"])
+      }, 8, ["height", "length", "current", "onPageChange"])
     ]);
   }
   const resultVue = /* @__PURE__ */ _export_sfc(_sfc_main$f, [["render", _sfc_render$e], ["__scopeId", "data-v-755e7dbf"], ["__file", "D:/APP/novel-app/novel-app/pages/search/components/result.vue"]]);
@@ -16166,6 +16169,11 @@ if (uni.restoreGlobal) {
         addSearchHistory,
         clearHistory
       } = useSearchHistory();
+      const store2 = useStore();
+      const chineseName = {
+        novel: "小说",
+        comic: "漫画"
+      };
       const placeholder = vue.ref("");
       const searchVal = vue.ref("");
       const searchResultHeight = vue.ref(0);
@@ -16174,8 +16182,9 @@ if (uni.restoreGlobal) {
         novel_name = ""
       }) => {
         placeholder.value = novel_name;
-        const hotRes = await getHotNovelList();
-        hotSearchList.value = hotRes.data.data;
+        const novelHotRes = await getHotNovelList();
+        const comicHotRes = await getHotComicList();
+        hotSearchList.value = [...novelHotRes.data.data, ...comicHotRes.data.data];
       });
       vue.onMounted(async () => {
         const instance = vue.getCurrentInstance();
@@ -16208,6 +16217,7 @@ if (uni.restoreGlobal) {
           addSearchHistory(newKeyword);
         }
         showResult.value = true;
+        searchResult.value = [];
       };
       const searchResult = vue.ref([]);
       const handelChange = async () => {
@@ -16220,10 +16230,25 @@ if (uni.restoreGlobal) {
           };
         });
       };
-      const __returned__ = { searchHistoryList, addSearchHistory, clearHistory, placeholder, searchVal, searchResultHeight, showResult, hotSearchList, issearchValEmpty, handelSearch, searchResult, handelChange, ref: vue.ref, computed: vue.computed, onMounted: vue.onMounted, getCurrentInstance: vue.getCurrentInstance, watch: vue.watch, get onLoad() {
+      const goToNovelDetail = (detail) => {
+        const removeHtmlTags = (str) => str.replace(/<[^>]+>/g, "");
+        store2.commit("setCurrentNovelDetail", {
+          ...detail,
+          name: removeHtmlTags(detail.name)
+        });
+        uni.navigateTo({
+          url: "/pages/nove-detail/index",
+          animationType: "slide-in-right"
+        });
+      };
+      const __returned__ = { searchHistoryList, addSearchHistory, clearHistory, store: store2, chineseName, placeholder, searchVal, searchResultHeight, showResult, hotSearchList, issearchValEmpty, handelSearch, searchResult, handelChange, goToNovelDetail, ref: vue.ref, computed: vue.computed, onMounted: vue.onMounted, getCurrentInstance: vue.getCurrentInstance, watch: vue.watch, get useStore() {
+        return useStore;
+      }, get onLoad() {
         return onLoad;
       }, get onBackPress() {
         return onBackPress;
+      }, get getHotComicList() {
+        return getHotComicList;
       }, get getHotNovelList() {
         return getHotNovelList;
       }, get searchBook() {
@@ -16276,7 +16301,7 @@ if (uni.restoreGlobal) {
             null,
             vue.renderList($setup.searchResult, (item) => {
               return vue.openBlock(), vue.createElementBlock("view", {
-                onClick: ($event) => $setup.handelSearch(item.name),
+                onClick: ($event) => $setup.goToNovelDetail(item),
                 class: "search-item",
                 key: item.id
               }, [
@@ -16292,7 +16317,7 @@ if (uni.restoreGlobal) {
                 vue.createElementVNode(
                   "view",
                   { class: "type" },
-                  vue.toDisplayString(item.type),
+                  vue.toDisplayString($setup.chineseName[item.type]),
                   1
                   /* TEXT */
                 )
@@ -16306,7 +16331,7 @@ if (uni.restoreGlobal) {
         /* STYLE */
       )) : vue.createCommentVNode("v-if", true),
       vue.createCommentVNode(" 默认显示 "),
-      !$setup.showResult && $setup.searchResult.length == 0 || $setup.issearchValEmpty ? (vue.openBlock(), vue.createBlock($setup["defaultVue"], {
+      !$setup.showResult && $setup.searchResult.length == 0 && $setup.issearchValEmpty ? (vue.openBlock(), vue.createBlock($setup["defaultVue"], {
         key: 1,
         onHandelSearch: $setup.handelSearch,
         onClearHistory: $setup.clearHistory,
@@ -18105,6 +18130,14 @@ if (uni.restoreGlobal) {
   const _sfc_main$3 = {
     __name: "input",
     props: {
+      prop: {
+        type: String,
+        default: ""
+      },
+      role: {
+        type: String,
+        default: ""
+      },
       modelValue: {
         type: String,
         default: ""
@@ -18118,28 +18151,43 @@ if (uni.restoreGlobal) {
         default: ""
       }
     },
+    emits: ["updateValue"],
     setup(__props, { expose: __expose, emit: __emit }) {
       __expose();
       const props2 = __props;
       const emit = __emit;
-      const inputTypeConfig = vue.ref({
+      const inputTypeConfig = vue.reactive({
         text: {
-          rightIcon: "close",
+          rightIcon: ["close"],
+          iconIndex: 0,
+          type: "text",
           rightIconClick() {
-            emit("update:modelValue", "");
+            emit("updateValue", {
+              key: props2.prop,
+              value: "",
+              role: props2.role
+            });
           }
         },
         password: {
-          rightIcon: "eye-fill",
+          rightIcon: ["eye", "eye-off-outline"],
+          type: "password",
+          iconIndex: 0,
           rightIconClick() {
-            formatAppLog("log", "at pages/login/components/input.vue:51", "Password icon clicked");
+            const iconIndex = inputTypeConfig.password.iconIndex;
+            inputTypeConfig.password.iconIndex = iconIndex == 1 ? 0 : 1;
+            inputTypeConfig.password.type = iconIndex == 1 ? "password" : "text";
           }
         }
       });
       const handleInput = (event) => {
-        emit("update:modelValue", event.target.value);
+        emit("updateValue", {
+          key: props2.prop,
+          value: event.detail.value,
+          role: props2.role
+        });
       };
-      const __returned__ = { props: props2, emit, inputTypeConfig, handleInput, ref: vue.ref };
+      const __returned__ = { props: props2, emit, inputTypeConfig, handleInput, ref: vue.ref, reactive: vue.reactive };
       Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
       return __returned__;
     }
@@ -18147,23 +18195,24 @@ if (uni.restoreGlobal) {
   function _sfc_render$2(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_uv_icon = resolveEasycom(vue.resolveDynamicComponent("uv-icon"), __easycom_0$9);
     return vue.openBlock(), vue.createElementBlock("view", { class: "input" }, [
-      vue.createCommentVNode(" input组件绑定v-model "),
       vue.createElementVNode("input", {
         onInput: $setup.handleInput,
         value: $props.modelValue,
-        type: $props.type,
+        type: $setup.inputTypeConfig[$props.type].type,
         placeholder: $props.placeholder
       }, null, 40, ["value", "type", "placeholder"]),
-      vue.createElementVNode("view", { class: "icon" }, [
-        vue.createCommentVNode(" 根据当前类型配置右侧图标点击事件 "),
+      $props.modelValue.length != 0 ? (vue.openBlock(), vue.createElementBlock("view", {
+        key: 0,
+        class: "icon"
+      }, [
         vue.createVNode(_component_uv_icon, {
           onClick: $setup.inputTypeConfig[$props.type].rightIconClick,
-          name: $setup.inputTypeConfig[$props.type].rightIcon,
+          name: $setup.inputTypeConfig[$props.type].rightIcon[$setup.inputTypeConfig[$props.type].iconIndex],
           color: "#868684",
           size: "14",
           bold: ""
         }, null, 8, ["onClick", "name"])
-      ])
+      ])) : vue.createCommentVNode("v-if", true)
     ]);
   }
   const inputVue = /* @__PURE__ */ _export_sfc(_sfc_main$3, [["render", _sfc_render$2], ["__scopeId", "data-v-021724e2"], ["__file", "D:/APP/novel-app/novel-app/pages/login/components/input.vue"]]);
@@ -18171,14 +18220,26 @@ if (uni.restoreGlobal) {
     __name: "login",
     setup(__props, { expose: __expose }) {
       __expose();
-      const accountVal = vue.ref("21313");
+      const formInfo = vue.reactive({
+        login: {
+          account: "",
+          password: ""
+        }
+      });
       const back = () => {
         uni.navigateBack();
       };
       const onSubmit = () => {
-        formatAppLog("log", "at pages/login/login.vue:38", 123);
+        formatAppLog("log", "at pages/login/login.vue:49", formInfo.login);
       };
-      const __returned__ = { accountVal, back, onSubmit, ref: vue.ref, inputVue };
+      const updateValue = ({
+        key,
+        value: value2,
+        role
+      }) => {
+        formInfo[role][key] = value2;
+      };
+      const __returned__ = { formInfo, back, onSubmit, updateValue, reactive: vue.reactive, ref: vue.ref, inputVue };
       Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
       return __returned__;
     }
@@ -18203,44 +18264,95 @@ if (uni.restoreGlobal) {
           mode: ""
         })
       ]),
-      vue.createElementVNode(
-        "form",
-        {
-          class: "form",
-          onSubmit: vue.withModifiers($setup.onSubmit, ["prevent"])
-        },
-        [
-          vue.createElementVNode("view", { class: "inner-box" }, [
-            vue.createVNode($setup["inputVue"], {
-              type: "text",
-              placeholder: "请输入您的账号",
-              modelValue: $setup.accountVal,
-              "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => $setup.accountVal = $event)
-            }, null, 8, ["modelValue"]),
-            vue.createElementVNode("view", { class: "btn-group" }, [
-              vue.createElementVNode("button", {
-                "open-type": "submit",
-                class: "btn"
-              }, "登录")
-            ])
+      vue.createElementVNode("view", { class: "form" }, [
+        vue.createElementVNode("view", { class: "inner-box" }, [
+          vue.createVNode($setup["inputVue"], {
+            role: "login",
+            prop: "account",
+            onUpdateValue: $setup.updateValue,
+            type: "text",
+            placeholder: "请输入您的账号",
+            modelValue: $setup.formInfo.login.account
+          }, null, 8, ["modelValue"]),
+          vue.createVNode($setup["inputVue"], {
+            role: "login",
+            prop: "password",
+            onUpdateValue: $setup.updateValue,
+            type: "password",
+            placeholder: "请输入您的密码",
+            modelValue: $setup.formInfo.login.password
+          }, null, 8, ["modelValue"]),
+          vue.createElementVNode("view", { class: "btn-group" }, [
+            vue.createElementVNode("button", {
+              onClick: $setup.onSubmit,
+              "open-type": "submit",
+              class: "btn"
+            }, "登录"),
+            vue.createElementVNode("button", { class: "btn" }, "注册")
           ])
-        ],
-        32
-        /* NEED_HYDRATION */
-      )
+        ])
+      ])
     ]);
   }
   const PagesLoginLogin = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["render", _sfc_render$1], ["__scopeId", "data-v-e4e4508d"], ["__file", "D:/APP/novel-app/novel-app/pages/login/login.vue"]]);
   const _sfc_main$1 = {
-    data() {
-      return {};
-    },
-    methods: {}
+    __name: "reward",
+    setup(__props, { expose: __expose }) {
+      __expose();
+      const paymentMode = vue.reactive([
+        {
+          name: "微信支付",
+          imgUrl: "../../static/images/wxpay.jpg"
+        },
+        {
+          name: "支付宝支付",
+          imgUrl: "../../static/images/alipay.jpg"
+        }
+      ]);
+      const imgUrlList = vue.computed(() => paymentMode.map((item) => item.imgUrl));
+      const previewPayQRCodeImage = (index2) => {
+        uni.previewImage({
+          current: index2,
+          urls: imgUrlList.value,
+          loop: true
+        });
+      };
+      const __returned__ = { paymentMode, imgUrlList, previewPayQRCodeImage, computed: vue.computed, reactive: vue.reactive };
+      Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
+      return __returned__;
+    }
   };
   function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
-    return vue.openBlock(), vue.createElementBlock("view");
+    return vue.openBlock(), vue.createElementBlock("view", { class: "reward-container" }, [
+      (vue.openBlock(true), vue.createElementBlock(
+        vue.Fragment,
+        null,
+        vue.renderList($setup.paymentMode, (item, index2) => {
+          return vue.openBlock(), vue.createElementBlock("view", {
+            class: "pay-mode",
+            key: index2
+          }, [
+            vue.createElementVNode(
+              "h2",
+              null,
+              vue.toDisplayString(item.name) + "：",
+              1
+              /* TEXT */
+            ),
+            vue.createElementVNode("image", {
+              onClick: ($event) => $setup.previewPayQRCodeImage(index2),
+              class: "img",
+              src: item.imgUrl,
+              mode: "widthFix"
+            }, null, 8, ["onClick", "src"])
+          ]);
+        }),
+        128
+        /* KEYED_FRAGMENT */
+      ))
+    ]);
   }
-  const PagesRewardReward = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["render", _sfc_render], ["__file", "D:/APP/novel-app/novel-app/pages/reward/reward.vue"]]);
+  const PagesRewardReward = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["render", _sfc_render], ["__scopeId", "data-v-1b97740b"], ["__file", "D:/APP/novel-app/novel-app/pages/reward/reward.vue"]]);
   __definePage("pages/home/index", PagesHomeIndex);
   __definePage("components/home/mid-area/mid-area", ComponentsHomeMidAreaMidArea);
   __definePage("pages/nove-detail/index", PagesNoveDetailIndex);

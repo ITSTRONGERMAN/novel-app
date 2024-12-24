@@ -3,32 +3,23 @@
 		<view id="top">
 			<topTabbar :tabBarList="tabBarList" :value="currentActiveTabbar" @change="handelTopChange" id="top_bar" />
 		</view>
-		<midArea background="#fff" :height="scrollViewHeight" :length="2" :current="currentActiveTabbar"
+		<midArea background="#fff" :height="scrollViewHeight" :length="tabBarList.length" :current="currentActiveTabbar"
 			@pageChange="pageChange">
 			<!-- 小说 -->
-			<midAreaItem :refresh="false" @onScrollToLower="getNovelList">
-				<view class="result-container">
-					<l-empty v-if="searchResultList.novel.list.length==0" description="没有找到相关内容" />
-					<template v-else>
-						<novelList :novelList="searchResultList.novel.list" @onLayout="onNovelListLayout" />
-						<uv-load-more v-if="searchResultList.novel.listHeight>scrollViewHeight"
-							:status="searchResultList.novel.loadingParam.status"
-							:loading-text="searchResultList.novel.loadingParam.loadingText"
-							:loadmore-text="searchResultList.novel.loadingParam.loadmoreText"
-							:nomore-text="searchResultList.novel.loadingParam.nomoreText" />
-					</template>
-				</view>
-			</midAreaItem>
-			<!-- 漫画区 -->
-			<midAreaItem :refresh="false">
-				<l-empty v-if="searchResultList.comic.list.length==0" description="没有找到相关内容" />
-				<template v-else>
-					<novelList :novelList="searchResultList.comic.list" @onLayout="onComicListLayout" />
-					<uv-load-more v-if="searchResultList.comic.listHeight>scrollViewHeight"
-						:status="searchResultList.comic.loadingParam.status"
-						:loading-text="searchResultList.comic.loadingParam.loadingText"
-						:loadmore-text="searchResultList.comic.loadingParam.loadmoreText"
-						:nomore-text="searchResultList.comic.loadingParam.nomoreText" />
+			<midAreaItem v-for="page,index in pageList" :key="index" :refresh="false" @onScrollToLower="getNovelList">
+				<l-empty @tap="reload" v-if="searchResultList[page.name].loadError" image="network"
+					description="网络连接异常,请点击重试" />
+				<loadingVue v-if="!searchResultList[page.name].loaded"></loadingVue>
+				<template v-if="searchResultList[page.name].loaded&&!searchResultList[page.name].loadError">
+					<view class="result-container">
+						<l-empty v-if="searchResultList[page.name].list.length==0" description="没有找到相关内容" />
+						<template v-else>
+							<novelList :novelList="searchResultList[page.name].list" @onLayout="onNovelListLayout" />
+							<uv-load-more v-if="searchResultList[page.name].listHeight>scrollViewHeight"
+								:status="searchResultList[page.name].loadingStatus" loading-text="努力加载中"
+								loadmore-text="轻轻上拉" nomore-text="实在没有了" />
+						</template>
+					</view>
 				</template>
 			</midAreaItem>
 		</midArea>
@@ -50,6 +41,7 @@
 	import midArea from '../../../components/home/mid-area/mid-area.vue';
 	import midAreaItem from '../../../components/home/mid-area/mid-area-item.vue';
 	import useSlide from '../../../hooks/useSlide.js'
+	import loadingVue from '../../../components/common/loading/loading.vue';
 	const {
 		currentActiveTabbar,
 		pageChange,
@@ -72,24 +64,18 @@
 			offset: 0,
 			list: [],
 			listHeight: 0,
-			loadingParam: {
-				status: 'loading',
-				loadingText: '努力加载中',
-				loadmoreText: '轻轻上拉',
-				nomoreText: '实在没有了'
-			}
+			loaded: false,
+			loadingStatus: 'loading',
+			loadError: false
 		},
 		comic: {
 			size: 10,
 			offset: 0,
 			list: [],
 			listHeight: 0,
-			loadingParam: {
-				status: 'loading',
-				loadingText: '努力加载中',
-				loadmoreText: '轻轻上拉',
-				nomoreText: '实在没有了'
-			}
+			loaded: false,
+			loadingStatus: 'loading',
+			loadError: false
 		}
 	})
 	// 显示列表高度
@@ -98,12 +84,7 @@
 	watch(currentPage, async (newVal) => {
 		if (!newVal.hasShown) {
 			if (newVal.name == 'comic') {
-				const searchComicRes = await searchComic(props.keyword, 0, 10);
-				searchResultList[newVal.name].list = searchComicRes.data.data.map(item => ({
-					...item,
-					name: parseSearchResult(item.name, props.keyword),
-					type: "comic"
-				}))
+				await getNovelList(props.keyword, 0, 10);
 			}
 			pageList.value[currentActiveTabbar.value] = {
 				...newVal,
@@ -133,23 +114,30 @@
 	// 获取搜索结果
 	const getNovelList = async () => {
 		const currentPageName = currentPage.value.name
-		if (searchResultList[currentPageName].loadingParam.status == 'nomore') return
-		let searchRes = null;
-		if (currentPageName == "novel") {
-			searchRes = await searchNovel(props.keyword, props.keyword, searchResultList[currentPageName].offset,
-				searchResultList[currentPageName].size)
-		} else if (currentPageName == "novel") {
-			searchRes = await searchComic()
+		try {
+			if (searchResultList[currentPageName].loadingStatus == 'nomore') return
+			let searchRes = null;
+			const offset = searchResultList[currentPageName].offset
+			const size = searchResultList[currentPageName].size
+			if (currentPageName == "novel") {
+				searchRes = await searchNovel(props.keyword, props.keyword, offset, size)
+			} else if (currentPageName == "comic") {
+				searchRes = await searchComic(props.keyword, offset, size)
+			}
+			const list = searchRes.data.data.map(item => ({
+				...item,
+				name: parseSearchResult(item.name, props.keyword),
+				type: currentPageName
+			}))
+			if (list.length == 0) {
+				searchResultList[currentPageName].loadingStatus = 'nomore'
+			}
+			searchResultList[currentPageName].loaded = true
+			searchResultList[currentPageName].list = [...searchResultList[currentPageName].list, ...list]
+		} catch (error) {
+			searchResultList[currentPageName].loaded = true
+			searchResultList[currentPageName].loadError = true
 		}
-		const list = searchRes.data.data.map(item => ({
-			...item,
-			name: parseSearchResult(item.name, props.keyword),
-			type: currentPageName
-		}))
-		if (list.length == 0) {
-			searchResultList[currentPageName].loadingParam.status = 'nomore'
-		}
-		searchResultList[currentPageName].list = [...searchResultList[currentPageName].list, ...list]
 	}
 	// 搜索列表触底事件
 	const onReachBottom = async () => {
@@ -158,11 +146,15 @@
 	}
 	// 小说列表布局
 	const onNovelListLayout = (e) => {
-		searchResultList.novel.listHeight = e.height;
+		searchResultList[currentPage.value].listHeight = e.height;
 	}
-	// 漫画列表布局
-	const onComicListLayout = (e) => {
-		searchResultList.comic.listHeight = e.height;
+	// 重新加载
+	const reload = async () => {
+		const currentPageName = currentPage.value.name
+		searchResultList[currentPageName].loadError = false
+		searchResultList[currentPageName].loaded = false
+		await getNovelList()
+		searchResultList[currentPageName].loaded = true
 	}
 </script>
 

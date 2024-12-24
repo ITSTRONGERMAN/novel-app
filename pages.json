@@ -46,17 +46,16 @@
 			}
 		},
 		{
-			"path" : "pages/login/login",
-			"style" : 
-			{
-				"navigationBarTitleText" : ""
+			"path": "pages/login/login",
+			"style": {
+				"navigationBarTitleText": ""
 			}
 		},
 		{
-			"path" : "pages/reward/reward",
-			"style" : 
-			{
-				"navigationBarTitleText" : ""
+			"path": "pages/reward/reward",
+			"style": {
+				"navigationBarTitleText": "打赏作者",
+				"navigationStyle": "default"
 			}
 		}
 	],

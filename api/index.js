@@ -33,6 +33,7 @@ export const searchBook = (keyword) => server(`/book/search?keyword=${keyword}`)
 export const comicBoyRank = (gender) => server(`/comic/rank?gender=${gender}`)
 // 所有漫画分类名称
 export const getComicClassName = () => server("/comic/classes")
+export const getHotComicList = () => server("/comic/hotcomic")
 // 根据分类筛选漫画
 export const getComicByCategory = (categoryName, size = 10) => server(
 	`/comic/category?className=${categoryName}&size=${size}`)

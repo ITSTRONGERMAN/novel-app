@@ -1,11 +1,10 @@
 <template>
 	<view class="input">
-		<!-- input组件绑定v-model -->
-		<input @input="handleInput" :value="modelValue" :type="type" :placeholder="placeholder" />
-		<view class="icon">
-			<!-- 根据当前类型配置右侧图标点击事件 -->
-			<uv-icon @tap="inputTypeConfig[type].rightIconClick" :name="inputTypeConfig[type].rightIcon" color="#868684"
-				size="14" bold></uv-icon>
+		<input @input="handleInput" :value="modelValue" :type="inputTypeConfig[type].type" :placeholder="placeholder" />
+		<view class="icon" v-if="modelValue.length!=0">
+			<uv-icon @tap="inputTypeConfig[type].rightIconClick"
+				:name="inputTypeConfig[type].rightIcon[inputTypeConfig[type].iconIndex]" color="#868684" size="14"
+				bold></uv-icon>
 		</view>
 	</view>
 </template>
@@ -14,48 +13,70 @@
 	import {
 		defineProps,
 		defineEmits,
-		ref
+		ref,
+		reactive
 	} from 'vue';
 
-	// 接收父组件的 `v-model` 和其他 prop
+	// 接收父组件传递的 props，包括 modelValue
 	const props = defineProps({
+		prop: {
+			type: String,
+			default: '',
+		},
+		role: {
+			type: String,
+			default: '',
+		},
 		modelValue: {
 			type: String,
-			default: ''
+			default: '',
 		},
 		type: {
 			type: String,
-			default: 'text'
+			default: 'text',
 		},
 		placeholder: {
 			type: String,
-			default: ''
+			default: '',
 		}
 	});
 
-	// 用于触发更新事件
-	const emit = defineEmits();
+	// 触发事件的 emit
+	const emit = defineEmits(['updateValue']);
 
 	// 配置不同类型的输入框操作
-	const inputTypeConfig = ref({
+	const inputTypeConfig = reactive({
 		text: {
-			rightIcon: 'close',
+			rightIcon: ['close'],
+			iconIndex: 0,
+			type: "text",
 			rightIconClick() {
-				emit('update:modelValue', ''); // 清空输入框内容
+				emit('updateValue', {
+					key: props.prop,
+					value: '',
+					role: props.role
+				}); // 清空输入框
 			}
 		},
 		password: {
-			rightIcon: 'eye-fill',
+			rightIcon: ['eye', 'eye-off-outline'],
+			type: "password",
+			iconIndex: 0,
 			rightIconClick() {
-				// 这里可以添加密码显示/隐藏的逻辑
-				console.log('Password icon clicked');
+				const iconIndex = inputTypeConfig.password.iconIndex
+				inputTypeConfig.password.iconIndex = iconIndex == 1 ? 0 : 1
+				inputTypeConfig.password.type = iconIndex == 1 ? 'password' : "text"
 			}
 		}
 	});
 
-	// 处理输入事件并更新父组件的 modelValue
+	// 处理输入事件，更新父组件的 modelValue
 	const handleInput = (event) => {
-		emit('update:modelValue', event.target.value);
+		emit('updateValue', {
+			key: props.prop,
+			value: event.detail.value,
+			role: props.role
+		});
 	};
 </script>
 

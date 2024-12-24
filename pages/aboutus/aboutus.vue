@@ -7,7 +7,7 @@
 			</view>
 		</view>
 		<view class="icon-box">
-			<image src="../../static/logo.png" mode=""></image>
+			<image src="../../static/images/logo.png" mode=""></image>
 			<view class="name">番猫免费小说 </view>
 		</view>
 		<view class="about-list">

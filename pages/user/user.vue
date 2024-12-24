@@ -3,8 +3,9 @@
 		<view class="header">
 			<view class="status-bar"></view>
 			<view class="login-contanier">
-				<image src="../../static/logo.png" mode="" class="headImg"></image>
+				<image src="../../static/images/logo.png" mode="" class="headImg"></image>
 				<view class="userInfo">
+					<!-- <view class="user-name">番猫免费小说</view> -->
 					<view class="user-name" @tap="goToLogin">登录/注册</view>
 					<view class="edit-info" v-if="false">编辑资料</view>
 				</view>
@@ -48,25 +49,25 @@
 					<uv-icon name="share" size="26"></uv-icon>
 					<view class="txt">分享应用</view>
 				</view>
-				<view class="config-list-item" @tap="handelAboutApp">
-					<uv-icon name="info-circle" size="26"></uv-icon>
-					<view class="txt">关于番猫</view>
-				</view>
 				<view class="config-list-item">
 					<uv-icon name="clear" custom-prefix="custom-icon" size="26"></uv-icon>
 					<view class="txt">清除缓存</view>
 				</view>
 				<view class="config-list-item">
-					<uv-icon name="setting" size="26"></uv-icon>
-					<view class="txt">设置</view>
-				</view>
-				<view class="config-list-item">
 					<uv-icon name="bug" custom-prefix="custom-icon" size="26"></uv-icon>
 					<view class="txt">bug报错</view>
 				</view>
-				<view class="config-list-item">
+				<view class="config-list-item" @tap="reward">
 					<uv-icon name="dashang" custom-prefix="custom-icon" size="26"></uv-icon>
 					<view class="txt">打赏作者</view>
+				</view>
+				<view class="config-list-item">
+					<uv-icon name="setting" size="26"></uv-icon>
+					<view class="txt">设置</view>
+				</view>
+				<view class="config-list-item" @tap="handelAboutApp">
+					<uv-icon name="info-circle" size="26"></uv-icon>
+					<view class="txt">关于番猫</view>
 				</view>
 			</view>
 		</view>
@@ -135,7 +136,9 @@
 	}
 	// 打赏
 	const reward = () => {
-
+		uni.navigateTo({
+			url: "/pages/reward/reward"
+		})
 	}
 </script>
 
@@ -246,7 +249,7 @@
 			.inner-box {
 				display: grid;
 				grid-gap: 20rpx;
-				grid-template-columns: repeat(4, 1fr);
+				grid-template-columns: repeat(3, 1fr);
 
 				.config-list-item {
 					padding: 10rpx 0;
