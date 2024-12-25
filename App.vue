@@ -7,10 +7,12 @@
 	import {
 		closeDatabase,
 	} from './api';
+	import setBottomNavigationBarColor from './utiles/setBottomNavigationBarColor.js';
 	// #endif
 	onLaunch(() => {
 		// #ifdef APP-PLUS
 		plus.screen.lockOrientation('portrait-primary'); // 锁定竖屏
+		setBottomNavigationBarColor("#FFFFFF")
 		// #endif
 	})
 	onUnload(() => {

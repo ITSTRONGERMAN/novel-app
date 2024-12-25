@@ -9,13 +9,10 @@
 			"path": "pages/nove-detail/index"
 		},
 		{
-			"path": "pages/chapters/chapters",
-			"style": {
-				"navigationStyle": "default"
-			}
+			"path": "pages/chapters/chapters"
 		},
 		{
-			"path": "pages/read/read"
+			"path": "pages/novel-read/novel-read"
 		},
 		{
 			"path": "pages/bookshelf/bookshelf"

@@ -7,7 +7,7 @@
 				<view class="userInfo">
 					<!-- <view class="user-name">番猫免费小说</view> -->
 					<view class="user-name" @tap="goToLogin">登录/注册</view>
-					<view class="edit-info" v-if="false">编辑资料</view>
+					<!-- <view class="edit-info" v-if="false">编辑资料</view> -->
 				</view>
 			</view>
 		</view>

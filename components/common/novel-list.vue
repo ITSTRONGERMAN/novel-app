@@ -1,7 +1,7 @@
 <template>
 	<view class="list-container">
 		<view class="list">
-			<view class="item" v-for="novel in novelList" :key="novel.id" @tap="goToNovelDetail(novel)">
+			<view class="item" v-for="novel in novelList" :key="novel.id" @tap="goToDetail(novel)">
 				<view class="l">
 					<uv-image :src="novel.cover" lazy-load observeLazyLoad fade radius="5" width="90"
 						height="120"></uv-image>
@@ -31,6 +31,10 @@
 		defineEmits
 	} from 'vue'
 	import getSelectorInfo from '../../utiles/getSelectorInfo'
+	import commonHook from '../../hooks/common'
+	const {
+		goToDetail
+	} = commonHook()
 	const store = useStore()
 	const instance = getCurrentInstance()
 	const emits = defineEmits(["onLayout"])
@@ -48,18 +52,6 @@
 		})
 		firtLayoutWatcher()
 	})
-	// 前往小说详情页
-	const goToNovelDetail = (detail) => {
-		const removeHtmlTags = (str) => str.replace(/<[^>]+>/g, '')
-		store.commit('setCurrentNovelDetail', {
-			...detail,
-			name: removeHtmlTags(detail.name),
-		})
-		uni.navigateTo({
-			url: '/pages/nove-detail/index',
-			animationType: "slide-in-right"
-		})
-	}
 </script>
 
 <style lang="scss" scoped>

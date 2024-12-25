@@ -1,12 +1,14 @@
 <template>
 	<view class="book-list">
 		<view class="book-item" v-for="item in bookList" :key="item.novel_id">
-			<uv-image :src="item.cover" lazy-load observeLazyLoad fade radius="5" width="80" height="100"
-				mode="aspectCover"></uv-image>
-			<view class="info">
-				<view class="name">{{item.name}}</view>
-				<view class="hasRead">{{item.hasRead?`读到：${item.hasRead}`:'未读'}}</view>
-				<view class="status">{{item.status}}</view>
+			<view class="l" @tap="exceptDetailPageGoToRead(item)">
+				<uv-image :src="item.cover" lazy-load observeLazyLoad fade radius="5" width="80" height="100"
+					mode="aspectCover"></uv-image>
+				<view class="info">
+					<view class="name">{{item.name}}</view>
+					<view class="hasRead">{{item.hasRead?`读到：${item.hasRead}`:'未读'}}</view>
+					<view class="status">{{item.status}}</view>
+				</view>
 			</view>
 			<view class="btn">
 				<uv-icon @tap="operate(item)" name="more" custom-prefix="custom-icon" size="20"
@@ -21,6 +23,10 @@
 		defineProps,
 		defineEmits
 	} from 'vue'
+	import commonHook from '../../../hooks/common'
+	const {
+		exceptDetailPageGoToRead
+	} = commonHook()
 	const emits = defineEmits(["operate"])
 	defineProps({
 		bookList: {
@@ -44,20 +50,25 @@
 			display: flex;
 			gap: 30rpx;
 
-			.info {
+			.l {
 				flex: 1;
 				display: flex;
-				flex-direction: column;
-				justify-content: space-around;
+				gap: 30rpx;
 
-				.name {
-					font-size: 28rpx;
-				}
+				.info {
+					display: flex;
+					flex-direction: column;
+					justify-content: space-around;
 
-				.hasRead,
-				.status {
-					font-size: 24rpx;
-					color: $gray-color;
+					.name {
+						font-size: 28rpx;
+					}
+
+					.hasRead,
+					.status {
+						font-size: 24rpx;
+						color: $gray-color;
+					}
 				}
 			}
 

@@ -30,7 +30,7 @@
 			</view>
 		</view>
 		<view :class="['list','unfold']">
-			<view @tap="goToNovelDetail(item)" class="list-item" v-for="item,index in  hotSearchList" :key="item.id">
+			<view @tap="goToDetail(item)" class="list-item" v-for="item,index in  hotSearchList" :key="item.id">
 				{{item.name}}
 			</view>
 		</view>
@@ -46,11 +46,11 @@
 		defineProps,
 		defineEmits
 	} from 'vue'
-	import {
-		useStore
-	} from 'vuex'
 	import modalVue from '../../../components/modal/modal.vue'
-	const store = useStore()
+	import commonHook from '../../../hooks/common'
+	const {
+		goToDetail
+	} = commonHook()
 	const clearModal = ref(null)
 	const isFold = ref(true)
 	defineProps({
@@ -64,14 +64,6 @@
 		},
 	})
 	const emits = defineEmits(['clearHistory', 'handelSearch'])
-	// 前往小说详情页
-	const goToNovelDetail = (detail) => {
-		store.commit('setCurrentNovelDetail', detail)
-		uni.navigateTo({
-			url: `/pages/nove-detail/index`,
-			animationType: "slide-in-right"
-		})
-	}
 	const clearHistory = () => {
 		isFold.value = true
 		emits('clearHistory')

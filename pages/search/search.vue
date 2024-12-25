@@ -9,15 +9,16 @@
 		<!-- 搜索提示内容区 -->
 		<scroll-view :scroll-y="true" class="search-result" :style="{height:searchResultHeight+'px'}"
 			v-if="searchResult.length>0&&!issearchValEmpty&&!showResult">
-			<view @tap="goToNovelDetail(item)" class="search-item" v-for="item in searchResult" :key="item.id">
+			<view @tap="goToDetail(item)" class="search-item" v-for="item in searchResult" :key="item.id">
 				<uv-icon size="22" name="search" color="#ccc"></uv-icon>
 				<view class="name" v-html="item.name"></view>
 				<view class="type">{{chineseName[item.type]}}</view>
 			</view>
 		</scroll-view>
 		<!-- 默认显示 -->
-		<defaultVue v-if="!showResult&&searchResult.length==0&&issearchValEmpty" @handelSearch="handelSearch"
-			@clearHistory="clearHistory" :hotSearchList="hotSearchList" :historyList="searchHistoryList" />
+		<defaultVue v-if="(!showResult&&searchResult.length==0)||(issearchValEmpty&&!showResult)"
+			@handelSearch="handelSearch" @clearHistory="clearHistory" :hotSearchList="hotSearchList"
+			:historyList="searchHistoryList" />
 		<!-- 搜索结果 -->
 		<resultVue v-if="showResult" :keyword="issearchValEmpty?placeholder:searchVal"
 			:scrollHeight="searchResultHeight" />
@@ -33,9 +34,6 @@
 		watch
 	} from 'vue'
 	import {
-		useStore
-	} from 'vuex'
-	import {
 		onLoad,
 		onBackPress
 	} from '@dcloudio/uni-app'
@@ -50,6 +48,10 @@
 	import getSelectorInfo from '../../utiles/getSelectorInfo';
 	import useSearchHistory from './hooks/useSearchHistory';
 	import resultVue from './components/result.vue';
+	import commonHook from '../../hooks/common';
+	const {
+		goToDetail
+	} = commonHook()
 	import {
 		parseSearchResult
 	} from './utils';
@@ -58,7 +60,6 @@
 		addSearchHistory,
 		clearHistory,
 	} = useSearchHistory()
-	const store = useStore()
 	const chineseName = {
 		novel: "小说",
 		comic: "漫画"
@@ -126,17 +127,6 @@
 				...item,
 				name: parseSearchResult(item.name, searchVal.value)
 			}
-		})
-	}
-	const goToNovelDetail = (detail) => {
-		const removeHtmlTags = (str) => str.replace(/<[^>]+>/g, '')
-		store.commit('setCurrentNovelDetail', {
-			...detail,
-			name: removeHtmlTags(detail.name),
-		})
-		uni.navigateTo({
-			url: '/pages/nove-detail/index',
-			animationType: "slide-in-right"
 		})
 	}
 </script>

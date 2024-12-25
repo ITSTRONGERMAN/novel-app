@@ -3,8 +3,7 @@
 		<!-- 遮罩 -->
 		<view class="mask" v-if="maskShow" @tap="closeMenu"></view>
 		<!-- 加载页 -->
-		<uv-loading-page :loading="isLoading" :bgColor="theme.backgroundColor" :color="theme.contentColor"
-			:loadingColor="theme.contentColor" loading-text="加载中..." font-size="24rpx"></uv-loading-page>
+		<pageLoadingVue v-if="isLoading" :backgroundColor="theme.backgroundColor"></pageLoadingVue>
 		<readTop :chapterName="currentChapter?.chapter_name" />
 		<!-- 内容区 -->
 		<scroll-view @scroll="handelScroll" v-if="chapterInfo.chapterList.length>0" :scroll-top="offsetY"
@@ -49,6 +48,7 @@
 	import bottomPopup from './components/bottom-popup.vue';
 	import configPopup from './components/config-popup.vue';
 	import usePopup from './hook/usePopup';
+	import pageLoadingVue from '../../components/common/page-loading.vue';
 	import {
 		onLoad,
 		onUnload,
@@ -107,8 +107,6 @@
 		changeTheme
 	} = useConfig()
 	const store = useStore()
-	const novel = computed(() => store.state.currentNovelDetail)
-	console.log(novel.value);
 	// 是否加载结束
 	const isLoading = ref(true)
 	// 阅读区宽度

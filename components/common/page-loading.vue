@@ -1,5 +1,5 @@
 <template>
-	<view class="page-loading">
+	<view class="page-loading" :style="{backgroundColor}">
 		<loadingVue></loadingVue>
 		<!-- <image src="../../static/images/error.png" mode=""></image> -->
 	</view>
@@ -7,6 +7,15 @@
 
 <script setup>
 	import loadingVue from './loading/loading.vue';
+	import {
+		defineProps
+	} from 'vue'
+	defineProps({
+		backgroundColor: {
+			type: String,
+			default: "#fff"
+		}
+	})
 </script>
 
 <style lang="scss" scoped>

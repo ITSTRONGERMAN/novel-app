@@ -52,6 +52,10 @@
 	} from 'vuex'
 	import loadingVue from '../../../components/common/loading/loading.vue';
 	import getSelectorInfo from '../../../utiles/getSelectorInfo';
+	import commonHook from "../../../hooks/common.js"
+	const {
+		goToDetail
+	} = commonHook()
 	const emits = defineEmits(["changeType", "scrolltolower", "onListLayout"])
 	const store = useStore()
 	const scrollTop = ref(0)
@@ -106,13 +110,6 @@
 		scrollTimer.value = setTimeout(() => {
 			scrollTop.value = 0
 		}, 300)
-	}
-	const goToDetail = (bookInfo) => {
-		store.commit('setCurrentNovelDetail', bookInfo)
-		uni.navigateTo({
-			url: '/pages/nove-detail/index',
-			animationType: "slide-in-right"
-		})
 	}
 </script>
 

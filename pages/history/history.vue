@@ -83,6 +83,9 @@
 	import midAreaItemVue from '../../components/home/mid-area/mid-area-item.vue';
 	import historyListVue from './components/history-list.vue';
 	import modalVue from '../../components/modal/modal.vue';
+	import {
+		refactorHistoryList
+	} from './utils';
 	const {
 		tabBarList,
 		currentPage,
@@ -240,20 +243,30 @@
 			await insterBookShell({
 				...book
 			})
-			historyList[pageName].list[book.index].isInBookShell = true
+			const pages = pageList.value.map(item => item.name)
+			for (const pageName of pages) {
+				historyList[pageName].list = await refactorHistoryList(
+					historyList[pageName].list,
+					[book.id]
+				)
+			}
 			finished = true
 		} else if (action === 1) {
 			const selectedBook = historyList[pageName].list.filter(item => item.checked)
 			const isAllInBookShell = selectedBook.every(item => item.isInBookShell)
+			const selectedBookId = selectedBook.map(item => item.id)
 			if (!isAllInBookShell) {
+				const pages = pageList.value.map(item => item.name)
+				for (const pageName of pages) {
+					historyList[pageName].list = await refactorHistoryList(
+						historyList[pageName].list,
+						selectedBookId
+					)
+				}
 				for await (const book of selectedBook) {
-					const index = historyList[pageName].list.findIndex(item => item.id == book.id)
-					if (!book.isInBookShell) {
-						await insterBookShell({
-							...book
-						})
-					}
-					historyList[pageName].list[index].isInBookShell = true
+					await insterBookShell({
+						...book
+					})
 				}
 			}
 			finished = !isAllInBookShell

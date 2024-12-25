@@ -77,6 +77,7 @@
 		onShow
 	} from '@dcloudio/uni-app'
 	import pageLoadingVue from "../../components/common/page-loading.vue";
+	import EventBus from '../../utiles/eventBus';
 	const store = useStore()
 	// 小说信息
 	const novel = computed(() => store.state.currentNovelDetail)
@@ -142,10 +143,10 @@
 	}
 	// 开始阅读
 	const goToRead = () => {
+		const type = novel.value.type
 		if (novel_chapters.value.length > 0) {
 			uni.navigateTo({
-				url: novel.value.type == "novel" ? `/pages/read/read?novel_id=${novel.value.id}&chapter_n=1` :
-					`/pages/comic-read/comic-read?comic_id=${novel.value.id}&chapter_n=1`
+				url: `/pages/${type}-read/${type}-read?${type}_id=${novel.value.id}&chapter_n=1`,
 			})
 		} else {
 			uni.showToast({
@@ -154,16 +155,24 @@
 			})
 		}
 	}
+	// 添加到书架
 	const addBookShell = async () => {
-		if (isAdded.value) {
-			await deleteFromBookShell(store.state.currentNovelDetail.id, novel.value.type)
-			isAdded.value = false
+		if (novel_chapters.value.length > 0) {
+			if (isAdded.value) {
+				await deleteFromBookShell(store.state.currentNovelDetail.id, novel.value.type)
+				isAdded.value = false
+			} else {
+				await insterBookShell({
+					novel_id: novel.value.id,
+					...novel.value
+				})
+				isAdded.value = true
+			}
 		} else {
-			await insterBookShell({
-				novel_id: novel.value.id,
-				...novel.value
+			uni.showToast({
+				icon: "none",
+				title: "当前小说暂无章节内容，暂不能加入书架",
 			})
-			isAdded.value = true
 		}
 	}
 </script>

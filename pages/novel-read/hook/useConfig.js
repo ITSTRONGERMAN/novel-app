@@ -2,8 +2,11 @@ import {
 	ref,
 	computed,
 	reactive,
-	watch
+	watch,
+	onMounted,
+	onUnmounted
 } from 'vue'
+import setBottomNavigationBarColor from '../../../utiles/setBottomNavigationBarColor'
 const useConfig = () => {
 	const config = reactive({
 		novel_id: -1, // 当前小说id
@@ -77,8 +80,17 @@ const useConfig = () => {
 	// 切换主题
 	const changeTheme = (theme) => {
 		config.currentTheme = theme
+		setBottomNavigationBarColor(themeStyle[config.currentTheme].backgroundColor)
 		uni.setStorageSync("read_theme", config.currentTheme)
 	}
+	onMounted(() => {
+		setTimeout(() => {
+			setBottomNavigationBarColor(themeStyle[config.currentTheme].backgroundColor)
+		}, 300)
+	})
+	onUnmounted(() => {
+		setBottomNavigationBarColor("#ffffff")
+	})
 	return {
 		config,
 		theme,

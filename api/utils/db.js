@@ -183,7 +183,6 @@ class DB {
 			 '${author}','${genre}','${intro}')`,
 				success(result) {
 					console.log("插入历史成功");
-					console.log(23123);
 					resolve()
 				},
 				fail(error) {

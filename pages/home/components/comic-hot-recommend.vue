@@ -11,7 +11,7 @@
 			</view>
 		</view>
 		<view class="comic-list">
-			<view class="comic-item" v-for="item,index in comicList" :key="item.id*(index+1)">
+			<view @tap="goToDetail(item)" class="comic-item" v-for="item,index in comicList" :key="item.id*(index+1)">
 				<uv-image :src="`http://192.168.0.100/comic/cover/${item.name}.png`" lazy-load observeLazyLoad fade
 					radius="5" width="100%" height="150"></uv-image>
 				<view class="name">
@@ -33,6 +33,10 @@
 		onMounted,
 		defineProps
 	} from 'vue'
+	import commonHook from '../../../hooks/common'
+	const {
+		goToDetail
+	} = commonHook()
 	defineProps({
 		comicList: {
 			type: Array,

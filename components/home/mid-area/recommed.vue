@@ -6,7 +6,7 @@
 		</view>
 		<view class="list">
 			<loadingVue v-show="!isLoaded"></loadingVue>
-			<view class="list-item" @tap="goToNovelDetail(item)" v-show="isLoaded" v-for="item,index in novelList"
+			<view class="list-item" @tap="goToDetail(item)" v-show="isLoaded" v-for="item,index in novelList"
 				:key="item.id">
 				<view class="l">
 					<uv-image :src="item.cover" lazy-load observeLazyLoad fade loadingIcon="photo-fill" duration="450"
@@ -37,10 +37,10 @@
 		defineEmits,
 	} from 'vue'
 	import loadingVue from '../../common/loading/loading.vue';
-	import {
-		useStore
-	} from 'vuex'
-	const store = useStore()
+	import commonHook from '../../../hooks/common';
+	const {
+		goToDetail
+	} = commonHook()
 	const props = defineProps({
 		isLoaded: {
 			default: false,
@@ -64,16 +64,6 @@
 	// 切换榜单
 	const changeRank = (index) => {
 		emits('changeRank', index)
-	}
-	const goToNovelDetail = (detail) => {
-		store.commit('setCurrentNovelDetail', {
-			...detail,
-			type: "novel"
-		})
-		uni.navigateTo({
-			url: '/pages/nove-detail/index',
-			animationType: "slide-in-right"
-		})
 	}
 </script>
 

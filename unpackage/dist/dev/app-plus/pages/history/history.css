@@ -1440,10 +1440,15 @@ uni-view[data-v-8fe9e33e], uni-scroll-view[data-v-8fe9e33e], uni-swiper-item[dat
   gap: 0.9375rem;
   align-items: center;
 }
-.history-list .history-list-item .cover[data-v-144ace82] {
+.history-list .history-list-item .l[data-v-144ace82] {
+  display: flex;
+  gap: 0.9375rem;
+  align-items: center;
+}
+.history-list .history-list-item .l .cover[data-v-144ace82] {
   position: relative;
 }
-.history-list .history-list-item .cover .type[data-v-144ace82] {
+.history-list .history-list-item .l .cover .type[data-v-144ace82] {
   position: absolute;
   right: 0.1875rem;
   top: 0.1875rem;
@@ -1452,25 +1457,31 @@ uni-view[data-v-8fe9e33e], uni-scroll-view[data-v-8fe9e33e], uni-swiper-item[dat
   font-size: 0.625rem;
   z-index: 99;
 }
-.history-list .history-list-item .info[data-v-144ace82] {
+.history-list .history-list-item .l .info[data-v-144ace82] {
   flex: 1;
   height: inherit;
   display: flex;
   flex-direction: column;
   gap: 0.625rem;
 }
-.history-list .history-list-item .info .name[data-v-144ace82] {
+.history-list .history-list-item .l .info .name[data-v-144ace82] {
   font-size: 1rem;
 }
-.history-list .history-list-item .info .b[data-v-144ace82] {
+.history-list .history-list-item .l .info .b[data-v-144ace82] {
   font-size: 0.75rem;
   color: #94a3b8;
   display: flex;
   flex-direction: column;
   gap: 0.3125rem;
 }
-.history-list .history-list-item .addBookShell[data-v-144ace82],
-.history-list .history-list-item .hasAdded[data-v-144ace82] {
+.history-list .history-list-item .r[data-v-144ace82] {
+  flex: 1;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+}
+.history-list .history-list-item .r .addBookShell[data-v-144ace82],
+.history-list .history-list-item .r .hasAdded[data-v-144ace82] {
   width: -webkit-fit-content;
   width: fit-content;
   padding: 0.3125rem 0.625rem;
@@ -1478,8 +1489,9 @@ uni-view[data-v-8fe9e33e], uni-scroll-view[data-v-8fe9e33e], uni-swiper-item[dat
   border-radius: 0.625rem;
   color: #000;
   background-color: #F7F7F7;
+  text-wrap: nowrap;
 }
-.history-list .history-list-item .hasAdded[data-v-144ace82] {
+.history-list .history-list-item .r .hasAdded[data-v-144ace82] {
   color: #AFAFAF;
 }
 /* 颜色变量 */
