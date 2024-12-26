@@ -264,9 +264,11 @@
 					)
 				}
 				for await (const book of selectedBook) {
-					await insterBookShell({
-						...book
-					})
+					if (!book.isInBookShell) {
+						await insterBookShell({
+							...book
+						})
+					}
 				}
 			}
 			finished = !isAllInBookShell

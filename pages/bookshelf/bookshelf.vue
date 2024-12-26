@@ -16,23 +16,19 @@
 		</view>
 		<midAreaVue background="#fff" :height="bookShellContainerHeight" :length="2" :current="currentActiveTabbar"
 			@pageChange="pageChange">
-			<mid-area-item-vue :refresh="false" :customStyle="{ padding:0 }">
-				<emptyVue @onNoDataBtn="onNoDataBtn" v-if="bookShellList.novel.length==0" desc="书架暂无书籍"></emptyVue>
+			<mid-area-item-vue v-for="({key,value},index) in bookShellTitle" :key="index" :refresh="false"
+				:customStyle="{ padding:0 }">
+				<emptyVue @onNoDataBtn="onNoDataBtn" v-if="bookShellList[key].length==0" :desc="`书架暂无${value}`">
+				</emptyVue>
 				<template v-else>
-					<rowVue :bookList="bookShellList.novel" @operate="handelAct" v-if="isList"></rowVue>
-					<columnVue :bookList="bookShellList.novel" @operate="handelAct" v-else></columnVue>
-				</template>
-			</mid-area-item-vue>
-			<mid-area-item-vue :refresh="false" :customStyle="{ padding:0 }">
-				<emptyVue @onNoDataBtn="onNoDataBtn" v-if="bookShellList.comic.length==0" desc="书架暂无书籍"></emptyVue>
-				<template v-else>
-					<rowVue :bookList="bookShellList.comic" @operate="handelAct" v-if="isList"></rowVue>
-					<columnVue :bookList="bookShellList.comic" @operate="handelAct" v-else></columnVue>
+					<rowVue :bookList="bookShellList[key]" @operate="handelAct" v-if="isList"></rowVue>
+					<columnVue :bookList="bookShellList[key]" @operate="handelAct" v-else></columnVue>
 				</template>
 			</mid-area-item-vue>
 		</midAreaVue>
 		<!-- 书籍操作弹出层 -->
-		<operationVue ref="popup" :currentBook="currentBook" @confirmDelete="confirm"></operationVue>
+		<operationVue ref="popup" :currentBook="currentBook" @topUpBook="topUpBook" @confirmDelete="confirm">
+		</operationVue>
 	</view>
 </template>
 
@@ -47,7 +43,8 @@
 	import {
 		deleteFromBookShell,
 		getBookShellList,
-		isExistHistory
+		isExistHistory,
+		setTopInBookShell
 	} from '../../api';
 	import getSystemInfo from '../../utiles/getSystemInfo.js'
 	import getSelectorInfo from '../../utiles/getSelectorInfo.js'
@@ -63,6 +60,9 @@
 	import novelListVue from '../../components/common/novel-list.vue';
 	import useSlide from '../../hooks/useSlide';
 	import EventBus from '../../utiles/eventBus';
+	import {
+		parseBookList
+	} from './utils';
 	const {
 		currentActiveTabbar,
 		pageChange,
@@ -111,26 +111,6 @@
 		const systemInfo = await getSystemInfo()
 		bookShellContainerHeight.value = systemInfo.windowHeight - headerInfo.height
 	})
-	// 解析书架列表
-	const parseBookList = async (bookList, type) => {
-		let newList = await Promise.all(bookList.map((item) => {
-			return isExistHistory(item.novel_id, type).then((isExist) => {
-				const hasRead = isExist.length > 0 ? isExist[0].chapter_name : null
-				const read_time = isExist.length > 0 ? isExist[0].read_time : 0
-				return {
-					...item,
-					hasRead,
-					read_time,
-				};
-			});
-		}))
-		newList = newList.sort((a, b) => {
-			const dateA = new Date(a.read_time);
-			const dateB = new Date(b.read_time);
-			return dateA - dateB;
-		});
-		return newList
-	}
 	// 当前查看的书
 	const currentBook = ref(null)
 	const handelAct = (info) => {
@@ -147,8 +127,21 @@
 			url: "/pages/search/search"
 		})
 	}
+	// 点击没有数据按钮
 	const onNoDataBtn = () => {
 		EventBus.emit("changeTab", currentActiveTabbar.value)
+	}
+	// 置顶图书
+	const topUpBook = async (bookInfo) => {
+		const key = bookShellTitle.value[currentActiveTabbar.value].key
+		const index = bookShellList[key].findIndex(item => item.id == bookInfo.id)
+		const currentTop = bookShellList[key][index].top
+		const newTop = currentTop == 1 ? 0 : 1
+		bookShellList[key][index].top = newTop
+		currentBook.value.top = newTop
+		if (newTop == 1) bookShellList[key].unshift(...bookShellList[key].splice(index, 1))
+		else bookShellList[key].push(...bookShellList[key].splice(index, 1))
+		await setTopInBookShell(bookInfo.id, newTop)
 	}
 </script>
 

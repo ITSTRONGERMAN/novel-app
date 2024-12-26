@@ -1,9 +1,9 @@
 <template>
 	<view class="history-list" :style="{paddingBottom:isEditMode?operationContanierHeight+'px':0}">
 		<l-empty v-if="historyList.length===0" description="没有找到相关内容" />
-		<view v-else @tap="selectBook(index)" @longpress="handelLongPress(index)" class="history-list-item"
+		<view v-else @tap="selectBook(index,book)" @longpress="handelLongPress(index)" class="history-list-item"
 			v-for="book,index in historyList" :key="book.id">
-			<view class="l" @tap="goToRead">
+			<view class="l">
 				<view class="cover">
 					<view class="type" :style="typeStyle[book.type].style">{{typeStyle[book.type].name}}</view>
 					<uv-image :src="book.cover" lazy-loade observeLazyLoad fade radius="5" width="140rpx"
@@ -20,7 +20,7 @@
 			<view class="r">
 				<uv-icon v-if="isEditMode" :color="book.checked?'#F66B32':'#7E7E7E'" name="checkmark-circle-fill"
 					size="24"></uv-icon>
-				<view @tap="addToBookShell({index,...book})" v-else
+				<view @tap.stop="addToBookShell({index,...book})" v-else
 					:class="['addBookShell',book.isInBookShell?'hasAdded':'']">
 					{{book.isInBookShell?'已加':'加入'}}书架
 				</view>
@@ -74,8 +74,9 @@
 	})
 	const emits = defineEmits(["selectBook", "handelLongPress", "addToBookShell"])
 	// 选择书本
-	const selectBook = (index) => {
-		emits("selectBook", index)
+	const selectBook = (index, book) => {
+		if (props.isEditMode) emits("selectBook", index)
+		else exceptDetailPageGoToRead(book)
 	}
 	// 长按历史项
 	const handelLongPress = (index) => {
@@ -85,10 +86,6 @@
 	const addToBookShell = (book) => {
 		if (book.isInBookShell) return
 		emits("addToBookShell", book)
-	}
-	const goToRead = () => {
-		if (props.isEditMode) return
-		exceptDetailPageGoToRead(book)
 	}
 </script>
 

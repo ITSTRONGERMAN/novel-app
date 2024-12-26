@@ -38,6 +38,11 @@
 
 		.chapter_name {
 			font-size: 28rpx;
+			display: -webkit-box;
+			text-overflow: ellipsis;
+			-webkit-box-orient: vertical;
+			-webkit-line-clamp: 1;
+			overflow: hidden;
 		}
 	}
 </style>

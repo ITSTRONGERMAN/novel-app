@@ -44,7 +44,7 @@ export const getYourPersionalRecommend = (size = 10, offset = 0) => server(
 export const getComicContent = (comic_name, chapter_n, device_width = 375) => server(
 	`/comic/content?name=${comic_name}&chapter_n=${chapter_n}&device_width=${device_width}`)
 // 目标漫画章节
-export const getComicChapters = (comic_name) => server(`/comic/chapters?name=${comic_name}`)
+export const getComicChapters = (comic_id) => server(`/comic/chapters?comic_id=${comic_id}`)
 // 漫画搜索
 export const searchComic = (comic_name, offset, size) => server(
 	`/comic/search?name=${comic_name}&offset=${offset}&size=${size}`)
@@ -108,3 +108,9 @@ export const getHistoryList = (type = "all", size = 10, offset = 0) => db.select
 )
 // 删除浏览历史
 export const deleteHistoryListById = (id) => db.executeSql(`DELETE FROM history WHERE id = ${id}`)
+// 书架 置顶
+export const setTopInBookShell = (id, top) => db.executeSql(`
+		UPDATE bookshell
+		SET top = ${top}
+		WHERE id = ${id};
+`)

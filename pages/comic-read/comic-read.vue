@@ -71,16 +71,22 @@
 	// 滚动条高度
 	const scrollTop = ref(0)
 	onLoad(async ({
-		comic_id
+		comic_id,
+		chapter_n,
+		appoint = false
 	}) => {
-		const res = await isExistHistory(comic_id, 'comic')
-		currentChapter_n.value = (res.length != 0 ? res[0].chapter_n : 1) - 1;
+		if (!JSON.parse(appoint)) {
+			const res = await isExistHistory(comic_id, 'comic')
+			currentChapter_n.value = (res.length != 0 ? res[0].chapter_n : 1) - 1;
+		} else {
+			currentChapter_n.value = parseInt(chapter_n) - 1
+		}
 	})
 	onMounted(async () => {
 		const sysInfo = await getSystemInfo()
 		device_width.value = sysInfo.windowWidth
 		screenHeight.value = sysInfo.screenHeight
-		const chapterRes = await getComicChapters(curentComicName.value)
+		const chapterRes = await getComicChapters(comic.value.id)
 		chapterList.value = chapterRes.data.data
 		// console.log(chapterList.value);
 		// #ifdef APP

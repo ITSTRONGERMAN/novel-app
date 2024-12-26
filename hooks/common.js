@@ -10,7 +10,7 @@ const commonHook = () => {
 			name: removeHtmlTags(detail.name),
 		})
 		uni.navigateTo({
-			url: '/pages/nove-detail/index',
+			url: '/pages/detail/detail',
 			animationType: "slide-in-right"
 		})
 	}

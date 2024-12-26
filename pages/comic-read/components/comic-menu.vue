@@ -11,8 +11,6 @@
 				</view>
 				<view class="action-right">
 					<view @tap="addBookShell">{{isAdd?'已加入书架':'加入书架'}}</view>
-					<uv-icon @tap="goToDetail" name="xiang" color="#2c2c2c" custom-prefix="custom-icon"
-						size="20"></uv-icon>
 				</view>
 			</view>
 		</view>
@@ -162,10 +160,6 @@
 	// 返回上一页
 	const back = () => {
 		uni.navigateBack()
-	}
-	// 前往漫画详情页
-	const goToDetail = () => {
-		console.log("前往详情页");
 	}
 	// 当菜单状态改变时
 	const handelChange = ({

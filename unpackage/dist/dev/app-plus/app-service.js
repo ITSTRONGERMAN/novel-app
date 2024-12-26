@@ -9427,7 +9427,7 @@ if (uni.restoreGlobal) {
         name: removeHtmlTags(detail.name)
       });
       uni.navigateTo({
-        url: "/pages/nove-detail/index",
+        url: "/pages/detail/detail",
         animationType: "slide-in-right"
       });
     };
@@ -9631,15 +9631,15 @@ if (uni.restoreGlobal) {
         (vue.openBlock(true), vue.createElementBlock(
           vue.Fragment,
           null,
-          vue.renderList($props.novelList, (novel2) => {
+          vue.renderList($props.novelList, (novel) => {
             return vue.openBlock(), vue.createElementBlock("view", {
               class: "item",
-              key: novel2.id,
-              onClick: ($event) => $setup.goToDetail(novel2)
+              key: novel.id,
+              onClick: ($event) => $setup.goToDetail(novel)
             }, [
               vue.createElementVNode("view", { class: "l" }, [
                 vue.createVNode(_component_uv_image, {
-                  src: novel2.cover,
+                  src: novel.cover,
                   "lazy-load": "",
                   observeLazyLoad: "",
                   fade: "",
@@ -9651,12 +9651,12 @@ if (uni.restoreGlobal) {
               vue.createElementVNode("view", { class: "r" }, [
                 vue.createElementVNode("view", {
                   class: "name",
-                  innerHTML: novel2.name
+                  innerHTML: novel.name
                 }, null, 8, ["innerHTML"]),
                 vue.createElementVNode(
                   "view",
                   { class: "info" },
-                  vue.toDisplayString(novel2.intro),
+                  vue.toDisplayString(novel.intro),
                   1
                   /* TEXT */
                 ),
@@ -9664,12 +9664,12 @@ if (uni.restoreGlobal) {
                   vue.createElementVNode(
                     "text",
                     { class: "status" },
-                    vue.toDisplayString(novel2.status),
+                    vue.toDisplayString(novel.status),
                     1
                     /* TEXT */
                   ),
                   vue.createTextVNode(
-                    " " + vue.toDisplayString(novel2.words_count),
+                    " " + vue.toDisplayString(novel.words_count),
                     1
                     /* TEXT */
                   )
@@ -9738,7 +9738,7 @@ if (uni.restoreGlobal) {
         url: BASEURL + url2,
         data,
         method,
-        timeout: 1e4,
+        timeout: 5e3,
         success(res) {
           resolve(res);
         },
@@ -9764,13 +9764,13 @@ if (uni.restoreGlobal) {
         await this.createHistoryTable();
         await this.createBookShellTable();
       } catch (error2) {
-        formatAppLog("error", "at api/utils/db.js:23", "数据库初始化失败:", error2.message);
+        formatAppLog("error", "at api/utils/db.js:22", "数据库初始化失败:", error2.message);
       }
     }
     // 插入章节
     async insertChapter(params) {
       if (!params || params.length !== 3) {
-        formatAppLog("error", "at api/utils/db.js:29", "参数无效");
+        formatAppLog("error", "at api/utils/db.js:28", "参数无效");
         return;
       }
       const [chapter_name, novel_id, chapter_n] = params;
@@ -9779,11 +9779,11 @@ if (uni.restoreGlobal) {
           name: this.name,
           sql: `INSERT INTO chapters (chapter_name, novel_id, chapter_n) VALUES ("${chapter_name}", ${novel_id}, ${chapter_n})`,
           success(result) {
-            formatAppLog("log", "at api/utils/db.js:38", "插入成功");
+            formatAppLog("log", "at api/utils/db.js:37", "插入成功");
             resolve();
           },
           fail(error2) {
-            formatAppLog("error", "at api/utils/db.js:42", "插入失败:" + error2.message);
+            formatAppLog("error", "at api/utils/db.js:41", "插入失败:" + error2.message);
             reject2();
           }
         });
@@ -9795,9 +9795,9 @@ if (uni.restoreGlobal) {
           name: this.name,
           path: this.path
         });
-        formatAppLog("log", "at api/utils/db.js:54", "数据库打开成功");
+        formatAppLog("log", "at api/utils/db.js:53", "数据库打开成功");
       } catch (error2) {
-        formatAppLog("error", "at api/utils/db.js:56", "数据库打开失败:", error2.message);
+        formatAppLog("error", "at api/utils/db.js:55", "数据库打开失败:", error2.message);
       }
     }
     // 创建章节表
@@ -9811,9 +9811,9 @@ if (uni.restoreGlobal) {
 					novel_id INTEGER NOT NULL, 
 					chapter_n INTEGER NOT NULL);`
         });
-        formatAppLog("log", "at api/utils/db.js:70", "章节表创建成功或已存在");
+        formatAppLog("log", "at api/utils/db.js:69", "章节表创建成功或已存在");
       } catch (error2) {
-        formatAppLog("error", "at api/utils/db.js:72", "创建章节表失败:", error2.message);
+        formatAppLog("error", "at api/utils/db.js:71", "创建章节表失败:", error2.message);
       }
     }
     // 创建历史表
@@ -9840,9 +9840,9 @@ if (uni.restoreGlobal) {
 					);
 				`
         });
-        formatAppLog("log", "at api/utils/db.js:99", "历史记录表创建成功或已存在");
+        formatAppLog("log", "at api/utils/db.js:98", "历史记录表创建成功或已存在");
       } catch (error2) {
-        formatAppLog("error", "at api/utils/db.js:101", "创建历史记录表失败:", error2.message);
+        formatAppLog("error", "at api/utils/db.js:100", "创建历史记录表失败:", error2.message);
       }
     }
     // 是否存在历史记录
@@ -9874,33 +9874,32 @@ if (uni.restoreGlobal) {
           sql: `INSERT INTO bookshell (novel_id, name, author, intro, cover, genre, status, words_count,type) 
 			          VALUES (${novel_id}, '${name2}', '${author}', '${intro}', '${cover}', '${genre}', '${status}', '${words_count}','${type}')`,
           success(result) {
-            formatAppLog("log", "at api/utils/db.js:133", `《${name2}》添加到书架成功`);
+            formatAppLog("log", "at api/utils/db.js:132", `《${name2}》添加到书架成功`);
             resolve();
           },
           fail(error2) {
-            formatAppLog("error", "at api/utils/db.js:137", `《${name2}》添加到书架失败`);
-            formatAppLog("log", "at api/utils/db.js:138", error2);
+            formatAppLog("error", "at api/utils/db.js:136", `《${name2}》添加到书架失败`);
+            formatAppLog("log", "at api/utils/db.js:137", error2);
             reject2();
           }
         });
       });
     }
     // 插入历史记录
-    insertHistory(params) {
-      const {
-        novel_id,
-        offsetY,
-        chapter_n,
-        chapter_name,
-        type = "novel",
-        intro,
-        name: name2,
-        cover,
-        status,
-        words_count,
-        author,
-        genre
-      } = params;
+    insertHistory({
+      novel_id,
+      offsetY,
+      chapter_n,
+      chapter_name,
+      type = "novel",
+      intro,
+      name: name2,
+      cover,
+      status,
+      words_count,
+      author,
+      genre
+    }) {
       return new Promise((resolve, reject2) => {
         plus.sqlite.executeSql({
           name: this.name,
@@ -9926,11 +9925,11 @@ if (uni.restoreGlobal) {
 			'${cover}','${status}','${words_count}',
 			 '${author}','${genre}','${intro}')`,
           success(result) {
-            formatAppLog("log", "at api/utils/db.js:185", "插入历史成功");
+            formatAppLog("log", "at api/utils/db.js:183", "插入历史成功");
             resolve();
           },
           fail(error2) {
-            formatAppLog("error", "at api/utils/db.js:189", "插入历史失败:" + error2.message);
+            formatAppLog("error", "at api/utils/db.js:187", "插入历史失败:" + error2.message);
             reject2();
           }
         });
@@ -9953,7 +9952,7 @@ if (uni.restoreGlobal) {
             resolve(result);
           },
           fail(err) {
-            formatAppLog("log", "at api/utils/db.js:212", "查询失败:" + err.message);
+            formatAppLog("log", "at api/utils/db.js:210", "查询失败:" + err.message);
             reject2();
           }
         });
@@ -9966,22 +9965,23 @@ if (uni.restoreGlobal) {
           name: this.name,
           sql: `
                 CREATE TABLE IF NOT EXISTS bookshell (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,  -- 自动递增的主键 
-                    novel_id INTEGER NOT NULL UNIQUE,  -- 小说id
-                    name TEXT NOT NULL,  -- 小说名称 
-                    author TEXT,  -- 小说作者 
-                    intro TEXT NOT NULL,  -- 小说简介 
-                    cover TEXT,  -- 小说封面 
-                    genre TEXT NOT NULL,  -- 小说题材 
-                    status TEXT NOT NULL DEFAULT '连载中',  -- 小说状态(使用TEXT代替ENUM) 
-                    words_count TEXT DEFAULT NULL,  -- 小说字数 (改为 INTEGER)
-					type TEXT Default 'novel'
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,  -- 自动递增的主键
+                    novel_id INTEGER NOT NULL UNIQUE,      -- 小说id
+                    top INTEGER CHECK(top IN (0, 1)) NOT NULL DEFAULT 0,  -- 是否置顶 (0: 否, 1: 是)
+                    name TEXT NOT NULL,                    -- 小说名称
+                    author TEXT,                           -- 小说作者
+                    intro TEXT NOT NULL,                   -- 小说简介
+                    cover TEXT,                            -- 小说封面
+                    genre TEXT NOT NULL,                   -- 小说题材
+                    status TEXT NOT NULL DEFAULT '连载中', -- 小说状态 (例如：'连载中', '已完结')
+                    words_count INTEGER DEFAULT NULL,      -- 小说字数 (使用 INTEGER)
+                    type TEXT DEFAULT 'novel'              -- 小说类型 (例如：'novel', 'short story', 等)
                 );
             `
         });
-        formatAppLog("log", "at api/utils/db.js:239", "书架表创建成功或已存在");
+        formatAppLog("log", "at api/utils/db.js:238", "书架表创建成功或已存在");
       } catch (error2) {
-        formatAppLog("error", "at api/utils/db.js:241", "创建书架表失败:", error2.message);
+        formatAppLog("error", "at api/utils/db.js:240", "创建书架表失败:", error2.message);
       }
     }
     //  执行sql语句
@@ -9994,7 +9994,7 @@ if (uni.restoreGlobal) {
             resolve(res);
           },
           fail(err) {
-            formatAppLog("error", "at api/utils/db.js:254", err.message);
+            formatAppLog("error", "at api/utils/db.js:253", err.message);
             reject();
           }
         });
@@ -10007,9 +10007,9 @@ if (uni.restoreGlobal) {
           name: this.name,
           path: this.path
         });
-        formatAppLog("log", "at api/utils/db.js:267", "数据库关闭成功！");
+        formatAppLog("log", "at api/utils/db.js:266", "数据库关闭成功！");
       } catch (error2) {
-        formatAppLog("error", "at api/utils/db.js:269", "数据库关闭失败:", error2.message);
+        formatAppLog("error", "at api/utils/db.js:268", "数据库关闭失败:", error2.message);
       }
     }
   }
@@ -10042,7 +10042,7 @@ if (uni.restoreGlobal) {
   const getComicContent = (comic_name, chapter_n, device_width = 375) => server(
     `/comic/content?name=${comic_name}&chapter_n=${chapter_n}&device_width=${device_width}`
   );
-  const getComicChapters = (comic_name) => server(`/comic/chapters?name=${comic_name}`);
+  const getComicChapters = (comic_id) => server(`/comic/chapters?comic_id=${comic_id}`);
   const searchComic = (comic_name, offset, size) => server(
     `/comic/search?name=${comic_name}&offset=${offset}&size=${size}`
   );
@@ -10052,7 +10052,6 @@ if (uni.restoreGlobal) {
   );
   const db = new DB();
   const closeDatabase = () => db.closeDatabase();
-  const executeSql = (sql) => db.executeSql(sql);
   const selectSql = (sql) => db.select(sql);
   const insertChapter = (params) => db.insertChapter(params);
   const insertHistory = (params) => db.insertHistory(params);
@@ -10093,6 +10092,11 @@ if (uni.restoreGlobal) {
 	`
   );
   const deleteHistoryListById = (id) => db.executeSql(`DELETE FROM history WHERE id = ${id}`);
+  const setTopInBookShell = (id, top) => db.executeSql(`
+		UPDATE bookshell
+		SET top = ${top}
+		WHERE id = ${id};
+`);
   const _sfc_main$P = {
     __name: "novel",
     setup(__props, { expose: __expose }) {
@@ -10449,7 +10453,7 @@ if (uni.restoreGlobal) {
           type: "comic"
         });
         uni.navigateTo({
-          url: "/pages/nove-detail/index"
+          url: "/pages/detail/detail"
         });
       };
       const __returned__ = { store: store2, goToDetail, get useStore() {
@@ -11412,53 +11416,163 @@ if (uni.restoreGlobal) {
     ]);
   }
   const __easycom_2$3 = /* @__PURE__ */ _export_sfc(_sfc_main$H, [["render", _sfc_render$G], ["__scopeId", "data-v-d91f31a6"], ["__file", "D:/APP/novel-app/novel-app/uni_modules/uv-read-more/components/uv-read-more/uv-read-more.vue"]]);
-  const _sfc_main$G = {
+  function isNumeric(value2) {
+    return /^(-)?\d+(\.\d+)?$/.test(value2);
+  }
+  function isDef(value2) {
+    return value2 !== void 0 && value2 !== null;
+  }
+  function addUnit(value2) {
+    if (!isDef(value2)) {
+      return null;
+    }
+    value2 = String(value2);
+    return isNumeric(value2) ? `${value2}px` : value2;
+  }
+  const _sfc_main$G = vue.defineComponent({
+    name: "l-empty",
+    props: {
+      description: String,
+      imageSize: {
+        type: [String, Number, Array]
+      },
+      image: {
+        type: String,
+        default: "default"
+      }
+    },
+    setup(props2) {
+      const PRESETS = ["error", "search", "default", "network", "cart", "404", "message", "coupon", "comment", "express", "order", "address"];
+      const imageUrl = vue.computed(() => {
+        if (PRESETS.includes(props2.image)) {
+          return "/uni_modules/lime-empty/static/" + props2.image + ".png";
+        }
+        return props2.image;
+      });
+      const styles = vue.computed(() => {
+        const style = {};
+        const imageSize = props2.imageSize;
+        if (imageSize == null) {
+          return style;
+        }
+        if (Array.isArray(imageSize) && imageSize.length > 0) {
+          const width2 = addUnit(imageSize[0]);
+          addUnit(imageSize[1]);
+          style["width"] = width2;
+          style["height"] = addUnit(imageSize[1]);
+          return style;
+        }
+        const width = addUnit(imageSize);
+        style["width"] = width;
+        return style;
+      });
+      return {
+        styles,
+        imageUrl
+      };
+    }
+  });
+  function _sfc_render$F(_ctx, _cache, $props, $setup, $data, $options) {
+    return vue.openBlock(), vue.createElementBlock("view", { class: "l-empty" }, [
+      _ctx.image ? (vue.openBlock(), vue.createElementBlock("image", {
+        key: 0,
+        class: "l-empty__image",
+        style: vue.normalizeStyle([_ctx.styles]),
+        mode: "widthFix",
+        src: _ctx.imageUrl
+      }, null, 12, ["src"])) : vue.createCommentVNode("v-if", true),
+      _ctx.description ? (vue.openBlock(), vue.createElementBlock(
+        "text",
+        {
+          key: 1,
+          class: "l-empty__description"
+        },
+        vue.toDisplayString(_ctx.description),
+        1
+        /* TEXT */
+      )) : vue.createCommentVNode("v-if", true),
+      vue.createElementVNode("view", { class: "l-empty__bottom" }, [
+        vue.renderSlot(_ctx.$slots, "default", {}, void 0, true)
+      ])
+    ]);
+  }
+  const __easycom_0$2 = /* @__PURE__ */ _export_sfc(_sfc_main$G, [["render", _sfc_render$F], ["__scopeId", "data-v-569a5b26"], ["__file", "D:/APP/novel-app/novel-app/uni_modules/lime-empty/components/l-empty/l-empty.vue"]]);
+  const _sfc_main$F = {
     __name: "page-loading",
     props: {
       backgroundColor: {
         type: String,
         default: "#fff"
+      },
+      status: {
+        type: String,
+        default: "loading"
+      },
+      fontColor: {
+        type: String,
+        default: "#000"
       }
     },
-    setup(__props, { expose: __expose }) {
+    emits: ["reload"],
+    setup(__props, { expose: __expose, emit: __emit }) {
       __expose();
-      const __returned__ = { loadingVue };
+      const emits = __emit;
+      const reload = () => {
+        emits("reload");
+      };
+      const __returned__ = { emits, reload, loadingVue };
       Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
       return __returned__;
     }
   };
-  function _sfc_render$F(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$E(_ctx, _cache, $props, $setup, $data, $options) {
+    const _component_l_empty = resolveEasycom(vue.resolveDynamicComponent("l-empty"), __easycom_0$2);
     return vue.openBlock(), vue.createElementBlock(
       "view",
       {
+        onClick: $setup.reload,
         class: "page-loading",
         style: vue.normalizeStyle({ backgroundColor: $props.backgroundColor })
       },
       [
-        vue.createVNode($setup["loadingVue"]),
-        vue.createCommentVNode(' <image src="../../static/images/error.png" mode=""></image> ')
+        $props.status === "loading" ? (vue.openBlock(), vue.createBlock($setup["loadingVue"], { key: 0 })) : $props.status === "error" ? (vue.openBlock(), vue.createElementBlock("view", {
+          key: 1,
+          class: "empty"
+        }, [
+          vue.createVNode(_component_l_empty, { image: "network" }),
+          vue.createElementVNode(
+            "view",
+            {
+              class: "txt",
+              style: vue.normalizeStyle({ color: $props.fontColor })
+            },
+            "网络连接异常,请点击重试",
+            4
+            /* STYLE */
+          )
+        ])) : vue.createCommentVNode("v-if", true)
       ],
       4
       /* STYLE */
     );
   }
-  const pageLoadingVue = /* @__PURE__ */ _export_sfc(_sfc_main$G, [["render", _sfc_render$F], ["__scopeId", "data-v-c3ec4776"], ["__file", "D:/APP/novel-app/novel-app/components/common/page-loading.vue"]]);
-  const _sfc_main$F = {
-    __name: "index",
+  const pageLoadingVue = /* @__PURE__ */ _export_sfc(_sfc_main$F, [["render", _sfc_render$E], ["__scopeId", "data-v-c3ec4776"], ["__file", "D:/APP/novel-app/novel-app/components/common/page-loading.vue"]]);
+  const _sfc_main$E = {
+    __name: "detail",
     setup(__props, { expose: __expose }) {
       __expose();
       const store2 = useStore();
-      const novel2 = vue.computed(() => store2.state.currentNovelDetail);
+      const novel = vue.computed(() => store2.state.currentNovelDetail);
       const isLoading = vue.ref(true);
       const txtColor = vue.ref("");
       const novel_chapters = vue.ref([]);
       const isAdded = vue.ref(false);
       onShow(async () => {
-        const addedVal = await isInBookShell(novel2.value.id, novel2.value.type);
+        const addedVal = await isInBookShell(novel.value.id, novel.value.type);
         isAdded.value = addedVal;
       });
       vue.onMounted(async () => {
-        await getCoverMainColor(novel2.value.cover);
+        await getCoverMainColor(novel.value.cover);
         await getChapters();
         isLoading.value = false;
       });
@@ -11474,24 +11588,24 @@ if (uni.restoreGlobal) {
         txtColor.value = maincolor;
       };
       const getChapters = async () => {
-        if (novel2.value.type == "novel") {
+        if (novel.value.type == "novel") {
           const {
             data: chapters
-          } = await getNovelChapters(novel2.value.id);
+          } = await getNovelChapters(novel.value.id);
           novel_chapters.value = chapters;
         } else {
-          const res = await getComicChapters(novel2.value.name);
+          const res = await getComicChapters(novel.value.id);
           novel_chapters.value = res.data.data;
         }
       };
       const goToChaptersPage = () => {
         if (novel_chapters.value.length > 0) {
           store2.commit("setCurrentNovelChapters", {
-            novel_name: novel2.value.name,
+            novel_name: novel.value.name,
             chapters: novel_chapters.value
           });
           uni.navigateTo({
-            url: "/pages/chapters/chapters"
+            url: `/pages/chapters/chapters?novel_id=${novel.value.id}&from=detail`
           });
         } else {
           uni.showToast({
@@ -11501,10 +11615,10 @@ if (uni.restoreGlobal) {
         }
       };
       const goToRead = () => {
-        const type = novel2.value.type;
+        const type = novel.value.type;
         if (novel_chapters.value.length > 0) {
           uni.navigateTo({
-            url: `/pages/${type}-read/${type}-read?${type}_id=${novel2.value.id}&chapter_n=1`
+            url: `/pages/${type}-read/${type}-read?${type}_id=${novel.value.id}&chapter_n=1`
           });
         } else {
           uni.showToast({
@@ -11516,12 +11630,12 @@ if (uni.restoreGlobal) {
       const addBookShell = async () => {
         if (novel_chapters.value.length > 0) {
           if (isAdded.value) {
-            await deleteFromBookShell(store2.state.currentNovelDetail.id, novel2.value.type);
+            await deleteFromBookShell(store2.state.currentNovelDetail.id, novel.value.type);
             isAdded.value = false;
           } else {
             await insterBookShell({
-              novel_id: novel2.value.id,
-              ...novel2.value
+              novel_id: novel.value.id,
+              ...novel.value
             });
             isAdded.value = true;
           }
@@ -11532,7 +11646,7 @@ if (uni.restoreGlobal) {
           });
         }
       };
-      const __returned__ = { store: store2, novel: novel2, isLoading, txtColor, novel_chapters, isAdded, goBack, getCoverMainColor, getChapters, goToChaptersPage, goToRead, addBookShell, computed: vue.computed, onMounted: vue.onMounted, ref: vue.ref, get useStore() {
+      const __returned__ = { store: store2, novel, isLoading, txtColor, novel_chapters, isAdded, goBack, getCoverMainColor, getChapters, goToChaptersPage, goToRead, addBookShell, computed: vue.computed, onMounted: vue.onMounted, ref: vue.ref, get useStore() {
         return useStore;
       }, get calculateCoverMainColor() {
         return calculateCoverMainColor;
@@ -11559,7 +11673,7 @@ if (uni.restoreGlobal) {
       return __returned__;
     }
   };
-  function _sfc_render$E(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$D(_ctx, _cache, $props, $setup, $data, $options) {
     var _a;
     const _component_uv_icon = resolveEasycom(vue.resolveDynamicComponent("uv-icon"), __easycom_0$8);
     const _component_uv_image = resolveEasycom(vue.resolveDynamicComponent("uv-image"), __easycom_1$3);
@@ -11701,57 +11815,114 @@ if (uni.restoreGlobal) {
       ])
     ]);
   }
-  const PagesNoveDetailIndex = /* @__PURE__ */ _export_sfc(_sfc_main$F, [["render", _sfc_render$E], ["__scopeId", "data-v-2d6fc040"], ["__file", "D:/APP/novel-app/novel-app/pages/nove-detail/index.vue"]]);
-  const _sfc_main$E = {
+  const PagesDetailDetail = /* @__PURE__ */ _export_sfc(_sfc_main$E, [["render", _sfc_render$D], ["__scopeId", "data-v-eca06f3c"], ["__file", "D:/APP/novel-app/novel-app/pages/detail/detail.vue"]]);
+  const _sfc_main$D = {
     __name: "chapters",
     setup(__props, { expose: __expose }) {
       __expose();
+      onLoad(async (param) => {
+        loading.value = param.from === "bookshell";
+        fromPage.value = param.from;
+        if (loading.value) {
+          await getChapterList2(param.novel_id, param.type);
+          novel_name.value = param.novel_name;
+        }
+      });
+      const fromPage = vue.ref("");
       const store2 = useStore();
-      const novel2 = vue.computed(() => store2.state.currentNovelChapters);
-      formatAppLog("log", "at pages/chapters/chapters.vue:48", novel2.value);
-      const latestChapter = vue.ref(novel2.value.chapters[novel2.value.chapters.length - 1].chapter_name);
+      const loading = vue.ref(false);
+      const loadError = vue.ref(false);
+      const chapters = vue.ref([]);
+      const novel_name = vue.ref("");
+      const novel = vue.computed(() => store2.state.currentNovelChapters);
+      const novelInfo = vue.computed(() => store2.state.currentNovelDetail);
+      const chapterList = vue.computed(() => {
+        return fromPage.value == "detail" ? novel.value.chapters : chapters.value;
+      });
+      const currentBookName = vue.computed(() => {
+        return fromPage.value == "detail" ? novel.value.name : novel_name.value;
+      });
       const instance = vue.getCurrentInstance();
       const isReverse = vue.ref(false);
       const scrollViewHeight = vue.ref(0);
       vue.onMounted(async () => {
         const sysInfo = await getSystemInfo();
         const headerInfo = await getSelectorInfo(instance, ".header");
-        formatAppLog("log", "at pages/chapters/chapters.vue:58", headerInfo);
         scrollViewHeight.value = sysInfo.windowHeight - headerInfo.height;
       });
       const chapters_reverse = () => {
-        novel2.value.chapters = novel2.value.chapters.reverse();
+        if (fromPage.value == "detail")
+          novel.value.chapters = novel.value.chapters.reverse();
+        else
+          chapters.value = chapters.value.reverse();
         isReverse.value = !isReverse.value;
       };
       const back = () => {
         uni.navigateBack();
       };
-      const __returned__ = { store: store2, novel: novel2, latestChapter, instance, isReverse, scrollViewHeight, chapters_reverse, back, onMounted: vue.onMounted, computed: vue.computed, ref: vue.ref, getCurrentInstance: vue.getCurrentInstance, get useStore() {
+      const getChapterList2 = async (id, type) => {
+        try {
+          if (type == "novel") {
+            const novelChapterRes = await getNovelChapters(id);
+            chapters.value = novelChapterRes.data;
+          } else if (type == "comic") {
+            const comicChapterRes = await getComicChapters(id);
+            chapters.value = comicChapterRes.data.data;
+          }
+          loading.value = false;
+        } catch (error2) {
+          loadError.value = true;
+        }
+      };
+      const goToRead = (chapterInfo) => {
+        const type = novelInfo.value.type;
+        const id = novelInfo.value.id;
+        uni.redirectTo({
+          url: `/pages/${type}-read/${type}-read?${type}_id=${id}&chapter_n=${chapterInfo.chapter_n}&appoint=true`
+        });
+      };
+      const reload = async () => {
+        loadError.value = false;
+        await getChapterList2(novelInfo.value.id, novelInfo.value.type);
+      };
+      const __returned__ = { fromPage, store: store2, loading, loadError, chapters, novel_name, novel, novelInfo, chapterList, currentBookName, instance, isReverse, scrollViewHeight, chapters_reverse, back, getChapterList: getChapterList2, goToRead, reload, get onLoad() {
+        return onLoad;
+      }, onMounted: vue.onMounted, computed: vue.computed, ref: vue.ref, getCurrentInstance: vue.getCurrentInstance, get useStore() {
         return useStore;
       }, get getSystemInfo() {
         return getSystemInfo;
       }, get getSelectorInfo() {
         return getSelectorInfo;
+      }, pageLoadingVue, get getComicChapters() {
+        return getComicChapters;
+      }, get getNovelChapters() {
+        return getNovelChapters;
       } };
       Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
       return __returned__;
     }
   };
-  function _sfc_render$D(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$C(_ctx, _cache, $props, $setup, $data, $options) {
+    var _a, _b, _c;
     const _component_uv_icon = resolveEasycom(vue.resolveDynamicComponent("uv-icon"), __easycom_0$8);
     return vue.openBlock(), vue.createElementBlock("view", { class: "chapters_container" }, [
+      $setup.loading ? (vue.openBlock(), vue.createBlock($setup["pageLoadingVue"], {
+        key: 0,
+        onReload: $setup.reload,
+        status: $setup.loadError ? "error" : "loading"
+      }, null, 8, ["status"])) : vue.createCommentVNode("v-if", true),
       vue.createElementVNode("view", { class: "header" }, [
         vue.createElementVNode("view", { class: "status-bar" }),
         vue.createElementVNode("view", { class: "inner-box" }, [
           vue.createVNode(_component_uv_icon, {
             onClick: $setup.back,
             name: "arrow-left",
-            size: "48rpx"
+            size: "46rpx"
           }),
           vue.createElementVNode(
             "view",
             { class: "name" },
-            vue.toDisplayString($setup.novel.novel_name),
+            vue.toDisplayString($setup.currentBookName),
             1
             /* TEXT */
           ),
@@ -11761,7 +11932,7 @@ if (uni.restoreGlobal) {
           vue.createElementVNode(
             "view",
             { class: "l" },
-            " 更新至" + vue.toDisplayString($setup.latestChapter),
+            " 更新至 " + vue.toDisplayString($setup.fromPage == "detail" ? $setup.novel.chapters[((_a = $setup.novel.chapters) == null ? void 0 : _a.length) - 1].chapter_name : (_c = $setup.chapters[((_b = $setup.chapters) == null ? void 0 : _b.length) - 1]) == null ? void 0 : _c.chapter_name),
             1
             /* TEXT */
           ),
@@ -11798,17 +11969,12 @@ if (uni.restoreGlobal) {
             (vue.openBlock(true), vue.createElementBlock(
               vue.Fragment,
               null,
-              vue.renderList($setup.novel.chapters, (item) => {
-                return vue.openBlock(), vue.createElementBlock(
-                  "view",
-                  {
-                    class: "chapter-list-item",
-                    key: item.id
-                  },
-                  vue.toDisplayString(item.chapter_name),
-                  1
-                  /* TEXT */
-                );
+              vue.renderList($setup.chapterList, (item) => {
+                return vue.openBlock(), vue.createElementBlock("view", {
+                  onClick: ($event) => $setup.goToRead(item),
+                  class: "chapter-list-item",
+                  key: item.id
+                }, vue.toDisplayString(item.chapter_name), 9, ["onClick"]);
               }),
               128
               /* KEYED_FRAGMENT */
@@ -11820,8 +11986,8 @@ if (uni.restoreGlobal) {
       )
     ]);
   }
-  const PagesChaptersChapters = /* @__PURE__ */ _export_sfc(_sfc_main$E, [["render", _sfc_render$D], ["__scopeId", "data-v-275a8e90"], ["__file", "D:/APP/novel-app/novel-app/pages/chapters/chapters.vue"]]);
-  const _sfc_main$D = {
+  const PagesChaptersChapters = /* @__PURE__ */ _export_sfc(_sfc_main$D, [["render", _sfc_render$C], ["__scopeId", "data-v-275a8e90"], ["__file", "D:/APP/novel-app/novel-app/pages/chapters/chapters.vue"]]);
+  const _sfc_main$C = {
     __name: "read-top",
     props: {
       theme: {
@@ -11846,7 +12012,7 @@ if (uni.restoreGlobal) {
       return __returned__;
     }
   };
-  function _sfc_render$C(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$B(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_uv_icon = resolveEasycom(vue.resolveDynamicComponent("uv-icon"), __easycom_0$8);
     return vue.openBlock(), vue.createElementBlock(
       vue.Fragment,
@@ -11875,8 +12041,8 @@ if (uni.restoreGlobal) {
       /* STABLE_FRAGMENT */
     );
   }
-  const readTop = /* @__PURE__ */ _export_sfc(_sfc_main$D, [["render", _sfc_render$C], ["__scopeId", "data-v-cd5e326e"], ["__file", "D:/APP/novel-app/novel-app/pages/novel-read/components/read-top.vue"]]);
-  const _sfc_main$C = {
+  const readTop = /* @__PURE__ */ _export_sfc(_sfc_main$C, [["render", _sfc_render$B], ["__scopeId", "data-v-cd5e326e"], ["__file", "D:/APP/novel-app/novel-app/pages/novel-read/components/read-top.vue"]]);
+  const _sfc_main$B = {
     __name: "read-bottom",
     props: {
       theme: {
@@ -11910,7 +12076,7 @@ if (uni.restoreGlobal) {
       return __returned__;
     }
   };
-  function _sfc_render$B(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$A(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_uv_icon = resolveEasycom(vue.resolveDynamicComponent("uv-icon"), __easycom_0$8);
     return vue.openBlock(), vue.createElementBlock(
       "view",
@@ -11967,8 +12133,8 @@ if (uni.restoreGlobal) {
       /* STYLE */
     );
   }
-  const readBottom = /* @__PURE__ */ _export_sfc(_sfc_main$C, [["render", _sfc_render$B], ["__scopeId", "data-v-c77f1d86"], ["__file", "D:/APP/novel-app/novel-app/pages/novel-read/components/read-bottom.vue"]]);
-  const _sfc_main$B = {
+  const readBottom = /* @__PURE__ */ _export_sfc(_sfc_main$B, [["render", _sfc_render$A], ["__scopeId", "data-v-c77f1d86"], ["__file", "D:/APP/novel-app/novel-app/pages/novel-read/components/read-bottom.vue"]]);
+  const _sfc_main$A = {
     __name: "catalog-popup",
     props: {
       catalogShow: {
@@ -12013,7 +12179,7 @@ if (uni.restoreGlobal) {
       return __returned__;
     }
   };
-  function _sfc_render$A(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$z(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock(
       "view",
       {
@@ -12049,7 +12215,7 @@ if (uni.restoreGlobal) {
       /* CLASS, STYLE */
     );
   }
-  const catalogpopup = /* @__PURE__ */ _export_sfc(_sfc_main$B, [["render", _sfc_render$A], ["__scopeId", "data-v-b455aa3c"], ["__file", "D:/APP/novel-app/novel-app/pages/novel-read/components/catalog-popup.vue"]]);
+  const catalogpopup = /* @__PURE__ */ _export_sfc(_sfc_main$A, [["render", _sfc_render$z], ["__scopeId", "data-v-b455aa3c"], ["__file", "D:/APP/novel-app/novel-app/pages/novel-read/components/catalog-popup.vue"]]);
   const props$5 = {
     props: {
       value: {
@@ -12108,7 +12274,7 @@ if (uni.restoreGlobal) {
       ...(_v = (_u = uni.$uv) == null ? void 0 : _u.props) == null ? void 0 : _v.slider
     }
   };
-  const _sfc_main$A = {
+  const _sfc_main$z = {
     name: "uv-slider",
     mixins: [mpMixin, mixin, props$5],
     computed: {
@@ -12135,7 +12301,7 @@ if (uni.restoreGlobal) {
       }
     }
   };
-  function _sfc_render$z(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$y(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock(
       "view",
       {
@@ -12162,7 +12328,7 @@ if (uni.restoreGlobal) {
       /* STYLE */
     );
   }
-  const __easycom_2$2 = /* @__PURE__ */ _export_sfc(_sfc_main$A, [["render", _sfc_render$z], ["__file", "D:/APP/novel-app/novel-app/uni_modules/uv-slider/components/uv-slider/uv-slider.vue"]]);
+  const __easycom_2$2 = /* @__PURE__ */ _export_sfc(_sfc_main$z, [["render", _sfc_render$y], ["__file", "D:/APP/novel-app/novel-app/uni_modules/uv-slider/components/uv-slider/uv-slider.vue"]]);
   const props$4 = {
     props: {
       // 是否显示遮罩
@@ -12188,7 +12354,7 @@ if (uni.restoreGlobal) {
       ...(_x = (_w = uni.$uv) == null ? void 0 : _w.props) == null ? void 0 : _x.overlay
     }
   };
-  const _sfc_main$z = {
+  const _sfc_main$y = {
     name: "uv-overlay",
     emits: ["click"],
     mixins: [mpMixin, mixin, props$4],
@@ -12218,7 +12384,7 @@ if (uni.restoreGlobal) {
       }
     }
   };
-  function _sfc_render$y(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$x(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_uv_transition = resolveEasycom(vue.resolveDynamicComponent("uv-transition"), __easycom_3);
     return vue.openBlock(), vue.createBlock(_component_uv_transition, {
       show: _ctx.show,
@@ -12236,7 +12402,7 @@ if (uni.restoreGlobal) {
       /* FORWARDED */
     }, 8, ["show", "duration", "custom-style", "onClick", "onTouchmove"]);
   }
-  const __easycom_0$2 = /* @__PURE__ */ _export_sfc(_sfc_main$z, [["render", _sfc_render$y], ["__scopeId", "data-v-7303e1aa"], ["__file", "D:/APP/novel-app/novel-app/uni_modules/uv-overlay/components/uv-overlay/uv-overlay.vue"]]);
+  const __easycom_0$1 = /* @__PURE__ */ _export_sfc(_sfc_main$y, [["render", _sfc_render$x], ["__scopeId", "data-v-7303e1aa"], ["__file", "D:/APP/novel-app/novel-app/uni_modules/uv-overlay/components/uv-overlay/uv-overlay.vue"]]);
   const props$3 = {
     props: {
       bgColor: {
@@ -12245,7 +12411,7 @@ if (uni.restoreGlobal) {
       }
     }
   };
-  const _sfc_main$y = {
+  const _sfc_main$x = {
     name: "uv-status-bar",
     mixins: [mpMixin, mixin, props$3],
     data() {
@@ -12266,7 +12432,7 @@ if (uni.restoreGlobal) {
       }
     }
   };
-  function _sfc_render$x(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$w(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock(
       "view",
       {
@@ -12280,8 +12446,8 @@ if (uni.restoreGlobal) {
       /* STYLE */
     );
   }
-  const __easycom_1$1 = /* @__PURE__ */ _export_sfc(_sfc_main$y, [["render", _sfc_render$x], ["__scopeId", "data-v-f5bd6f5a"], ["__file", "D:/APP/novel-app/novel-app/uni_modules/uv-status-bar/components/uv-status-bar/uv-status-bar.vue"]]);
-  const _sfc_main$x = {
+  const __easycom_1$1 = /* @__PURE__ */ _export_sfc(_sfc_main$x, [["render", _sfc_render$w], ["__scopeId", "data-v-f5bd6f5a"], ["__file", "D:/APP/novel-app/novel-app/uni_modules/uv-status-bar/components/uv-status-bar/uv-status-bar.vue"]]);
+  const _sfc_main$w = {
     name: "uv-safe-bottom",
     mixins: [mpMixin, mixin],
     data() {
@@ -12299,7 +12465,7 @@ if (uni.restoreGlobal) {
     mounted() {
     }
   };
-  function _sfc_render$w(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$v(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock(
       "view",
       {
@@ -12311,8 +12477,8 @@ if (uni.restoreGlobal) {
       /* CLASS, STYLE */
     );
   }
-  const __easycom_2$1 = /* @__PURE__ */ _export_sfc(_sfc_main$x, [["render", _sfc_render$w], ["__scopeId", "data-v-560f16b2"], ["__file", "D:/APP/novel-app/novel-app/uni_modules/uv-safe-bottom/components/uv-safe-bottom/uv-safe-bottom.vue"]]);
-  const _sfc_main$w = {
+  const __easycom_2$1 = /* @__PURE__ */ _export_sfc(_sfc_main$w, [["render", _sfc_render$v], ["__scopeId", "data-v-560f16b2"], ["__file", "D:/APP/novel-app/novel-app/uni_modules/uv-safe-bottom/components/uv-safe-bottom/uv-safe-bottom.vue"]]);
+  const _sfc_main$v = {
     name: "uv-popup",
     components: {},
     mixins: [mpMixin, mixin],
@@ -12646,8 +12812,8 @@ if (uni.restoreGlobal) {
       }
     }
   };
-  function _sfc_render$v(_ctx, _cache, $props, $setup, $data, $options) {
-    const _component_uv_overlay = resolveEasycom(vue.resolveDynamicComponent("uv-overlay"), __easycom_0$2);
+  function _sfc_render$u(_ctx, _cache, $props, $setup, $data, $options) {
+    const _component_uv_overlay = resolveEasycom(vue.resolveDynamicComponent("uv-overlay"), __easycom_0$1);
     const _component_uv_status_bar = resolveEasycom(vue.resolveDynamicComponent("uv-status-bar"), __easycom_1$1);
     const _component_uv_safe_bottom = resolveEasycom(vue.resolveDynamicComponent("uv-safe-bottom"), __easycom_2$1);
     const _component_uv_icon = resolveEasycom(vue.resolveDynamicComponent("uv-icon"), __easycom_0$8);
@@ -12734,7 +12900,7 @@ if (uni.restoreGlobal) {
       /* CLASS, STYLE */
     )) : vue.createCommentVNode("v-if", true);
   }
-  const __easycom_1 = /* @__PURE__ */ _export_sfc(_sfc_main$w, [["render", _sfc_render$v], ["__scopeId", "data-v-01a3ad6e"], ["__file", "D:/APP/novel-app/novel-app/uni_modules/uv-popup/components/uv-popup/uv-popup.vue"]]);
+  const __easycom_1 = /* @__PURE__ */ _export_sfc(_sfc_main$v, [["render", _sfc_render$u], ["__scopeId", "data-v-01a3ad6e"], ["__file", "D:/APP/novel-app/novel-app/uni_modules/uv-popup/components/uv-popup/uv-popup.vue"]]);
   const props$2 = {
     props: {
       // 标题
@@ -12825,7 +12991,7 @@ if (uni.restoreGlobal) {
       ...(_B = (_A = uni.$uv) == null ? void 0 : _A.props) == null ? void 0 : _B.modal
     }
   };
-  const _sfc_main$v = {
+  const _sfc_main$u = {
     name: "uv-modal",
     mixins: [mpMixin, mixin, props$2],
     data() {
@@ -12875,7 +13041,7 @@ if (uni.restoreGlobal) {
       }
     }
   };
-  function _sfc_render$u(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$t(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_uv_line = resolveEasycom(vue.resolveDynamicComponent("uv-line"), __easycom_0$7);
     const _component_uv_loading_icon = resolveEasycom(vue.resolveDynamicComponent("uv-loading-icon"), __easycom_0$6);
     const _component_uv_popup = resolveEasycom(vue.resolveDynamicComponent("uv-popup"), __easycom_1);
@@ -13028,8 +13194,8 @@ if (uni.restoreGlobal) {
       /* FORWARDED */
     }, 8, ["zoom", "zIndex", "customStyle", "closeOnClickOverlay", "onChange"]);
   }
-  const __easycom_2 = /* @__PURE__ */ _export_sfc(_sfc_main$v, [["render", _sfc_render$u], ["__scopeId", "data-v-4b4aa5ec"], ["__file", "D:/APP/novel-app/novel-app/uni_modules/uv-modal/components/uv-modal/uv-modal.vue"]]);
-  const _sfc_main$u = {
+  const __easycom_2 = /* @__PURE__ */ _export_sfc(_sfc_main$u, [["render", _sfc_render$t], ["__scopeId", "data-v-4b4aa5ec"], ["__file", "D:/APP/novel-app/novel-app/uni_modules/uv-modal/components/uv-modal/uv-modal.vue"]]);
+  const _sfc_main$t = {
     __name: "bottom-popup",
     props: {
       menuShow: {
@@ -13151,7 +13317,7 @@ if (uni.restoreGlobal) {
       return __returned__;
     }
   };
-  function _sfc_render$t(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$s(_ctx, _cache, $props, $setup, $data, $options) {
     var _a, _b;
     const _component_uv_slider = resolveEasycom(vue.resolveDynamicComponent("uv-slider"), __easycom_2$2);
     const _component_uv_icon = resolveEasycom(vue.resolveDynamicComponent("uv-icon"), __easycom_0$8);
@@ -13301,8 +13467,8 @@ if (uni.restoreGlobal) {
       /* STABLE_FRAGMENT */
     );
   }
-  const bottomPopup = /* @__PURE__ */ _export_sfc(_sfc_main$u, [["render", _sfc_render$t], ["__scopeId", "data-v-88d9cb66"], ["__file", "D:/APP/novel-app/novel-app/pages/novel-read/components/bottom-popup.vue"]]);
-  const _sfc_main$t = {
+  const bottomPopup = /* @__PURE__ */ _export_sfc(_sfc_main$t, [["render", _sfc_render$s], ["__scopeId", "data-v-88d9cb66"], ["__file", "D:/APP/novel-app/novel-app/pages/novel-read/components/bottom-popup.vue"]]);
+  const _sfc_main$s = {
     __name: "config-popup",
     props: {
       show: {
@@ -13369,7 +13535,7 @@ if (uni.restoreGlobal) {
       return __returned__;
     }
   };
-  function _sfc_render$s(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$r(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_uv_slider = resolveEasycom(vue.resolveDynamicComponent("uv-slider"), __easycom_2$2);
     return vue.openBlock(), vue.createElementBlock(
       "view",
@@ -13480,7 +13646,7 @@ if (uni.restoreGlobal) {
       /* CLASS, STYLE */
     );
   }
-  const configPopup = /* @__PURE__ */ _export_sfc(_sfc_main$t, [["render", _sfc_render$s], ["__scopeId", "data-v-a6d65de4"], ["__file", "D:/APP/novel-app/novel-app/pages/novel-read/components/config-popup.vue"]]);
+  const configPopup = /* @__PURE__ */ _export_sfc(_sfc_main$s, [["render", _sfc_render$r], ["__scopeId", "data-v-a6d65de4"], ["__file", "D:/APP/novel-app/novel-app/pages/novel-read/components/config-popup.vue"]]);
   const usePopup = () => {
     const catalogShow = vue.ref(false);
     const menuShow = vue.ref(false);
@@ -13671,7 +13837,7 @@ if (uni.restoreGlobal) {
       return savedChapters;
     }
   };
-  const _sfc_main$s = {
+  const _sfc_main$r = {
     __name: "novel-read",
     setup(__props, { expose: __expose }) {
       __expose();
@@ -13697,7 +13863,13 @@ if (uni.restoreGlobal) {
         changeTheme
       } = useConfig();
       const store2 = useStore();
+      const novel = vue.computed(() => store2.state.currentNovelDetail);
       const isLoading = vue.ref(true);
+      const loadError = vue.ref(false);
+      const loadErrorOption = {
+        fun: null,
+        param: null
+      };
       const contentWidth = vue.ref(0);
       const instance = vue.ref(null);
       const offsetY = vue.ref(0);
@@ -13712,17 +13884,19 @@ if (uni.restoreGlobal) {
       const chapterNameScrollHeight = vue.ref(0);
       onLoad(async ({
         novel_id,
+        appoint = false,
         chapter_n
       }) => {
         let currentChapter_n = chapter_n;
-        const result = await isExistHistory(novel_id, "novel");
-        if (result.length != 0) {
-          currentChapter_n = result[0].chapter_n;
-          offsetY.value = result[0].offsetY;
+        if (!JSON.parse(appoint)) {
+          const result = await isExistHistory(novel_id, "novel");
+          if (result.length != 0) {
+            currentChapter_n = result[0].chapter_n;
+            offsetY.value = result[0].offsetY;
+          }
         }
         config2.novel_id = novel_id;
-        const res = await getChapterContent(config2.novel_id, currentChapter_n);
-        chapterInfo.chapterList = res.data.data;
+        await init(currentChapter_n);
       });
       const contentHeight = vue.ref(0);
       vue.onMounted(async () => {
@@ -13730,12 +13904,29 @@ if (uni.restoreGlobal) {
         instance.value = vue.getCurrentInstance();
         const sysInfo = await getSystemInfo();
         chapterNameScrollHeight.value = sysInfo.screenHeight - sysInfo.statusBarHeight;
-        setTimeout(async () => {
-          chapterInfo.chapterNameList = await getChapterList(config2.novel_id);
-          await calculateContentHeight();
-          isLoading.value = false;
-        }, 1e3);
       });
+      const init = async (currentChapter_n) => {
+        try {
+          const chapterContentRes = await getChapterContent(config2.novel_id, currentChapter_n);
+          chapterInfo.chapterList = chapterContentRes.data.data;
+          await new Promise((resolve, reject2) => {
+            setTimeout(async () => {
+              try {
+                chapterInfo.chapterNameList = await getChapterList(config2.novel_id);
+                await calculateContentHeight();
+                resolve();
+              } catch (error2) {
+                reject2(error2);
+              }
+            }, 300);
+          });
+          isLoading.value = false;
+        } catch (error2) {
+          loadErrorOption.fun = init;
+          loadErrorOption.param = currentChapter_n;
+          loadError.value = true;
+        }
+      };
       onUnload(() => {
         plus.navigator.setFullscreen(false);
         saveHistory();
@@ -13750,13 +13941,14 @@ if (uni.restoreGlobal) {
             offsetY.value
           );
         } else {
-          await insertHistory({
+          const param = {
             novel_id: config2.novel_id,
             offsetY: offsetY.value,
             type: "novel",
             ...currentChapter.value,
             ...novel.value
-          });
+          };
+          await insertHistory(param);
         }
       };
       onHide(async () => {
@@ -13769,51 +13961,63 @@ if (uni.restoreGlobal) {
         contentHeight.value = sysInfo.screenHeight - info.height - info2.height - sysInfo.statusBarHeight;
       };
       const prevChapter = async () => {
-        if (chapterInfo.currentIndex == 0 && currentChapter.value.chapter_n != 1) {
-          isLoading.value = true;
-          const startChapter_n = currentChapter.value.chapter_n - 10 < 0 ? 1 : currentChapter.value.chapter_n - 10;
-          const targetChapter_n = currentChapter.value.chapter_n - 1;
-          const res = await getChapterContent(config2.novel_id, startChapter_n);
-          chapterInfo.chapterList = res.data.data;
-          const targetIndex = chapterInfo.chapterList.findIndex((item) => item.chapter_n == targetChapter_n);
-          chapterInfo.currentIndex = targetIndex;
-          isLoading.value = false;
-        } else {
-          if (currentChapter.value.chapter_n != 1) {
-            chapterInfo.currentIndex -= 1;
+        try {
+          if (chapterInfo.currentIndex == 0 && currentChapter.value.chapter_n != 1) {
+            isLoading.value = true;
+            const startChapter_n = currentChapter.value.chapter_n - 10 < 0 ? 1 : currentChapter.value.chapter_n - 10;
+            const targetChapter_n = currentChapter.value.chapter_n - 1;
+            const res = await getChapterContent(config2.novel_id, startChapter_n);
+            chapterInfo.chapterList = res.data.data;
+            const targetIndex = chapterInfo.chapterList.findIndex((item) => item.chapter_n == targetChapter_n);
+            chapterInfo.currentIndex = targetIndex;
+            isLoading.value = false;
+          } else {
+            if (currentChapter.value.chapter_n != 1) {
+              chapterInfo.currentIndex -= 1;
+            }
           }
+          vue.nextTick(() => {
+            offsetY.value = 0;
+          });
+        } catch (error2) {
+          loadErrorOption.fun = prevChapter;
+          loadErrorOption.param = null;
+          loadError.value = true;
         }
-        vue.nextTick(() => {
-          offsetY.value = 0;
-        });
       };
       const nextChapter = async () => {
-        const lastChapter_n = chapterInfo.chapterNameList[chapterInfo.chapterNameList.length - 1].chapter_n;
-        const targetChapter_n = currentChapter.value.chapter_n + 1;
-        if (targetChapter_n > lastChapter_n) {
-          uni.showToast({
-            icon: "none",
-            title: "已经是最后一章了"
-          });
-          return;
-        }
-        if (chapterInfo.currentIndex == 9) {
-          isLoading.value = true;
-          let startChapter_n = targetChapter_n;
-          if (currentChapter.value.chapter_n + 10 >= lastChapter_n) {
-            startChapter_n = lastChapter_n - 10;
+        try {
+          const lastChapter_n = chapterInfo.chapterNameList[chapterInfo.chapterNameList.length - 1].chapter_n;
+          const targetChapter_n = currentChapter.value.chapter_n + 1;
+          if (targetChapter_n > lastChapter_n) {
+            uni.showToast({
+              icon: "none",
+              title: "已经是最后一章了"
+            });
+            return;
           }
-          const res = await getChapterContent(config2.novel_id, startChapter_n);
-          chapterInfo.chapterList = res.data.data;
-          const targetIndex = chapterInfo.chapterList.findIndex((item) => item.chapter_n == targetChapter_n);
-          chapterInfo.currentIndex = targetIndex;
-          isLoading.value = false;
-        } else {
-          chapterInfo.currentIndex += 1;
+          if (chapterInfo.currentIndex == 9) {
+            isLoading.value = true;
+            let startChapter_n = targetChapter_n;
+            if (currentChapter.value.chapter_n + 10 >= lastChapter_n) {
+              startChapter_n = lastChapter_n - 10;
+            }
+            const res = await getChapterContent(config2.novel_id, startChapter_n);
+            chapterInfo.chapterList = res.data.data;
+            const targetIndex = chapterInfo.chapterList.findIndex((item) => item.chapter_n == targetChapter_n);
+            chapterInfo.currentIndex = targetIndex;
+            isLoading.value = false;
+          } else {
+            chapterInfo.currentIndex += 1;
+          }
+          vue.nextTick(() => {
+            offsetY.value = 0;
+          });
+        } catch (error2) {
+          loadErrorOption.fun = nextChapter;
+          loadErrorOption.param = null;
+          loadError.value = true;
         }
-        vue.nextTick(() => {
-          offsetY.value = 0;
-        });
       };
       const openChapterContalog = () => {
         menuShow.value = false;
@@ -13826,23 +14030,35 @@ if (uni.restoreGlobal) {
         maskShow.value = true;
       };
       const changeChapter = async (chapter_n) => {
-        isLoading.value = true;
-        const res = await getChapterContent(config2.novel_id, chapter_n);
-        chapterInfo.chapterList = res.data.data;
-        chapterInfo.currentIndex = 0;
-        closeMenu();
-        setTimeout(() => {
-          isLoading.value = false;
-          offsetY.value = 0;
-        }, 300);
+        try {
+          isLoading.value = true;
+          const res = await getChapterContent(config2.novel_id, chapter_n);
+          chapterInfo.chapterList = res.data.data;
+          chapterInfo.currentIndex = 0;
+          closeMenu();
+          setTimeout(() => {
+            isLoading.value = false;
+            offsetY.value = 0;
+          }, 300);
+        } catch (error2) {
+          loadErrorOption.fun = changeChapter;
+          loadErrorOption.param = chapter_n;
+          loadError.value = true;
+        }
       };
       const handelSliderChange = async (chapter_n) => {
-        isLoading.value = true;
-        const res = await getChapterContent(config2.novel_id, chapter_n + 1);
-        chapterInfo.chapterList = res.data.data;
-        chapterInfo.currentIndex = 0;
-        offsetY.value = 0;
-        isLoading.value = false;
+        try {
+          isLoading.value = true;
+          const res = await getChapterContent(config2.novel_id, chapter_n + 1);
+          chapterInfo.chapterList = res.data.data;
+          chapterInfo.currentIndex = 0;
+          offsetY.value = 0;
+          isLoading.value = false;
+        } catch (error2) {
+          loadErrorOption.fun = handelSliderChange;
+          loadErrorOption.param = chapter_n;
+          loadError.value = true;
+        }
       };
       const scrollTimer = vue.ref(null);
       const handelScroll = (e) => {
@@ -13853,7 +14069,11 @@ if (uni.restoreGlobal) {
           offsetY.value = e.detail.scrollTop;
         }, 300);
       };
-      const __returned__ = { catalogShow, menuShow, maskShow, configShow, handelShowMenu, closeMenu, openConfigMenu, currentTime, batteryInfo, theme, config: config2, changeFontSize, themeNames, setLineHeight, changeTheme, store: store2, isLoading, contentWidth, instance, offsetY, chapterInfo, currentChapter, chapterNameScrollHeight, contentHeight, saveHistory, calculateContentHeight, prevChapter, nextChapter, openChapterContalog, btnOpenChapterContalog, changeChapter, handelSliderChange, scrollTimer, handelScroll, readTop, readBottom, catalogpopup, bottomPopup, configPopup, get usePopup() {
+      const reload = async () => {
+        loadError.value = false;
+        await loadErrorOption.fun(loadErrorOption.param);
+      };
+      const __returned__ = { catalogShow, menuShow, maskShow, configShow, handelShowMenu, closeMenu, openConfigMenu, currentTime, batteryInfo, theme, config: config2, changeFontSize, themeNames, setLineHeight, changeTheme, store: store2, novel, isLoading, loadError, loadErrorOption, contentWidth, instance, offsetY, chapterInfo, currentChapter, chapterNameScrollHeight, contentHeight, init, saveHistory, calculateContentHeight, prevChapter, nextChapter, openChapterContalog, btnOpenChapterContalog, changeChapter, handelSliderChange, scrollTimer, handelScroll, reload, readTop, readBottom, catalogpopup, bottomPopup, configPopup, get usePopup() {
         return usePopup;
       }, pageLoadingVue, get onLoad() {
         return onLoad;
@@ -13861,8 +14081,6 @@ if (uni.restoreGlobal) {
         return onUnload;
       }, get onHide() {
         return onHide;
-      }, get executeSql() {
-        return executeSql;
       }, get getChapterContent() {
         return getChapterContent;
       }, get getNovelChapters() {
@@ -13892,7 +14110,7 @@ if (uni.restoreGlobal) {
       return __returned__;
     }
   };
-  function _sfc_render$r(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$q(_ctx, _cache, $props, $setup, $data, $options) {
     var _a, _b, _c, _d, _e2, _f2, _g2, _h2;
     return vue.openBlock(), vue.createElementBlock(
       "view",
@@ -13910,8 +14128,11 @@ if (uni.restoreGlobal) {
         vue.createCommentVNode(" 加载页 "),
         $setup.isLoading ? (vue.openBlock(), vue.createBlock($setup["pageLoadingVue"], {
           key: 1,
+          status: $setup.loadError ? "error" : "loading",
+          onReload: $setup.reload,
+          fontColor: $setup.theme.contentColor,
           backgroundColor: $setup.theme.backgroundColor
-        }, null, 8, ["backgroundColor"])) : vue.createCommentVNode("v-if", true),
+        }, null, 8, ["status", "fontColor", "backgroundColor"])) : vue.createCommentVNode("v-if", true),
         vue.createVNode($setup["readTop"], {
           chapterName: (_a = $setup.currentChapter) == null ? void 0 : _a.chapter_name
         }, null, 8, ["chapterName"]),
@@ -14010,8 +14231,8 @@ if (uni.restoreGlobal) {
       /* STYLE */
     );
   }
-  const PagesNovelReadNovelRead = /* @__PURE__ */ _export_sfc(_sfc_main$s, [["render", _sfc_render$r], ["__file", "D:/APP/novel-app/novel-app/pages/novel-read/novel-read.vue"]]);
-  const _sfc_main$r = {
+  const PagesNovelReadNovelRead = /* @__PURE__ */ _export_sfc(_sfc_main$r, [["render", _sfc_render$q], ["__file", "D:/APP/novel-app/novel-app/pages/novel-read/novel-read.vue"]]);
+  const _sfc_main$q = {
     __name: "row",
     props: {
       bookList: {
@@ -14036,14 +14257,14 @@ if (uni.restoreGlobal) {
       return __returned__;
     }
   };
-  function _sfc_render$q(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$p(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_uv_image = resolveEasycom(vue.resolveDynamicComponent("uv-image"), __easycom_1$3);
     const _component_uv_icon = resolveEasycom(vue.resolveDynamicComponent("uv-icon"), __easycom_0$8);
     return vue.openBlock(), vue.createElementBlock("view", { class: "book-list" }, [
       (vue.openBlock(true), vue.createElementBlock(
         vue.Fragment,
         null,
-        vue.renderList($props.bookList, (item) => {
+        vue.renderList($props.bookList, (item, index2) => {
           return vue.openBlock(), vue.createElementBlock("view", {
             class: "book-item",
             key: item.novel_id
@@ -14052,16 +14273,29 @@ if (uni.restoreGlobal) {
               class: "l",
               onClick: ($event) => $setup.exceptDetailPageGoToRead(item)
             }, [
-              vue.createVNode(_component_uv_image, {
-                src: item.cover,
-                "lazy-load": "",
-                observeLazyLoad: "",
-                fade: "",
-                radius: "5",
-                width: "80",
-                height: "100",
-                mode: "aspectCover"
-              }, null, 8, ["src"]),
+              vue.createElementVNode("view", { class: "cover" }, [
+                vue.createVNode(_component_uv_image, {
+                  src: item.cover,
+                  "lazy-load": "",
+                  observeLazyLoad: "",
+                  fade: "",
+                  radius: "5",
+                  width: "100%",
+                  height: "100%",
+                  mode: "widthFit"
+                }, null, 8, ["src"]),
+                item.top == 1 ? (vue.openBlock(), vue.createElementBlock("view", {
+                  key: 0,
+                  class: "top"
+                }, [
+                  vue.createVNode(_component_uv_icon, {
+                    name: "top",
+                    color: "#fff",
+                    "custom-prefix": "custom-icon",
+                    size: "20rpx"
+                  })
+                ])) : vue.createCommentVNode("v-if", true)
+              ]),
               vue.createElementVNode("view", { class: "info" }, [
                 vue.createElementVNode(
                   "view",
@@ -14088,7 +14322,7 @@ if (uni.restoreGlobal) {
             ], 8, ["onClick"]),
             vue.createElementVNode("view", { class: "btn" }, [
               vue.createVNode(_component_uv_icon, {
-                onClick: ($event) => $setup.operate(item),
+                onClick: ($event) => $setup.operate({ index: index2, ...item }),
                 name: "more",
                 "custom-prefix": "custom-icon",
                 size: "20",
@@ -14102,8 +14336,8 @@ if (uni.restoreGlobal) {
       ))
     ]);
   }
-  const rowVue = /* @__PURE__ */ _export_sfc(_sfc_main$r, [["render", _sfc_render$q], ["__scopeId", "data-v-ad543c46"], ["__file", "D:/APP/novel-app/novel-app/pages/bookshelf/components/row.vue"]]);
-  const _sfc_main$q = {
+  const rowVue = /* @__PURE__ */ _export_sfc(_sfc_main$q, [["render", _sfc_render$p], ["__scopeId", "data-v-ad543c46"], ["__file", "D:/APP/novel-app/novel-app/pages/bookshelf/components/row.vue"]]);
+  const _sfc_main$p = {
     __name: "column",
     props: {
       bookList: {
@@ -14129,7 +14363,7 @@ if (uni.restoreGlobal) {
       return __returned__;
     }
   };
-  function _sfc_render$p(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$o(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_uv_image = resolveEasycom(vue.resolveDynamicComponent("uv-image"), __easycom_1$3);
     const _component_uv_icon = resolveEasycom(vue.resolveDynamicComponent("uv-icon"), __easycom_0$8);
     return vue.openBlock(), vue.createElementBlock("view", { class: "book-grid" }, [
@@ -14153,7 +14387,7 @@ if (uni.restoreGlobal) {
                   fade: "",
                   radius: "5",
                   width: "100%",
-                  height: "160"
+                  height: "300rpx"
                 }, null, 8, ["src"]),
                 vue.createElementVNode(
                   "view",
@@ -14163,7 +14397,18 @@ if (uni.restoreGlobal) {
                   vue.toDisplayString(item.status),
                   3
                   /* TEXT, CLASS */
-                )
+                ),
+                item.top == 1 ? (vue.openBlock(), vue.createElementBlock("view", {
+                  key: 0,
+                  class: "top"
+                }, [
+                  vue.createVNode(_component_uv_icon, {
+                    name: "top",
+                    color: "#fff",
+                    "custom-prefix": "custom-icon",
+                    size: "24rpx"
+                  })
+                ])) : vue.createCommentVNode("v-if", true)
               ]),
               vue.createElementVNode(
                 "view",
@@ -14182,7 +14427,7 @@ if (uni.restoreGlobal) {
                 /* TEXT */
               ),
               vue.createVNode(_component_uv_icon, {
-                onClick: ($event) => $setup.operate(item),
+                onClick: ($event) => $setup.operate({ index: index2, ...item }),
                 name: "more",
                 "custom-prefix": "custom-icon",
                 size: "14",
@@ -14196,8 +14441,8 @@ if (uni.restoreGlobal) {
       ))
     ]);
   }
-  const columnVue = /* @__PURE__ */ _export_sfc(_sfc_main$q, [["render", _sfc_render$p], ["__scopeId", "data-v-2e360cc4"], ["__file", "D:/APP/novel-app/novel-app/pages/bookshelf/components/column.vue"]]);
-  const _sfc_main$p = {
+  const columnVue = /* @__PURE__ */ _export_sfc(_sfc_main$p, [["render", _sfc_render$o], ["__scopeId", "data-v-2e360cc4"], ["__file", "D:/APP/novel-app/novel-app/pages/bookshelf/components/column.vue"]]);
+  const _sfc_main$o = {
     __name: "modal",
     props: {
       title: {
@@ -14243,7 +14488,7 @@ if (uni.restoreGlobal) {
       return __returned__;
     }
   };
-  function _sfc_render$o(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$n(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_uv_popup = resolveEasycom(vue.resolveDynamicComponent("uv-popup"), __easycom_1);
     return vue.openBlock(), vue.createBlock(_component_uv_popup, {
       round: 10,
@@ -14290,59 +14535,69 @@ if (uni.restoreGlobal) {
       /* STABLE */
     }, 8, ["closeOnClickOverlay"]);
   }
-  const modalVue = /* @__PURE__ */ _export_sfc(_sfc_main$p, [["render", _sfc_render$o], ["__scopeId", "data-v-ef206254"], ["__file", "D:/APP/novel-app/novel-app/components/modal/modal.vue"]]);
-  const _sfc_main$o = {
+  const modalVue = /* @__PURE__ */ _export_sfc(_sfc_main$o, [["render", _sfc_render$n], ["__scopeId", "data-v-ef206254"], ["__file", "D:/APP/novel-app/novel-app/components/modal/modal.vue"]]);
+  const _sfc_main$n = {
     __name: "operation",
     props: {
       currentBook: {
         required: true
       }
     },
-    emits: ["confirmDelete"],
+    emits: ["confirmDelete", "topUpBook"],
     setup(__props, { expose: __expose, emit: __emit }) {
+      const store2 = useStore();
       const popup = vue.ref(null);
       const modal = vue.ref(null);
-      const handelList = vue.ref([
+      const handelList = vue.computed(() => [
         {
-          icon: "zhiding",
+          icon: ["top", "canceltop"],
           custom: true,
-          size: 25,
-          name: "置顶",
+          size: "40rpx",
+          name: props2.currentBook.top == 1 ? "取消置顶" : "置顶",
           onTap() {
-            formatAppLog("log", "at pages/bookshelf/components/operation.vue:45", "content");
+            emits("topUpBook", props2.currentBook);
           }
         },
         {
-          icon: "content",
+          icon: ["content", "content"],
           custom: true,
-          size: 17,
+          size: "34rpx",
           name: "目录",
           onTap() {
-            formatAppLog("log", "at pages/bookshelf/components/operation.vue:54", "content");
+            store2.commit("setCurrentNovelDetail", {
+              ...props2.currentBook,
+              id: props2.currentBook.novel_id
+            });
+            uni.navigateTo({
+              url: `/pages/chapters/chapters?novel_name=${props2.currentBook.name}&novel_id=${props2.currentBook.novel_id}&from=bookshell&type=${props2.currentBook.type}`,
+              success() {
+                popup.value.close();
+              }
+            });
           }
         },
         {
-          icon: "download",
+          icon: ["download", "download"],
           custom: false,
-          size: 25,
+          size: "50rpx",
           name: "下载本书",
           onTap() {
-            formatAppLog("log", "at pages/bookshelf/components/operation.vue:63", "dowload");
+            formatAppLog("log", "at pages/bookshelf/components/operation.vue:78", "dowload");
           }
         },
         {
-          icon: "reload",
+          icon: ["reload", "reload"],
           custom: false,
-          size: 25,
+          size: "50rpx",
           name: "清除缓存",
           onTap() {
-            formatAppLog("log", "at pages/bookshelf/components/operation.vue:72", "reload");
+            formatAppLog("log", "at pages/bookshelf/components/operation.vue:87", "reload");
           }
         },
         {
-          icon: "trash",
+          icon: ["trash", "trash"],
           custom: false,
-          size: 25,
+          size: "50rpx",
           name: "删除",
           onTap: () => {
             popup.value.close();
@@ -14357,15 +14612,18 @@ if (uni.restoreGlobal) {
       const confirm = () => {
         emits("confirmDelete");
       };
+      const props2 = __props;
       __expose({
         open
       });
-      const __returned__ = { popup, modal, handelList, open, emits, confirm, ref: vue.ref, modalVue };
+      const __returned__ = { store: store2, popup, modal, handelList, open, emits, confirm, props: props2, ref: vue.ref, computed: vue.computed, get useStore() {
+        return useStore;
+      }, modalVue };
       Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
       return __returned__;
     }
   };
-  function _sfc_render$n(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$m(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_uv_image = resolveEasycom(vue.resolveDynamicComponent("uv-image"), __easycom_1$3);
     const _component_uv_icon = resolveEasycom(vue.resolveDynamicComponent("uv-icon"), __easycom_0$8);
     const _component_uv_popup = resolveEasycom(vue.resolveDynamicComponent("uv-popup"), __easycom_1);
@@ -14419,21 +14677,20 @@ if (uni.restoreGlobal) {
                     vue.renderList($setup.handelList, (item, index2) => {
                       return vue.openBlock(), vue.createElementBlock("view", {
                         class: "handel-item",
+                        onClick: item.onTap,
                         key: index2
                       }, [
                         vue.createElementVNode("view", { class: "icon" }, [
                           !item.custom ? (vue.openBlock(), vue.createBlock(_component_uv_icon, {
                             key: 0,
                             size: item.size,
-                            name: item.icon,
-                            onClick: item.onTap
-                          }, null, 8, ["size", "name", "onClick"])) : (vue.openBlock(), vue.createBlock(_component_uv_icon, {
+                            name: item.icon[$props.currentBook.top]
+                          }, null, 8, ["size", "name"])) : (vue.openBlock(), vue.createBlock(_component_uv_icon, {
                             key: 1,
-                            name: item.icon,
+                            name: item.icon[$props.currentBook.top],
                             "custom-prefix": "custom-icon",
-                            onClick: item.onTap,
                             size: item.size
-                          }, null, 8, ["name", "onClick", "size"]))
+                          }, null, 8, ["name", "size"]))
                         ]),
                         vue.createElementVNode(
                           "view",
@@ -14442,7 +14699,7 @@ if (uni.restoreGlobal) {
                           1
                           /* TEXT */
                         )
-                      ]);
+                      ], 8, ["onClick"]);
                     }),
                     128
                     /* KEYED_FRAGMENT */
@@ -14478,88 +14735,7 @@ if (uni.restoreGlobal) {
       /* STABLE_FRAGMENT */
     );
   }
-  const operationVue = /* @__PURE__ */ _export_sfc(_sfc_main$o, [["render", _sfc_render$n], ["__scopeId", "data-v-d7954f0b"], ["__file", "D:/APP/novel-app/novel-app/pages/bookshelf/components/operation.vue"]]);
-  function isNumeric(value2) {
-    return /^(-)?\d+(\.\d+)?$/.test(value2);
-  }
-  function isDef(value2) {
-    return value2 !== void 0 && value2 !== null;
-  }
-  function addUnit(value2) {
-    if (!isDef(value2)) {
-      return null;
-    }
-    value2 = String(value2);
-    return isNumeric(value2) ? `${value2}px` : value2;
-  }
-  const _sfc_main$n = vue.defineComponent({
-    name: "l-empty",
-    props: {
-      description: String,
-      imageSize: {
-        type: [String, Number, Array]
-      },
-      image: {
-        type: String,
-        default: "default"
-      }
-    },
-    setup(props2) {
-      const PRESETS = ["error", "search", "default", "network", "cart", "404", "message", "coupon", "comment", "express", "order", "address"];
-      const imageUrl = vue.computed(() => {
-        if (PRESETS.includes(props2.image)) {
-          return "/uni_modules/lime-empty/static/" + props2.image + ".png";
-        }
-        return props2.image;
-      });
-      const styles = vue.computed(() => {
-        const style = {};
-        const imageSize = props2.imageSize;
-        if (imageSize == null) {
-          return style;
-        }
-        if (Array.isArray(imageSize) && imageSize.length > 0) {
-          const width2 = addUnit(imageSize[0]);
-          addUnit(imageSize[1]);
-          style["width"] = width2;
-          style["height"] = addUnit(imageSize[1]);
-          return style;
-        }
-        const width = addUnit(imageSize);
-        style["width"] = width;
-        return style;
-      });
-      return {
-        styles,
-        imageUrl
-      };
-    }
-  });
-  function _sfc_render$m(_ctx, _cache, $props, $setup, $data, $options) {
-    return vue.openBlock(), vue.createElementBlock("view", { class: "l-empty" }, [
-      _ctx.image ? (vue.openBlock(), vue.createElementBlock("image", {
-        key: 0,
-        class: "l-empty__image",
-        style: vue.normalizeStyle([_ctx.styles]),
-        mode: "widthFix",
-        src: _ctx.imageUrl
-      }, null, 12, ["src"])) : vue.createCommentVNode("v-if", true),
-      _ctx.description ? (vue.openBlock(), vue.createElementBlock(
-        "text",
-        {
-          key: 1,
-          class: "l-empty__description"
-        },
-        vue.toDisplayString(_ctx.description),
-        1
-        /* TEXT */
-      )) : vue.createCommentVNode("v-if", true),
-      vue.createElementVNode("view", { class: "l-empty__bottom" }, [
-        vue.renderSlot(_ctx.$slots, "default", {}, void 0, true)
-      ])
-    ]);
-  }
-  const __easycom_0$1 = /* @__PURE__ */ _export_sfc(_sfc_main$n, [["render", _sfc_render$m], ["__scopeId", "data-v-569a5b26"], ["__file", "D:/APP/novel-app/novel-app/uni_modules/lime-empty/components/l-empty/l-empty.vue"]]);
+  const operationVue = /* @__PURE__ */ _export_sfc(_sfc_main$n, [["render", _sfc_render$m], ["__scopeId", "data-v-d7954f0b"], ["__file", "D:/APP/novel-app/novel-app/pages/bookshelf/components/operation.vue"]]);
   const _sfc_main$m = {
     __name: "empty",
     props: {
@@ -14584,7 +14760,7 @@ if (uni.restoreGlobal) {
     }
   };
   function _sfc_render$l(_ctx, _cache, $props, $setup, $data, $options) {
-    const _component_l_empty = resolveEasycom(vue.resolveDynamicComponent("l-empty"), __easycom_0$1);
+    const _component_l_empty = resolveEasycom(vue.resolveDynamicComponent("l-empty"), __easycom_0$2);
     return vue.openBlock(), vue.createElementBlock("view", { class: "empty-container" }, [
       vue.createVNode(_component_l_empty, { description: $props.desc }, {
         default: vue.withCtx(() => [
@@ -14599,6 +14775,32 @@ if (uni.restoreGlobal) {
     ]);
   }
   const emptyVue = /* @__PURE__ */ _export_sfc(_sfc_main$m, [["render", _sfc_render$l], ["__scopeId", "data-v-c668eefc"], ["__file", "D:/APP/novel-app/novel-app/pages/bookshelf/components/empty.vue"]]);
+  const parseBookList = async (bookList, type) => {
+    let newList = await Promise.all(bookList.map((item) => {
+      return isExistHistory(item.novel_id, type).then((isExist) => {
+        const hasRead = isExist.length > 0 ? isExist[0].chapter_name : null;
+        const read_time = isExist.length > 0 ? isExist[0].read_time : 0;
+        return {
+          ...item,
+          hasRead,
+          read_time
+        };
+      });
+    }));
+    let topList = newList.filter((book) => book.top === 1);
+    let notTopList = newList.filter((book) => book.top === 0);
+    topList = topList.sort((a, b) => {
+      const dateA = new Date(a.read_time);
+      const dateB = new Date(b.read_time);
+      return dateB - dateA;
+    });
+    notTopList = notTopList.sort((a, b) => {
+      const dateA = new Date(a.read_time);
+      const dateB = new Date(b.read_time);
+      return dateB - dateA;
+    });
+    return [...topList, ...notTopList];
+  };
   const _sfc_main$l = {
     __name: "bookshelf",
     setup(__props, { expose: __expose }) {
@@ -14642,25 +14844,6 @@ if (uni.restoreGlobal) {
         const systemInfo2 = await getSystemInfo();
         bookShellContainerHeight.value = systemInfo2.windowHeight - headerInfo.height;
       });
-      const parseBookList = async (bookList, type) => {
-        let newList = await Promise.all(bookList.map((item) => {
-          return isExistHistory(item.novel_id, type).then((isExist) => {
-            const hasRead = isExist.length > 0 ? isExist[0].chapter_name : null;
-            const read_time = isExist.length > 0 ? isExist[0].read_time : 0;
-            return {
-              ...item,
-              hasRead,
-              read_time
-            };
-          });
-        }));
-        newList = newList.sort((a, b) => {
-          const dateA = new Date(a.read_time);
-          const dateB = new Date(b.read_time);
-          return dateA - dateB;
-        });
-        return newList;
-      };
       const currentBook = vue.ref(null);
       const handelAct = (info) => {
         currentBook.value = info;
@@ -14677,12 +14860,27 @@ if (uni.restoreGlobal) {
       const onNoDataBtn = () => {
         EventBus.emit("changeTab", currentActiveTabbar.value);
       };
-      const __returned__ = { currentActiveTabbar, pageChange, handelTopChange, isList, popup, confirm, bookShellTitle, bookClasses, bookShellList, currentBookShell, bookShellContainerHeight, parseBookList, currentBook, handelAct, changeLayoutStyle, goToSearch, onNoDataBtn, getCurrentInstance: vue.getCurrentInstance, onMounted: vue.onMounted, ref: vue.ref, reactive: vue.reactive, computed: vue.computed, get deleteFromBookShell() {
+      const topUpBook = async (bookInfo) => {
+        const key = bookShellTitle.value[currentActiveTabbar.value].key;
+        const index2 = bookShellList[key].findIndex((item) => item.id == bookInfo.id);
+        const currentTop = bookShellList[key][index2].top;
+        const newTop = currentTop == 1 ? 0 : 1;
+        bookShellList[key][index2].top = newTop;
+        currentBook.value.top = newTop;
+        if (newTop == 1)
+          bookShellList[key].unshift(...bookShellList[key].splice(index2, 1));
+        else
+          bookShellList[key].push(...bookShellList[key].splice(index2, 1));
+        await setTopInBookShell(bookInfo.id, newTop);
+      };
+      const __returned__ = { currentActiveTabbar, pageChange, handelTopChange, isList, popup, confirm, bookShellTitle, bookClasses, bookShellList, currentBookShell, bookShellContainerHeight, currentBook, handelAct, changeLayoutStyle, goToSearch, onNoDataBtn, topUpBook, getCurrentInstance: vue.getCurrentInstance, onMounted: vue.onMounted, ref: vue.ref, reactive: vue.reactive, computed: vue.computed, get deleteFromBookShell() {
         return deleteFromBookShell;
       }, get getBookShellList() {
         return getBookShellList;
       }, get isExistHistory() {
         return isExistHistory;
+      }, get setTopInBookShell() {
+        return setTopInBookShell;
       }, get getSystemInfo() {
         return getSystemInfo;
       }, get getSelectorInfo() {
@@ -14693,6 +14891,8 @@ if (uni.restoreGlobal) {
         return useSlide;
       }, get EventBus() {
         return EventBus;
+      }, get parseBookList() {
+        return parseBookList;
       } };
       Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
       return __returned__;
@@ -14743,66 +14943,51 @@ if (uni.restoreGlobal) {
         onPageChange: $setup.pageChange
       }, {
         default: vue.withCtx(() => [
-          vue.createVNode($setup["midAreaItemVue"], {
-            refresh: false,
-            customStyle: { padding: 0 }
-          }, {
-            default: vue.withCtx(() => [
-              $setup.bookShellList.novel.length == 0 ? (vue.openBlock(), vue.createBlock($setup["emptyVue"], {
-                key: 0,
-                onOnNoDataBtn: $setup.onNoDataBtn,
-                desc: "书架暂无书籍"
-              })) : (vue.openBlock(), vue.createElementBlock(
-                vue.Fragment,
-                { key: 1 },
-                [
-                  $setup.isList ? (vue.openBlock(), vue.createBlock($setup["rowVue"], {
-                    key: 0,
-                    bookList: $setup.bookShellList.novel,
-                    onOperate: $setup.handelAct
-                  }, null, 8, ["bookList"])) : (vue.openBlock(), vue.createBlock($setup["columnVue"], {
-                    key: 1,
-                    bookList: $setup.bookShellList.novel,
-                    onOperate: $setup.handelAct
-                  }, null, 8, ["bookList"]))
-                ],
-                64
-                /* STABLE_FRAGMENT */
-              ))
-            ]),
-            _: 1
-            /* STABLE */
-          }),
-          vue.createVNode($setup["midAreaItemVue"], {
-            refresh: false,
-            customStyle: { padding: 0 }
-          }, {
-            default: vue.withCtx(() => [
-              $setup.bookShellList.comic.length == 0 ? (vue.openBlock(), vue.createBlock($setup["emptyVue"], {
-                key: 0,
-                onOnNoDataBtn: $setup.onNoDataBtn,
-                desc: "书架暂无书籍"
-              })) : (vue.openBlock(), vue.createElementBlock(
-                vue.Fragment,
-                { key: 1 },
-                [
-                  $setup.isList ? (vue.openBlock(), vue.createBlock($setup["rowVue"], {
-                    key: 0,
-                    bookList: $setup.bookShellList.comic,
-                    onOperate: $setup.handelAct
-                  }, null, 8, ["bookList"])) : (vue.openBlock(), vue.createBlock($setup["columnVue"], {
-                    key: 1,
-                    bookList: $setup.bookShellList.comic,
-                    onOperate: $setup.handelAct
-                  }, null, 8, ["bookList"]))
-                ],
-                64
-                /* STABLE_FRAGMENT */
-              ))
-            ]),
-            _: 1
-            /* STABLE */
-          })
+          (vue.openBlock(true), vue.createElementBlock(
+            vue.Fragment,
+            null,
+            vue.renderList($setup.bookShellTitle, ({ key, value: value2 }, index2) => {
+              return vue.openBlock(), vue.createBlock(
+                $setup["midAreaItemVue"],
+                {
+                  key: index2,
+                  refresh: false,
+                  customStyle: { padding: 0 }
+                },
+                {
+                  default: vue.withCtx(() => [
+                    $setup.bookShellList[key].length == 0 ? (vue.openBlock(), vue.createBlock($setup["emptyVue"], {
+                      key: 0,
+                      onOnNoDataBtn: $setup.onNoDataBtn,
+                      desc: `书架暂无${value2}`
+                    }, null, 8, ["desc"])) : (vue.openBlock(), vue.createElementBlock(
+                      vue.Fragment,
+                      { key: 1 },
+                      [
+                        $setup.isList ? (vue.openBlock(), vue.createBlock($setup["rowVue"], {
+                          key: 0,
+                          bookList: $setup.bookShellList[key],
+                          onOperate: $setup.handelAct
+                        }, null, 8, ["bookList"])) : (vue.openBlock(), vue.createBlock($setup["columnVue"], {
+                          key: 1,
+                          bookList: $setup.bookShellList[key],
+                          onOperate: $setup.handelAct
+                        }, null, 8, ["bookList"]))
+                      ],
+                      64
+                      /* STABLE_FRAGMENT */
+                    ))
+                  ]),
+                  _: 2
+                  /* DYNAMIC */
+                },
+                1024
+                /* DYNAMIC_SLOTS */
+              );
+            }),
+            128
+            /* KEYED_FRAGMENT */
+          ))
         ]),
         _: 1
         /* STABLE */
@@ -14811,6 +14996,7 @@ if (uni.restoreGlobal) {
       vue.createVNode($setup["operationVue"], {
         ref: "popup",
         currentBook: $setup.currentBook,
+        onTopUpBook: $setup.topUpBook,
         onConfirmDelete: $setup.confirm
       }, null, 8, ["currentBook"])
     ]);
@@ -14889,7 +15075,7 @@ if (uni.restoreGlobal) {
     }
   };
   function _sfc_render$j(_ctx, _cache, $props, $setup, $data, $options) {
-    const _component_l_empty = resolveEasycom(vue.resolveDynamicComponent("l-empty"), __easycom_0$1);
+    const _component_l_empty = resolveEasycom(vue.resolveDynamicComponent("l-empty"), __easycom_0$2);
     const _component_uv_image = resolveEasycom(vue.resolveDynamicComponent("uv-image"), __easycom_1$3);
     const _component_uv_load_more = resolveEasycom(vue.resolveDynamicComponent("uv-load-more"), __easycom_0$5);
     return vue.openBlock(), vue.createElementBlock("view", { class: "class-container" }, [
@@ -16039,7 +16225,7 @@ if (uni.restoreGlobal) {
     }
   };
   function _sfc_render$e(_ctx, _cache, $props, $setup, $data, $options) {
-    const _component_l_empty = resolveEasycom(vue.resolveDynamicComponent("l-empty"), __easycom_0$1);
+    const _component_l_empty = resolveEasycom(vue.resolveDynamicComponent("l-empty"), __easycom_0$2);
     const _component_uv_load_more = resolveEasycom(vue.resolveDynamicComponent("uv-load-more"), __easycom_0$5);
     return vue.openBlock(), vue.createElementBlock("view", { class: "search-result-page" }, [
       vue.createElementVNode("view", { id: "top" }, [
@@ -16802,9 +16988,6 @@ if (uni.restoreGlobal) {
       const back = () => {
         uni.navigateBack();
       };
-      const goToDetail = () => {
-        formatAppLog("log", "at pages/comic-read/components/comic-menu.vue:168", "前往详情页");
-      };
       const handelChange = ({
         show
       }) => {
@@ -16877,7 +17060,7 @@ if (uni.restoreGlobal) {
         return isOpen;
       }, set isOpen(v) {
         isOpen = v;
-      }, emits, props: props2, openMenu, back, goToDetail, handelChange, brightness, changeDark, showChapter, configShow, openConfigPopup, tapMask, chaperListHeight, changeChapter, isReverse, reverseChapter, chapterSlideValue, sliderTiimer, handelSliderChange, ref: vue.ref, onMounted: vue.onMounted, getCurrentInstance: vue.getCurrentInstance, watch: vue.watch, computed: vue.computed, get getSystemInfo() {
+      }, emits, props: props2, openMenu, back, handelChange, brightness, changeDark, showChapter, configShow, openConfigPopup, tapMask, chaperListHeight, changeChapter, isReverse, reverseChapter, chapterSlideValue, sliderTiimer, handelSliderChange, ref: vue.ref, onMounted: vue.onMounted, getCurrentInstance: vue.getCurrentInstance, watch: vue.watch, computed: vue.computed, get getSystemInfo() {
         return getSystemInfo;
       }, get getSelectorInfo() {
         return getSelectorInfo;
@@ -16949,14 +17132,7 @@ if (uni.restoreGlobal) {
                       vue.toDisplayString($setup.isAdd ? "已加入书架" : "加入书架"),
                       1
                       /* TEXT */
-                    ),
-                    vue.createVNode(_component_uv_icon, {
-                      onClick: $setup.goToDetail,
-                      name: "xiang",
-                      color: "#2c2c2c",
-                      "custom-prefix": "custom-icon",
-                      size: "20"
-                    })
+                    )
                   ])
                 ])
               ])
@@ -17212,16 +17388,22 @@ if (uni.restoreGlobal) {
       const screenHeight = vue.ref(0);
       const scrollTop = vue.ref(0);
       onLoad(async ({
-        comic_id
+        comic_id,
+        chapter_n,
+        appoint = false
       }) => {
-        const res = await isExistHistory(comic_id, "comic");
-        currentChapter_n.value = (res.length != 0 ? res[0].chapter_n : 1) - 1;
+        if (!JSON.parse(appoint)) {
+          const res = await isExistHistory(comic_id, "comic");
+          currentChapter_n.value = (res.length != 0 ? res[0].chapter_n : 1) - 1;
+        } else {
+          currentChapter_n.value = parseInt(chapter_n) - 1;
+        }
       });
       vue.onMounted(async () => {
         const sysInfo = await getSystemInfo();
         device_width.value = sysInfo.windowWidth;
         screenHeight.value = sysInfo.screenHeight;
-        const chapterRes = await getComicChapters(curentComicName.value);
+        const chapterRes = await getComicChapters(comic.value.id);
         chapterList.value = chapterRes.data.data;
         plus.navigator.setFullscreen(true);
         plus.key.addEventListener("keydown", onVolumeKeyDown);
@@ -17491,8 +17673,11 @@ if (uni.restoreGlobal) {
       });
       const props2 = __props;
       const emits = __emit;
-      const selectBook = (index2) => {
-        emits("selectBook", index2);
+      const selectBook = (index2, book) => {
+        if (props2.isEditMode)
+          emits("selectBook", index2);
+        else
+          exceptDetailPageGoToRead(book);
       };
       const handelLongPress = (index2) => {
         emits("handelLongPress", index2);
@@ -17512,7 +17697,7 @@ if (uni.restoreGlobal) {
     }
   };
   function _sfc_render$6(_ctx, _cache, $props, $setup, $data, $options) {
-    const _component_l_empty = resolveEasycom(vue.resolveDynamicComponent("l-empty"), __easycom_0$1);
+    const _component_l_empty = resolveEasycom(vue.resolveDynamicComponent("l-empty"), __easycom_0$2);
     const _component_uv_image = resolveEasycom(vue.resolveDynamicComponent("uv-image"), __easycom_1$3);
     const _component_uv_icon = resolveEasycom(vue.resolveDynamicComponent("uv-icon"), __easycom_0$8);
     return vue.openBlock(), vue.createElementBlock(
@@ -17530,15 +17715,12 @@ if (uni.restoreGlobal) {
           { key: 1 },
           vue.renderList($props.historyList, (book, index2) => {
             return vue.openBlock(), vue.createElementBlock("view", {
-              onClick: ($event) => $setup.selectBook(index2),
+              onClick: ($event) => $setup.selectBook(index2, book),
               onLongpress: ($event) => $setup.handelLongPress(index2),
               class: "history-list-item",
               key: book.id
             }, [
-              vue.createElementVNode("view", {
-                class: "l",
-                onClick: ($event) => $setup.exceptDetailPageGoToRead(book)
-              }, [
+              vue.createElementVNode("view", { class: "l" }, [
                 vue.createElementVNode("view", { class: "cover" }, [
                   vue.createElementVNode(
                     "view",
@@ -17585,7 +17767,7 @@ if (uni.restoreGlobal) {
                     )
                   ])
                 ])
-              ], 8, ["onClick"]),
+              ]),
               vue.createElementVNode("view", { class: "r" }, [
                 $props.isEditMode ? (vue.openBlock(), vue.createBlock(_component_uv_icon, {
                   key: 0,
@@ -17594,7 +17776,7 @@ if (uni.restoreGlobal) {
                   size: "24"
                 }, null, 8, ["color"])) : (vue.openBlock(), vue.createElementBlock("view", {
                   key: 1,
-                  onClick: ($event) => $setup.addToBookShell({ index: index2, ...book }),
+                  onClick: vue.withModifiers(($event) => $setup.addToBookShell({ index: index2, ...book }), ["stop"]),
                   class: vue.normalizeClass(["addBookShell", book.isInBookShell ? "hasAdded" : ""])
                 }, vue.toDisplayString(book.isInBookShell ? "已加" : "加入") + "书架 ", 11, ["onClick"]))
               ])
@@ -17772,9 +17954,11 @@ if (uni.restoreGlobal) {
               );
             }
             for await (const book2 of selectedBook) {
-              await insterBookShell({
-                ...book2
-              });
+              if (!book2.isInBookShell) {
+                await insterBookShell({
+                  ...book2
+                });
+              }
             }
           }
           finished = !isAllInBookShell;
@@ -18343,7 +18527,7 @@ if (uni.restoreGlobal) {
   const PagesRewardReward = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["render", _sfc_render], ["__scopeId", "data-v-1b97740b"], ["__file", "D:/APP/novel-app/novel-app/pages/reward/reward.vue"]]);
   __definePage("pages/home/index", PagesHomeIndex);
   __definePage("components/home/mid-area/mid-area", ComponentsHomeMidAreaMidArea);
-  __definePage("pages/nove-detail/index", PagesNoveDetailIndex);
+  __definePage("pages/detail/detail", PagesDetailDetail);
   __definePage("pages/chapters/chapters", PagesChaptersChapters);
   __definePage("pages/novel-read/novel-read", PagesNovelReadNovelRead);
   __definePage("pages/bookshelf/bookshelf", PagesBookshelfBookshelf);

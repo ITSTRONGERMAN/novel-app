@@ -3,7 +3,9 @@
 		<!-- 遮罩 -->
 		<view class="mask" v-if="maskShow" @tap="closeMenu"></view>
 		<!-- 加载页 -->
-		<pageLoadingVue v-if="isLoading" :backgroundColor="theme.backgroundColor"></pageLoadingVue>
+		<pageLoadingVue :status="loadError?'error':'loading'" @reload="reload" v-if="isLoading"
+			:fontColor="theme.contentColor" :backgroundColor="theme.backgroundColor">
+		</pageLoadingVue>
 		<readTop :chapterName="currentChapter?.chapter_name" />
 		<!-- 内容区 -->
 		<scroll-view @scroll="handelScroll" v-if="chapterInfo.chapterList.length>0" :scroll-top="offsetY"
@@ -55,7 +57,6 @@
 		onHide
 	} from '@dcloudio/uni-app'
 	import {
-		executeSql,
 		getChapterContent,
 		getNovelChapters,
 		insertChapter,
@@ -107,8 +108,14 @@
 		changeTheme
 	} = useConfig()
 	const store = useStore()
+	const novel = computed(() => store.state.currentNovelDetail)
 	// 是否加载结束
 	const isLoading = ref(true)
+	const loadError = ref(false)
+	const loadErrorOption = {
+		fun: null,
+		param: null
+	}
 	// 阅读区宽度
 	const contentWidth = ref(0)
 	// 页面实例
@@ -129,19 +136,21 @@
 	const chapterNameScrollHeight = ref(0)
 	onLoad(async ({
 		novel_id,
+		appoint = false,
 		chapter_n
 	}) => {
 		let currentChapter_n = chapter_n
-		// #ifdef APP-PLUS
-		const result = await isExistHistory(novel_id, 'novel')
-		if (result.length != 0) {
-			currentChapter_n = result[0].chapter_n
-			offsetY.value = result[0].offsetY
+		if (!JSON.parse(appoint)) {
+			// #ifdef APP-PLUS
+			const result = await isExistHistory(novel_id, 'novel')
+			if (result.length != 0) {
+				currentChapter_n = result[0].chapter_n
+				offsetY.value = result[0].offsetY
+			}
+			// #endif
 		}
-		// #endif
 		config.novel_id = novel_id
-		const res = await getChapterContent(config.novel_id, currentChapter_n)
-		chapterInfo.chapterList = res.data.data
+		await init(currentChapter_n)
 	})
 	// 内容区高度
 	const contentHeight = ref(0)
@@ -152,12 +161,30 @@
 		instance.value = getCurrentInstance()
 		const sysInfo = await getSystemInfo()
 		chapterNameScrollHeight.value = sysInfo.screenHeight - sysInfo.statusBarHeight
-		setTimeout(async () => {
-			chapterInfo.chapterNameList = await getChapterList(config.novel_id)
-			await calculateContentHeight()
-			isLoading.value = false
-		}, 1000)
 	})
+	// 初始化
+	const init = async (currentChapter_n) => {
+		try {
+			const chapterContentRes = await getChapterContent(config.novel_id, currentChapter_n)
+			chapterInfo.chapterList = chapterContentRes.data.data
+			await new Promise((resolve, reject) => {
+				setTimeout(async () => {
+					try {
+						chapterInfo.chapterNameList = await getChapterList(config.novel_id);
+						await calculateContentHeight();
+						resolve();
+					} catch (error) {
+						reject(error);
+					}
+				}, 300);
+			});
+			isLoading.value = false
+		} catch (error) {
+			loadErrorOption.fun = init
+			loadErrorOption.param = currentChapter_n
+			loadError.value = true
+		}
+	}
 	onUnload(() => {
 		// #ifdef APP-PLUS
 		plus.navigator.setFullscreen(false)
@@ -174,13 +201,14 @@
 				currentChapter.value.chapter_name, offsetY.value
 			)
 		} else {
-			await insertHistory({
+			const param = {
 				novel_id: config.novel_id,
 				offsetY: offsetY.value,
 				type: "novel",
 				...currentChapter.value,
 				...novel.value
-			})
+			}
+			await insertHistory(param)
 		}
 	}
 	onHide(async () => {
@@ -197,56 +225,68 @@
 	}
 	// 上一章
 	const prevChapter = async () => {
-		if (chapterInfo.currentIndex == 0 && currentChapter.value.chapter_n != 1) {
-			isLoading.value = true
-			// 章节起始
-			const startChapter_n = currentChapter.value.chapter_n - 10 < 0 ? 1 :
-				currentChapter.value.chapter_n - 10
-			// 切换的目标章节
-			const targetChapter_n = currentChapter.value.chapter_n - 1
-			const res = await getChapterContent(config.novel_id, startChapter_n)
-			chapterInfo.chapterList = res.data.data
-			// 目标索引
-			const targetIndex = chapterInfo.chapterList.findIndex(item => item.chapter_n == targetChapter_n)
-			chapterInfo.currentIndex = targetIndex
-			isLoading.value = false
-		} else {
-			if (currentChapter.value.chapter_n != 1) {
-				chapterInfo.currentIndex -= 1
+		try {
+			if (chapterInfo.currentIndex == 0 && currentChapter.value.chapter_n != 1) {
+				isLoading.value = true
+				// 章节起始
+				const startChapter_n = currentChapter.value.chapter_n - 10 < 0 ? 1 :
+					currentChapter.value.chapter_n - 10
+				// 切换的目标章节
+				const targetChapter_n = currentChapter.value.chapter_n - 1
+				const res = await getChapterContent(config.novel_id, startChapter_n)
+				chapterInfo.chapterList = res.data.data
+				// 目标索引
+				const targetIndex = chapterInfo.chapterList.findIndex(item => item.chapter_n == targetChapter_n)
+				chapterInfo.currentIndex = targetIndex
+				isLoading.value = false
+			} else {
+				if (currentChapter.value.chapter_n != 1) {
+					chapterInfo.currentIndex -= 1
+				}
 			}
+			nextTick(() => {
+				offsetY.value = 0
+			})
+		} catch (error) {
+			loadErrorOption.fun = prevChapter
+			loadErrorOption.param = null
+			loadError.value = true
 		}
-		nextTick(() => {
-			offsetY.value = 0
-		})
 	}
 	// 下一章
 	const nextChapter = async () => {
-		const lastChapter_n = chapterInfo.chapterNameList[chapterInfo.chapterNameList.length - 1].chapter_n
-		const targetChapter_n = currentChapter.value.chapter_n + 1
-		if (targetChapter_n > lastChapter_n) {
-			uni.showToast({
-				icon: "none",
-				title: '已经是最后一章了'
-			})
-			return
-		}
-		if (chapterInfo.currentIndex == 9) {
-			isLoading.value = true
-			let startChapter_n = targetChapter_n
-			if (currentChapter.value.chapter_n + 10 >= lastChapter_n) {
-				startChapter_n = lastChapter_n - 10
+		try {
+			const lastChapter_n = chapterInfo.chapterNameList[chapterInfo.chapterNameList.length - 1].chapter_n
+			const targetChapter_n = currentChapter.value.chapter_n + 1
+			if (targetChapter_n > lastChapter_n) {
+				uni.showToast({
+					icon: "none",
+					title: '已经是最后一章了'
+				})
+				return
 			}
-			const res = await getChapterContent(config.novel_id, startChapter_n)
-			chapterInfo.chapterList = res.data.data
-			const targetIndex = chapterInfo.chapterList.findIndex(item => item.chapter_n == targetChapter_n)
-			chapterInfo.currentIndex = targetIndex
-			isLoading.value = false
-		} else {
-			chapterInfo.currentIndex += 1
+			if (chapterInfo.currentIndex == 9) {
+				isLoading.value = true
+				let startChapter_n = targetChapter_n
+				if (currentChapter.value.chapter_n + 10 >= lastChapter_n) {
+					startChapter_n = lastChapter_n - 10
+				}
+				const res = await getChapterContent(config.novel_id, startChapter_n)
+				chapterInfo.chapterList = res.data.data
+				const targetIndex = chapterInfo.chapterList.findIndex(item => item.chapter_n == targetChapter_n)
+				chapterInfo.currentIndex = targetIndex
+				isLoading.value = false
+			} else {
+				chapterInfo.currentIndex += 1
+			}
+			nextTick(() => {
+				offsetY.value = 0
+			})
+		} catch (error) {
+			loadErrorOption.fun = nextChapter
+			loadErrorOption.param = null
+			loadError.value = true
 		}
-		nextTick(() => {
-			offsetY.value = 0
-		})
 	}
 	// 打开章节弹出层
 	const openChapterContalog = () => {
@@ -262,24 +302,36 @@
 	}
 	// 切换章节
 	const changeChapter = async (chapter_n) => {
-		isLoading.value = true
-		const res = await getChapterContent(config.novel_id, chapter_n)
-		chapterInfo.chapterList = res.data.data
-		chapterInfo.currentIndex = 0
-		closeMenu()
-		setTimeout(() => {
-			isLoading.value = false
-			offsetY.value = 0
-		}, 300)
+		try {
+			isLoading.value = true
+			const res = await getChapterContent(config.novel_id, chapter_n)
+			chapterInfo.chapterList = res.data.data
+			chapterInfo.currentIndex = 0
+			closeMenu()
+			setTimeout(() => {
+				isLoading.value = false
+				offsetY.value = 0
+			}, 300)
+		} catch (error) {
+			loadErrorOption.fun = changeChapter
+			loadErrorOption.param = chapter_n
+			loadError.value = true
+		}
 	}
 	// 章节slidebar
 	const handelSliderChange = async (chapter_n) => {
-		isLoading.value = true
-		const res = await getChapterContent(config.novel_id, chapter_n + 1)
-		chapterInfo.chapterList = res.data.data
-		chapterInfo.currentIndex = 0
-		offsetY.value = 0
-		isLoading.value = false
+		try {
+			isLoading.value = true
+			const res = await getChapterContent(config.novel_id, chapter_n + 1)
+			chapterInfo.chapterList = res.data.data
+			chapterInfo.currentIndex = 0
+			offsetY.value = 0
+			isLoading.value = false
+		} catch (error) {
+			loadErrorOption.fun = handelSliderChange
+			loadErrorOption.param = chapter_n
+			loadError.value = true
+		}
 	}
 	// 处理内容区滚动事件
 	const scrollTimer = ref(null)
@@ -290,6 +342,10 @@
 		scrollTimer.value = setTimeout(() => {
 			offsetY.value = e.detail.scrollTop;
 		}, 300)
+	}
+	const reload = async () => {
+		loadError.value = false
+		await loadErrorOption.fun(loadErrorOption.param)
 	}
 </script>
 <style lang="scss">

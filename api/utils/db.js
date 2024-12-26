@@ -10,8 +10,7 @@ class DB {
 			if (!this.isDatabaseOpen()) {
 				await this.openDatabase();
 			}
-			// await this.executeSql('DROP TABLE IF EXISTS history;')
-			// console.log(await this.select("SELECT * from history"));
+			// await this.executeSql('DROP TABLE IF EXISTS bookshell;')
 			// await this.executeSql("DELETE FROM history;")
 			// await this.select("SELECT datetime('now', '+8 hours');")
 			// const fileds = await this.select("PRAGMA table_info(history);")
@@ -142,21 +141,20 @@ class DB {
 		})
 	}
 	// 插入历史记录
-	insertHistory(params) {
-		const {
-			novel_id,
-			offsetY,
-			chapter_n,
-			chapter_name,
-			type = "novel",
-			intro,
-			name,
-			cover,
-			status,
-			words_count,
-			author,
-			genre
-		} = params
+	insertHistory({
+		novel_id,
+		offsetY,
+		chapter_n,
+		chapter_name,
+		type = "novel",
+		intro,
+		name,
+		cover,
+		status,
+		words_count,
+		author,
+		genre
+	}) {
 		return new Promise((resolve, reject) => {
 			plus.sqlite.executeSql({
 				name: this.name,
@@ -223,16 +221,17 @@ class DB {
 				name: this.name,
 				sql: `
                 CREATE TABLE IF NOT EXISTS bookshell (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,  -- 自动递增的主键 
-                    novel_id INTEGER NOT NULL UNIQUE,  -- 小说id
-                    name TEXT NOT NULL,  -- 小说名称 
-                    author TEXT,  -- 小说作者 
-                    intro TEXT NOT NULL,  -- 小说简介 
-                    cover TEXT,  -- 小说封面 
-                    genre TEXT NOT NULL,  -- 小说题材 
-                    status TEXT NOT NULL DEFAULT '连载中',  -- 小说状态(使用TEXT代替ENUM) 
-                    words_count TEXT DEFAULT NULL,  -- 小说字数 (改为 INTEGER)
-					type TEXT Default 'novel'
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,  -- 自动递增的主键
+                    novel_id INTEGER NOT NULL UNIQUE,      -- 小说id
+                    top INTEGER CHECK(top IN (0, 1)) NOT NULL DEFAULT 0,  -- 是否置顶 (0: 否, 1: 是)
+                    name TEXT NOT NULL,                    -- 小说名称
+                    author TEXT,                           -- 小说作者
+                    intro TEXT NOT NULL,                   -- 小说简介
+                    cover TEXT,                            -- 小说封面
+                    genre TEXT NOT NULL,                   -- 小说题材
+                    status TEXT NOT NULL DEFAULT '连载中', -- 小说状态 (例如：'连载中', '已完结')
+                    words_count INTEGER DEFAULT NULL,      -- 小说字数 (使用 INTEGER)
+                    type TEXT DEFAULT 'novel'              -- 小说类型 (例如：'novel', 'short story', 等)
                 );
             `,
 			});

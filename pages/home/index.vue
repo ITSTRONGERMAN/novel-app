@@ -70,7 +70,6 @@
 				...newVal,
 				hasShown: true
 			}
-			// console.log(pageList.value[currentActiveTabbar.value])
 		}
 	})
 	// 搜索推荐小说

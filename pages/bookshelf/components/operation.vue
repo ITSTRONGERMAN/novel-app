@@ -10,10 +10,10 @@
 				</view>
 			</view>
 			<view class="handel-list">
-				<view class="handel-item" v-for="item,index in handelList" :key="index">
+				<view class="handel-item" v-for="item,index in handelList" @tap="item.onTap" :key="index">
 					<view class="icon">
-						<uv-icon :size="item.size" :name="item.icon" @tap="item.onTap" v-if="!item.custom"></uv-icon>
-						<uv-icon :name="item.icon" custom-prefix="custom-icon" @tap="item.onTap" :size="item.size"
+						<uv-icon :size="item.size" :name="item.icon[currentBook.top]" v-if="!item.custom"></uv-icon>
+						<uv-icon :name="item.icon[currentBook.top]" custom-prefix="custom-icon" :size="item.size"
 							v-else></uv-icon>
 					</view>
 					<view class="name">{{item.name}}</view>
@@ -31,66 +31,82 @@
 		ref,
 		defineExpose,
 		defineProps,
-		defineEmits
+		defineEmits,
+		computed
 	} from 'vue'
+	import {
+		useStore
+	} from 'vuex'
 	import modalVue from '../../../components/modal/modal.vue'
+	const store = useStore()
 	const popup = ref(null)
 	const modal = ref(null)
-	const handelList = ref([{
-			icon: 'zhiding',
-			custom: true,
-			size: 25,
-			name: '置顶',
-			onTap() {
-				console.log("content");
-			}
-		},
-		{
-			icon: 'content',
-			custom: true,
-			size: 17,
-			name: '目录',
-			onTap() {
-				console.log("content");
-			}
-		},
-		{
-			icon: 'download',
-			custom: false,
-			size: 25,
-			name: '下载本书',
-			onTap() {
-				console.log("dowload");
-			}
-		},
-		{
-			icon: 'reload',
-			custom: false,
-			size: 25,
-			name: '清除缓存',
-			onTap() {
-				console.log("reload");
-			}
-		},
-		{
-			icon: 'trash',
-			custom: false,
-			size: 25,
-			name: '删除',
-			onTap: () => {
-				popup.value.close()
-				modal.value.open()
-			}
-		},
-	])
+	const handelList = computed(() => (
+		[{
+				icon: ['top', 'canceltop'],
+				custom: true,
+				size: '40rpx',
+				name: props.currentBook.top == 1 ? '取消置顶' : '置顶',
+				onTap() {
+					emits("topUpBook", props.currentBook)
+				}
+			},
+			{
+				icon: ['content', 'content'],
+				custom: true,
+				size: '34rpx',
+				name: '目录',
+				onTap() {
+					store.commit('setCurrentNovelDetail', {
+						...props.currentBook,
+						id: props.currentBook.novel_id
+					})
+					uni.navigateTo({
+						url: `/pages/chapters/chapters?novel_name=${props.currentBook.name}&novel_id=${props.currentBook.novel_id}&from=bookshell&type=${props.currentBook.type}`,
+						success() {
+							popup.value.close()
+						}
+					})
+				}
+			},
+			{
+				icon: ['download', 'download'],
+				custom: false,
+				size: '50rpx',
+				name: '下载本书',
+				onTap() {
+					console.log("dowload");
+				}
+			},
+			{
+				icon: ['reload', 'reload'],
+				custom: false,
+				size: '50rpx',
+				name: '清除缓存',
+				onTap() {
+					console.log("reload");
+				}
+			},
+			{
+				icon: ['trash', 'trash'],
+				custom: false,
+				size: '50rpx',
+				name: '删除',
+				onTap: () => {
+					popup.value.close()
+					modal.value.open()
+				}
+			},
+		]
+	))
 	const open = () => {
 		popup.value.open()
 	}
-	const emits = defineEmits(["confirmDelete"])
+	const emits = defineEmits(["confirmDelete", "topUpBook"])
 	const confirm = () => {
 		emits("confirmDelete")
 	}
-	defineProps({
+	const props = defineProps({
 		currentBook: {
 			required: true
 		}
@@ -129,8 +145,9 @@
 		}
 
 		.handel-list {
-			display: flex;
-			justify-content: space-between;
+			display: grid;
+			grid-template-columns: repeat(5, 1fr);
+			grid-gap: 20rpx;
 
 			.handel-item {
 				display: flex;

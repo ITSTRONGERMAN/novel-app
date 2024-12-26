@@ -9,7 +9,7 @@ const server = (
 			url: BASEURL + url,
 			data,
 			method,
-			timeout: 10000,
+			timeout: 5000,
 			success(res) {
 				resolve(res)
 			},

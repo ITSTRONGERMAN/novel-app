@@ -4,14 +4,17 @@
 			<view @tap="exceptDetailPageGoToRead(item)" class="top">
 				<view class="cover">
 					<uv-image :src="item.cover" lazy-load observeLazyLoad fade radius="5" width="100%"
-						height="160"></uv-image>
+						height="300rpx"></uv-image>
 					<view :class="['finish',item.status=='完结'?'':'renew']">{{item.status}}</view>
+					<view class="top" v-if="item.top==1">
+						<uv-icon name="top" color="#fff" custom-prefix="custom-icon" size="24rpx"></uv-icon>
+					</view>
 				</view>
 				<view class="name">{{item.name}}</view>
 			</view>
 			<view class="bottom">
 				<view class="chapter">{{item.hasRead?`读到：${item.hasRead}`:'未读'}}</view>
-				<uv-icon @tap="operate(item)" name="more" custom-prefix="custom-icon" size="14"
+				<uv-icon @tap="operate({index,...item})" name="more" custom-prefix="custom-icon" size="14"
 					color="#989898"></uv-icon>
 			</view>
 		</view>
@@ -59,6 +62,7 @@
 
 				.cover {
 					width: 100%;
+					height: 300rpx;
 					position: relative;
 
 					.finish {
@@ -75,6 +79,15 @@
 					.renew {
 						background-color: $gold-color !important;
 						color: #ffff !important;
+					}
+
+					.top {
+						position: absolute;
+						left: 0;
+						top: 0;
+						padding: 5rpx;
+						background-color: rgba(0, 0, 0, .5);
+						border-bottom-right-radius: 16rpx;
 					}
 				}
 

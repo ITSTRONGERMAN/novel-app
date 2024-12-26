@@ -119,7 +119,7 @@
 			} = await getNovelChapters(novel.value.id)
 			novel_chapters.value = chapters
 		} else {
-			const res = await getComicChapters(novel.value.name);
+			const res = await getComicChapters(novel.value.id);
 			novel_chapters.value = res.data.data
 		}
 	}
@@ -131,7 +131,7 @@
 				chapters: novel_chapters.value
 			})
 			uni.navigateTo({
-				url: '/pages/chapters/chapters'
+				url: `/pages/chapters/chapters?novel_id=${novel.value.id}&from=detail`
 			})
 		} else {
 			uni.showToast({

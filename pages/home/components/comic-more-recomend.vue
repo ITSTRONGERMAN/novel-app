@@ -36,7 +36,7 @@
 			type: "comic"
 		})
 		uni.navigateTo({
-			url: "/pages/nove-detail/index"
+			url: "/pages/detail/detail"
 		})
 	}
 </script>
