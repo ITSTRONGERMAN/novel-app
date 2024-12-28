@@ -1,16 +1,17 @@
 <template>
 	<view class="class-container">
-		<view class="l">
+		<view class="l" :style="{backgroundColor:theme=='light'?currentTheme.mainBcg:currentTheme.secondaryBcg}">
 			<scroll-view :scroll-into-view="'classItem-'+active" :style="{height:classContainerHeight+'px'}"
 				scroll-y="true">
 				<view @tap="changeGenre(index,className)" :id="'classItem-'+index"
-					:class="['class-item',index==active?'active':'']" v-for="className,index in classItemList"
-					:key="index">
+					:style="{color:currentTheme.secondaryFontColor}" :class="['class-item',index==active?'active':'']"
+					v-for="className,index in classItemList" :key="index">
 					{{className}}
 				</view>
 			</scroll-view>
 		</view>
-		<view class="r" :style="{height:classContainerHeight+'px'}">
+		<view class="r"
+			:style="{height:classContainerHeight+'px',backgroundColor:theme=='light'?'#fff':currentTheme.mainBcg}">
 			<loadingVue v-if="bookList.length==0"></loadingVue>
 			<scroll-view @scroll="handelScroll" @scrolltolower="scrolltolower" :lower-threshold="300"
 				:scroll-top="scrollTop" v-else :style="{height:classContainerHeight+'px'}" scroll-y="true">
@@ -18,12 +19,12 @@
 				<template v-else>
 					<view class="book-list">
 						<view @tap="goToDetail(book)" class="book-item" v-for="book in bookList" :key="book.id">
-							<view style="width: 70px;height: 100px;">
-								<uv-image :src="book.cover" lazy-load observeLazyLoad fade radius="5" width="70"
-									height="100"></uv-image>
+							<view style="width: 140rpx;height: 200rpx;">
+								<uv-image :src="book.cover" lazy-load observeLazyLoad fade radius="5" width="100%"
+									height="100%"></uv-image>
 							</view>
 							<view class="info">
-								<view class="name">{{book.name}}</view>
+								<view class="name" :style="{color:currentTheme.mainFontColor}">{{book.name}}</view>
 								<view class="author">{{book.author}}</view>
 								<view class="intro">{{book.intro}}</view>
 							</view>
@@ -50,9 +51,14 @@
 	import {
 		useStore
 	} from 'vuex'
-	import loadingVue from '../../../components/common/loading/loading.vue';
-	import getSelectorInfo from '../../../utiles/getSelectorInfo';
-	import commonHook from "../../../hooks/common.js"
+	import loadingVue from '@/components/loading/loading.vue';
+	import getSelectorInfo from '@/utiles/getSelectorInfo';
+	import commonHook from "@/hooks/common.js"
+	import useTheme from '@/hooks/useTheme';
+	const {
+		currentTheme,
+		theme
+	} = useTheme()
 	const {
 		goToDetail
 	} = commonHook()
@@ -151,7 +157,6 @@
 				flex-direction: column;
 				gap: 20rpx;
 				align-items: center;
-				background-color: #fff;
 				padding: 20rpx;
 
 				.book-item {

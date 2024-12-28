@@ -50,7 +50,7 @@
 	import bottomPopup from './components/bottom-popup.vue';
 	import configPopup from './components/config-popup.vue';
 	import usePopup from './hook/usePopup';
-	import pageLoadingVue from '../../components/common/page-loading.vue';
+	import pageLoadingVue from '@/components/loading/page-loading.vue';
 	import {
 		onLoad,
 		onUnload,
@@ -63,9 +63,9 @@
 		insertHistory,
 		isExistHistory,
 		updateHistory,
-	} from '../../api';
-	import getSelectorInfo from "../../utiles/getSelectorInfo.js"
-	import getSystemInfo from '../../utiles/getSystemInfo.js'
+	} from '@/api';
+	import getSelectorInfo from "@/utiles/getSelectorInfo.js"
+	import getSystemInfo from '@/utiles/getSystemInfo.js'
 	import {
 		ref,
 		onMounted,
@@ -75,14 +75,14 @@
 		computed,
 		watch
 	} from 'vue'
-	import getBottomInfo from "../../utiles/getBottomInfo.js"
+	import getBottomInfo from "@/utiles/getBottomInfo.js"
 	import useConfig from './hook/useConfig';
 	import {
 		useStore
 	} from 'vuex'
 	import {
 		getChapterList
-	} from './hook/useCache';
+	} from '@/hooks/useCache';
 	// 菜单弹出hook
 	const {
 		catalogShow,

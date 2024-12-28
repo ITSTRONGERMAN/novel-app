@@ -1,6 +1,10 @@
 import {
 	createStore
 } from 'vuex'
+import {
+	Worker
+} from '@/uni_modules/xianxu-worker/js_sdk/index.js'
+
 
 const store = createStore({
 	state() {
@@ -12,6 +16,10 @@ const store = createStore({
 			currentNovelDetail: {},
 			// 当前浏览的小说章节
 			currentNovelChapters: [],
+			// 下载线程
+			downloadWorker: null,
+			// 主题
+			theme: uni.getStorageSync("app-theme") || "bright"
 		}
 	},
 	mutations: {
@@ -31,6 +39,18 @@ const store = createStore({
 		updateReadTime(state) {
 			state.readTime = state.readTime + 1;
 			uni.setStorageSync("readTime", state.readTime);
+		},
+		// 设置下载线程
+		setDownloadWorker(state, worker) {
+			if (worker) {
+				state.downloadWorker = worker
+				state.downloadWorker.start()
+			}
+		},
+		// 设置主题
+		setAppTheme(state, theme) {
+			state.theme = theme
+			uni.setStorageSync("app-theme", theme)
 		}
 	}
 })

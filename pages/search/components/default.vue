@@ -1,7 +1,7 @@
 <template>
 	<!-- 搜索历史 -->
 	<view class="area" v-if="historyList.length>0">
-		<view class="area-top">
+		<view class="area-top" :style="{color:currentTheme.mainFontColor}">
 			<view class="l">
 				搜索历史
 			</view>
@@ -9,28 +9,30 @@
 				<template v-if="historyList.length>3">
 					<view class="btn" @tap="isFold=!isFold">
 						{{isFold?'展开':'收起'}}
-						<uv-icon :name="isFold?'arrow-down':'arrow-up'" color="#989898" size="12"></uv-icon>
+						<uv-icon :name="isFold?'arrow-down':'arrow-up'" size="12"></uv-icon>
 					</view>
 					<view class="btn">|</view>
 				</template>
-				<uv-icon name="trash" @tap="clearModal.open()" color="#989898" size="20"></uv-icon>
+				<uv-icon name="trash" @tap="clearModal.open()" size="20"></uv-icon>
 			</view>
 		</view>
 		<view :class="['list',isFold?'fold':'unfold']">
-			<view @tap="handelSearch(item)" class="list-item" v-for="item,index in  historyList" :key="index">
+			<view :style="{backgroundColor:currentTheme.componentBcg,color:currentTheme.mainFontColor}"
+				@tap="handelSearch(item)" class="list-item" v-for="item,index in  historyList" :key="index">
 				{{item}}
 			</view>
 		</view>
 	</view>
 	<!-- 热门搜索 -->
 	<view class="area">
-		<view class="area-top">
+		<view class="area-top" :style="{color:currentTheme.mainFontColor}">
 			<view class="l">
 				热门搜索
 			</view>
 		</view>
 		<view :class="['list','unfold']">
-			<view @tap="goToDetail(item)" class="list-item" v-for="item,index in  hotSearchList" :key="item.id">
+			<view :style="{backgroundColor:currentTheme.componentBcg,color:currentTheme.mainFontColor}"
+				@tap="goToDetail(item)" class="list-item" v-for="item,index in  hotSearchList" :key="item.id">
 				{{item.name}}
 			</view>
 		</view>
@@ -46,8 +48,13 @@
 		defineProps,
 		defineEmits
 	} from 'vue'
-	import modalVue from '../../../components/modal/modal.vue'
-	import commonHook from '../../../hooks/common'
+	import modalVue from '@/components/modal/modal.vue'
+	import commonHook from '@/hooks/common'
+	import useTheme from '@/hooks/useTheme'
+	const {
+		currentTheme,
+		theme
+	} = useTheme()
 	const {
 		goToDetail
 	} = commonHook()
@@ -86,7 +93,6 @@
 			.l {
 				font-size: 32rpx;
 				font-weight: 700;
-				color: #131313;
 			}
 
 			.r {
@@ -123,9 +129,7 @@
 			.list-item {
 				width: fit-content;
 				padding: 10rpx 20rpx;
-				background-color: #F6F6F6;
 				border-radius: 10rpx;
-				color: #141414;
 			}
 		}
 	}

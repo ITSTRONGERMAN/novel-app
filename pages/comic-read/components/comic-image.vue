@@ -1,6 +1,6 @@
 <template>
 	<view class="comic-image-container">
-		<view class="comic-image" :style="{height:imgInfo.height+'px',width:imgInfo.width+'px'}">
+		<view class="comic-image" :style="{height:imgInfo?.height+'px',width:imgInfo?.width+'px'}">
 			<image :draggable="false" v-if="loadParameter.show&&!loadParameter.loadError" @load="handelLoad"
 				@error="handelLoadError" class="img" :src="imgInfo.url" :lazy-load="isLazyLoad"
 				:style="{opacity:loadParameter.loaded?1:0}" mode="widthFix">

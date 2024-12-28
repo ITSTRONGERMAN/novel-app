@@ -18,7 +18,6 @@
   },
   "permissions": {
     "SQLite": {},
-    "VideoPlayer": {},
     "Share": {},
     "UniNView": {
       "description": "UniNView原生渲染"
@@ -84,9 +83,9 @@
       "splashscreen": {
         "androidStyle": "default",
         "android": {
-          "hdpi": "E:/Googel Download/splash.9 (1)/res/drawable-hdpi/splash.9.png",
-          "xhdpi": "E:/Googel Download/splash.9 (1)/res/drawable-xhdpi/splash.9.png",
-          "xxhdpi": "E:/Googel Download/splash.9 (1)/res/drawable-xxhdpi/splash.9.png"
+          "hdpi": "E:/Googel Download/splash.9/res/drawable-mdpi/splash.9.png",
+          "xhdpi": "E:/Googel Download/splash.9/res/drawable-xhdpi/splash.9.png",
+          "xxhdpi": "E:/Googel Download/splash.9/res/drawable-xxhdpi/splash.9.png"
         },
         "iosStyle": "common"
       },
@@ -118,18 +117,10 @@
         "dSYMs": false
       },
       "plugins": {
-        "share": {
-          "weixin": {
-            "appid": "wxf3963a129737702f",
-            "UniversalLinks": ""
-          },
-          "qq": {
-            "appid": "1112417710",
-            "UniversalLinks": ""
-          }
-        },
+        "share": {},
         "payment": {},
         "maps": {},
+        "oauth": {},
         "audio": {
           "mp3": {
             "description": "Android平台录音支持MP3格式文件"

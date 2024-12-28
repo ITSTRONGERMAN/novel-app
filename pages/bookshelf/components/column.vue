@@ -10,7 +10,8 @@
 						<uv-icon name="top" color="#fff" custom-prefix="custom-icon" size="24rpx"></uv-icon>
 					</view>
 				</view>
-				<view class="name">{{item.name}}</view>
+				<view class="name" :style="{color:theme=='light'?'#000':currentTheme.mainFontColor}">{{item.name}}
+				</view>
 			</view>
 			<view class="bottom">
 				<view class="chapter">{{item.hasRead?`读到：${item.hasRead}`:'未读'}}</view>
@@ -27,10 +28,15 @@
 		defineEmits,
 		onMounted
 	} from 'vue'
-	import commonHook from '../../../hooks/common'
+	import commonHook from '@/hooks/common'
+	import useTheme from '@/hooks/useTheme'
 	const {
 		exceptDetailPageGoToRead
 	} = commonHook()
+	const {
+		theme,
+		currentTheme
+	} = useTheme()
 	const emits = defineEmits(["operate"])
 	const props = defineProps({
 		bookList: {

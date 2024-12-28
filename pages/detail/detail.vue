@@ -1,31 +1,41 @@
 <template>
-	<view class="nove-detail-container">
-		<pageLoadingVue v-if="isLoading"></pageLoadingVue>
+	<view class="nove-detail-container" :style="{backgroundColor:theme=='light'?'#fff':currentTheme.mainBcg}">
+		<pageLoadingVue @reload="reload" :status="loadError?'error':'loading'" v-if="isLoading"></pageLoadingVue>
 		<view class="nove-detail-top" :style="{backgroundImage:`url(${novel.cover})`}">
-			<view class="frosted-glass"></view>
+			<view class="frosted-glass" :style="{
+					backgroundColor:theme=='light'?'rgba(255, 255, 255, 0.5)':currentTheme.secondaryBcg}
+					">
+			</view>
 			<view class="status-bar"></view>
 			<view class="back">
-				<uv-icon @tap="goBack" bold name="arrow-left" :color="txtColor=='white'?'black':'white'"
+				<uv-icon @tap="goBack" bold name="arrow-left"
+					:color="theme=='light'?(txtColor=='white'?'black':'white'):currentTheme.mainFontColor"
 					size="28"></uv-icon>
 			</view>
 			<view class="info">
 				<uv-image :src="novel.cover" lazy-load observeLazyLoad fade radius="5" width="90"
 					height="120"></uv-image>
-				<view class="name" :style="{color:txtColor=='white'?'black':'white'}">{{novel.name}}</view>
-				<view class="author" :style="{color:txtColor=='white'?'black':'white'}">
+				<view class="name"
+					:style="{color:theme=='light'?(txtColor=='white'?'black':'white'):currentTheme.mainFontColor}">
+					{{novel.name}}
+				</view>
+				<view class="author"
+					:style="{color:theme=='light'?(txtColor=='white'?'black':'white'):currentTheme.mainFontColor}">
 					{{novel.author}} · {{novel.genre}}
 				</view>
 			</view>
 		</view>
-		<view class="nove-detail-bottom">
-			<view class="info">
+		<view class="nove-detail-bottom" :style="{backgroundColor:theme=='light'?'#fff':currentTheme.mainBcg}">
+			<view class="info" :style="{color:currentTheme.mainFontColor}">
 				<view class="t">
-					<view class="l">{{novel.type=='novel'?novel.words_count:novel.genre}}</view>
+					<view class="l">{{novel.type=='novel'?novel.words_count:novel.genre.split(",")[0]}}</view>
 					<view class="line">|</view>
 					<view class="r">{{novel.status}}</view>
 				</view>
 				<!-- 小说简介 -->
-				<uv-read-more show-height="200rpx" :toggle="true" color="#D33D22">
+				<uv-read-more :shadow-style="{
+						backgroundImage:theme=='light'?'linear-gradient(-180deg, rgba(255, 255, 255, 0) 0%, #fff 80%)':'linear-gradient(-180deg, rgba(0,0 0, 0) 0%, #000 80%)'
+					}" show-height="200rpx" :toggle="true" color="#D33D22">
 					<view class="intro">
 						{{novel.intro}}
 					</view>
@@ -43,9 +53,9 @@
 			</view>
 		</view>
 		<!-- 底部功能按钮 -->
-		<view class="fun">
-			<view class="add-book" @tap="addBookShell">
-				<uv-icon name="bookshelfshujia" custom-prefix="custom-icon" size="20" color="#000"></uv-icon>
+		<view class="fun" :style="{backgroundColor:currentTheme.secondaryBcg,border:theme=='light'?'':'none'}">
+			<view class="add-book" @tap="addBookShell" :style="{color:currentTheme.mainFontColor}">
+				<uv-icon name="bookshelfshujia" custom-prefix="custom-icon" size="20"></uv-icon>
 				{{isAdded?'已在书架':'加入书架'}}
 			</view>
 			<view class="view download">全本缓存</view>
@@ -76,13 +86,25 @@
 		onLoad,
 		onShow
 	} from '@dcloudio/uni-app'
-	import pageLoadingVue from "../../components/common/page-loading.vue";
-	import EventBus from '../../utiles/eventBus';
+	import pageLoadingVue from "@/components/loading/page-loading.vue";
+	import EventBus from '@/utiles/eventBus';
+	import useReload from "@/hooks/useReload.js"
+	import useTheme from '@/hooks/useTheme';
+	const {
+		theme,
+		currentTheme
+	} = useTheme()
+	const {
+		loadErrorParam,
+		reload
+	} = useReload()
 	const store = useStore()
 	// 小说信息
 	const novel = computed(() => store.state.currentNovelDetail)
 	// 页面数据是否加载完毕
 	const isLoading = ref(true);
+	// 是否加载失败
+	const loadError = ref(false)
 	// 字体颜色
 	const txtColor = ref('')
 	// 小说章节
@@ -93,11 +115,18 @@
 		const addedVal = await isInBookShell(novel.value.id, novel.value.type)
 		isAdded.value = addedVal
 	})
-	onMounted(async () => {
-		await getCoverMainColor(novel.value.cover)
-		await getChapters()
-		isLoading.value = false
-	})
+	const init = async () => {
+		try {
+			loadError.value = false
+			if (theme.value === 'light') await getCoverMainColor(novel.value.cover)
+			await getChapters()
+			isLoading.value = false
+		} catch (error) {
+			loadError.value = true
+			loadErrorParam.fun = init
+		}
+	}
+	onMounted(init)
 	// 返回上一页
 	const goBack = () => {
 		uni.navigateBack()

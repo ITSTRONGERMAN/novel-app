@@ -3,7 +3,7 @@
 		:chapterList="chapterList" :title="currentChapterTitle" ref="popMenu">
 	</comicMenuVue>
 	<timeVue :zIndex="isLoaded?9:0" :chapterImageInfo="chapterImageInfo"></timeVue>
-	<pageLoadingVue v-if="!isLoaded"></pageLoadingVue>
+	<pageLoadingVue v-if="!isLoaded" :backgroundColor="currentTheme.secondaryBcg"></pageLoadingVue>
 	<view class="page" @tap.stop="handelOpenMenu">
 		<z-paging :show-scrollbar="false" :fixed="false" @scrollTopChange="scrollTopChange" lower-threshold="500px"
 			cell-height-mode="dynamic" :refresher-enabled="false" ref="virtualList" v-model="comicImageList"
@@ -34,7 +34,7 @@
 	} from 'vue'
 	import comicImageVue from "./components/comic-image.vue";
 	import comicChapterContentVue from "./components/comic-chapter.vue";
-	import pageLoadingVue from "../../components/common/page-loading.vue";
+	import pageLoadingVue from "@/components/loading/page-loading.vue";
 	import timeVue from "./components/time.vue";
 	import comicMenuVue from "./components/comic-menu.vue";
 	import {
@@ -43,9 +43,14 @@
 		insertHistory,
 		isExistHistory,
 		updateHistory
-	} from "../../api";
-	import getSystemInfo from "../../utiles/getSystemInfo";
-	import getSelectorInfo from "../../utiles/getSelectorInfo";
+	} from "@/api";
+	import getSystemInfo from "@/utiles/getSystemInfo";
+	import getSelectorInfo from "@/utiles/getSelectorInfo";
+	import useTheme from '@/hooks/useTheme';
+	const {
+		currentTheme,
+		theme
+	} = useTheme()
 	const store = useStore()
 	const virtualList = ref(null)
 	// 当前观看漫画信息

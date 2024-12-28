@@ -11,6 +11,142 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
+uni-view[data-v-b7a6dd5d], uni-scroll-view[data-v-b7a6dd5d], uni-swiper-item[data-v-b7a6dd5d] {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  flex-grow: 0;
+  flex-basis: auto;
+  align-items: stretch;
+  align-content: flex-start;
+}
+@font-face {
+  font-family: "uvicon-iconfont";
+  src: url("../../../../assets/uvicons.04d281cc.ttf") format("truetype");
+}
+.uv-icon[data-v-b7a6dd5d] {
+  display: flex;
+  align-items: center;
+}
+.uv-icon--left[data-v-b7a6dd5d] {
+  flex-direction: row-reverse;
+  align-items: center;
+}
+.uv-icon--right[data-v-b7a6dd5d] {
+  flex-direction: row;
+  align-items: center;
+}
+.uv-icon--top[data-v-b7a6dd5d] {
+  flex-direction: column-reverse;
+  justify-content: center;
+}
+.uv-icon--bottom[data-v-b7a6dd5d] {
+  flex-direction: column;
+  justify-content: center;
+}
+.uv-icon__icon[data-v-b7a6dd5d] {
+  font-family: uvicon-iconfont;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.uv-icon__icon--primary[data-v-b7a6dd5d] {
+  color: #3c9cff;
+}
+.uv-icon__icon--success[data-v-b7a6dd5d] {
+  color: #5ac725;
+}
+.uv-icon__icon--error[data-v-b7a6dd5d] {
+  color: #f56c6c;
+}
+.uv-icon__icon--warning[data-v-b7a6dd5d] {
+  color: #f9ae3d;
+}
+.uv-icon__icon--info[data-v-b7a6dd5d] {
+  color: #909399;
+}
+.uv-icon__img[data-v-b7a6dd5d] {
+  height: auto;
+  will-change: transform;
+}
+.uv-icon__label[data-v-b7a6dd5d] {
+  line-height: 1;
+}
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+.page-with-header-contanier[data-v-2f6a5b58] {
+  width: 100vw;
+  height: 100vh;
+}
+.page-with-header-contanier .page-header[data-v-2f6a5b58] {
+  padding-bottom: 0.3125rem;
+  border-bottom: 0.0625rem solid #eee;
+  background-color: #fff;
+}
+.page-with-header-contanier .page-header .inner-box[data-v-2f6a5b58] {
+  padding: 0.625rem 0.9375rem;
+  padding-bottom: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: center;
+}
+.page-with-header-contanier .page-header .inner-box uni-view[data-v-2f6a5b58] {
+  text-align: center;
+}
+.page-with-header-contanier .page-header .inner-box .name[data-v-2f6a5b58] {
+  font-size: 1rem;
+}
+.page-with-header-contanier .page-header .order[data-v-2f6a5b58] {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0.625rem;
+  padding-bottom: 0.3125rem;
+  background-color: #fff;
+  gap: 0.625rem;
+}
+.page-with-header-contanier .page-header .order .l[data-v-2f6a5b58] {
+  flex: 1;
+  font-size: 0.875rem;
+  color: #8f8f8f;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.page-with-header-contanier .page-header .order .r[data-v-2f6a5b58] {
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3125rem;
+}
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
 .disclaimer-container[data-v-d1873373] {
   padding: 0.9375rem;
   display: flex;

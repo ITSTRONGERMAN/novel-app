@@ -24,14 +24,14 @@
 		computed,
 		reactive
 	} from 'vue'
-	import midAreaItemVue from '../../../components/home/mid-area/mid-area-item.vue';
+	import midAreaItemVue from '@/components/mid-area/mid-area-item.vue';
 	import {
 		comicBoyRank,
 		getComicByCategory,
 		getYourPersionalRecommend
-	} from '../../../api';
-	import EventBus from '../../../utiles/eventBus';
-	import loadingVue from '../../../components/common/loading/loading.vue';
+	} from '@/api';
+	import EventBus from '@/utiles/eventBus';
+	import loadingVue from '@/components/loading/loading.vue';
 	import comicGenderRecommendVue from './comic-gender-recommend.vue';
 	import useComicGenderRank from '../hooks/useComicGenderRank';
 	import comicHotRecommendVue from './comic-hot-recommend.vue';

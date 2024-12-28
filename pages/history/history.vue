@@ -1,9 +1,9 @@
 <template>
-	<view class="browse-history-contanier">
+	<view class="browse-history-contanier" :style="{backgroundColor:currentTheme.mainBcg}">
 		<!-- header -->
-		<view class="header">
+		<view class="header" :style="{backgroundColor:currentTheme.secondaryBcg,border:theme=='light'?'':'none'}">
 			<view class="status-bar"></view>
-			<view class="action-list">
+			<view class="action-list" :style="{color:currentTheme.mainFontColor}">
 				<view class="btn">
 					<view v-if="isEditMode" @tap="isEditMode=false">取消</view>
 					<uv-icon v-else name="arrow-left" size="48rpx" @tap="back"></uv-icon>
@@ -15,20 +15,21 @@
 					</view>
 				</view>
 			</view>
-			<view class="class-list" v-if="!isEditMode">
+			<view class="class-list" v-if="!isEditMode" :style="{color:currentTheme.mainFontColor}">
 				<view class="l">
 					<view @tap="currentActiveTabbar=index"
-						:class="['class-item',currentActiveTabbar==index?'active':'']"
+						:class="['class-item',currentActiveTabbar==index?theme+'-active':'']"
 						v-for="className,index in tabBarList" :key="index">
 						{{className}}
 					</view>
 				</view>
-				<view class="r" :style="{color:historyList[currentPage.name].list.length==0?'#989898':'#000'}"
+				<view class="r"
+					:style="{color:historyList[currentPage.name].list.length==0?currentTheme.secondaryFontColor:currentTheme.mainFontColor}"
 					@tap="enterEditMode">编辑</view>
 			</view>
 		</view>
-		<midAreaVue :enableSlide="!isEditMode" background="#fff" :height="listHeight" :length="tabBarList.length"
-			:current="currentActiveTabbar" @pageChange="pageChange">
+		<midAreaVue :enableSlide="!isEditMode" :background="theme=='light'?'#fff':currentTheme.mainBcg"
+			:height="listHeight" :length="tabBarList.length" :current="currentActiveTabbar" @pageChange="pageChange">
 			<midAreaItemVue :refresh="false" v-for="page,index in pageList" :key="index">
 				<historyListVue @addToBookShell="addToBookShell" @selectBook="selectBook"
 					@handelLongPress="handelLongPress" :isEditMode="isEditMode"
@@ -36,9 +37,10 @@
 			</midAreaItemVue>
 		</midAreaVue>
 		<!-- 底部操纵栏 -->
-		<view class="operation-contaniner" v-if="!isMounted||isEditMode">
-			<view class="l" @tap="addToBookShell(null,1)">
-				<uv-icon name="jiarushujia" color="#000" custom-prefix="custom-icon" size="48rpx"></uv-icon>
+		<view :style="{backgroundColor:currentTheme.secondaryBcg,border:theme=='light'?'':'none'}"
+			class="operation-contaniner" v-if="!isMounted||isEditMode">
+			<view class="l" @tap="addToBookShell(null,1)" :style="{color:currentTheme.mainFontColor}">
+				<uv-icon name="jiarushujia" custom-prefix="custom-icon" size="48rpx"></uv-icon>
 				<view class="txt">
 					加入书架
 				</view>
@@ -75,17 +77,23 @@
 		getHistoryList,
 		insterBookShell,
 		isInBookShell
-	} from '../../api';
-	import useSlider from "../../hooks/useSlide.js"
-	import getSystemInfo from '../../utiles/getSystemInfo';
-	import getSelectorInfo from '../../utiles/getSelectorInfo';
-	import midAreaVue from "../../components/home/mid-area/mid-area.vue"
-	import midAreaItemVue from '../../components/home/mid-area/mid-area-item.vue';
+	} from '@/api';
+	import useSlider from "@/hooks/useSlide.js"
+	import getSystemInfo from '@/utiles/getSystemInfo';
+	import getSelectorInfo from '@/utiles/getSelectorInfo';
+	import midAreaVue from "@/components/mid-area/mid-area.vue"
+	import midAreaItemVue from '@/components/mid-area/mid-area-item.vue';
 	import historyListVue from './components/history-list.vue';
-	import modalVue from '../../components/modal/modal.vue';
+	import modalVue from '@/components/modal/modal.vue';
+	import useTheme from "@/hooks/useTheme.js"
+	// import pageLoadingVue from '@/components/loading/page-loading.vue';
 	import {
 		refactorHistoryList
 	} from './utils';
+	const {
+		currentTheme,
+		theme
+	} = useTheme()
 	const {
 		tabBarList,
 		currentPage,
@@ -299,6 +307,9 @@
 
 <style lang="scss" scoped>
 	.browse-history-contanier {
+		height: 100vh;
+		width: 100vw;
+
 		.header {
 			border-bottom: 2rpx solid #eee;
 			padding-bottom: 20rpx;
@@ -321,8 +332,12 @@
 				padding: 10rpx 30rpx;
 				font-size: 30rpx;
 
-				.active {
+				.light-active {
 					color: #000 !important;
+				}
+
+				.dark-active {
+					color: #fff !important;
 				}
 
 				.l {

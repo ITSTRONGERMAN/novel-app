@@ -5,7 +5,7 @@
 			:style="`height:${chapterNameScrollHeight}px`" class="scroll-box" :scroll-y="true">
 			<view @tap="changeChapter(item.chapter_n)" :id="'chapter_'+item.chapter_n" class="item"
 				v-for="(item,index) in chapterNameList" :key="item.id"
-				:style="{color:currentChapter_n==item.chapter_n?'rgb(41, 121, 255)':theme.color}">
+				:style="{color:currentChapter_n==item.chapter_n?'#F59F70':theme.color}">
 				{{item.chapter_name.trim()}}
 			</view>
 		</scroll-view>
@@ -73,7 +73,6 @@
 			.item {
 				font-size: 30rpx;
 				padding: 20rpx 0;
-				border-bottom: 1rpx solid #1F1F1F;
 			}
 		}
 	}

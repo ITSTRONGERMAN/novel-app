@@ -1,73 +1,52 @@
 <template>
-	<view class="user-contanier">
-		<view class="header">
+	<view class="user-contanier" :style="{backgroundColor:currentThemeStyle.mainBcg}">
+		<view class="header" :style="{backgroundImage:store.state.theme=='light'?'':'none'}">
 			<view class="status-bar"></view>
 			<view class="login-contanier">
 				<image src="../../static/images/logo.png" mode="" class="headImg"></image>
-				<view class="userInfo">
-					<!-- <view class="user-name">番猫免费小说</view> -->
-					<view class="user-name" @tap="goToLogin">登录/注册</view>
+				<view class="userInfo" :style="{color:currentThemeStyle.mainFontColor}">
+					<view class="user-name">番猫免费小说</view>
+					<!-- <view class="user-name" @tap="goToLogin">登录/注册</view> -->
 					<!-- <view class="edit-info" v-if="false">编辑资料</view> -->
 				</view>
 			</view>
 		</view>
-		<view class="readInfo">
+		<view class="readInfo" :style="{backgroundColor:currentThemeStyle.secondaryBcg}">
 			<view class="readInfo-item">
-				<view class="t">
+				<view class="t" :style="{color:currentThemeStyle.mainFontColor}">
 					{{readInfo.collectionCount}}
 					<text class="small-font">个</text>
 				</view>
 				<view class="b">我的收藏</view>
 			</view>
 			<view class="readInfo-item">
-				<view class="t">
+				<view class="t" :style="{color:currentThemeStyle.mainFontColor}">
 					{{store.state.readTime}}
 					<text class="small-font">分钟</text>
 				</view>
 				<view class="b">阅读时长</view>
 			</view>
 			<view class="readInfo-item">
-				<view class="t">0<text class="small-font">个</text></view>
+				<view class="t" :style="{color:currentThemeStyle.mainFontColor}">0<text class="small-font">个</text>
+				</view>
 				<view class="b">我的评论</view>
 			</view>
 			<view class="readInfo-item">
-				<view class="t">
+				<view class="t" :style="{color:currentThemeStyle.mainFontColor}">
 					{{readInfo.browseCount}}
 					<text class="small-font">个</text>
 				</view>
 				<view class="b">浏览历史</view>
 			</view>
 		</view>
-		<view class="config-list">
-			<view class="title">常用功能</view>
+		<view class="config-list" :style="{backgroundColor:currentThemeStyle.secondaryBcg}">
+			<view class="title" :style="{color:currentThemeStyle.mainFontColor}">常用功能</view>
 			<view class="inner-box">
-				<view @tap="goToHistory" class="config-list-item">
-					<uv-icon name="history" custom-prefix="custom-icon" size="30"></uv-icon>
-					<view class="txt">浏览历史</view>
-				</view>
-				<view class="config-list-item" @tap="handelShareApp">
-					<uv-icon name="share" size="26"></uv-icon>
-					<view class="txt">分享应用</view>
-				</view>
-				<view class="config-list-item">
-					<uv-icon name="clear" custom-prefix="custom-icon" size="26"></uv-icon>
-					<view class="txt">清除缓存</view>
-				</view>
-				<view class="config-list-item">
-					<uv-icon name="bug" custom-prefix="custom-icon" size="26"></uv-icon>
-					<view class="txt">bug报错</view>
-				</view>
-				<view class="config-list-item" @tap="reward">
-					<uv-icon name="dashang" custom-prefix="custom-icon" size="26"></uv-icon>
-					<view class="txt">打赏作者</view>
-				</view>
-				<view class="config-list-item">
-					<uv-icon name="setting" size="26"></uv-icon>
-					<view class="txt">设置</view>
-				</view>
-				<view class="config-list-item" @tap="handelAboutApp">
-					<uv-icon name="info-circle" size="26"></uv-icon>
-					<view class="txt">关于番猫</view>
+				<view :key="index" v-for="configItem,index in configItemList" @tap="configItem.onTap"
+					class="config-list-item">
+					<uv-icon :name="configItem.icon" :custom-prefix="configItem.iconPrefix"
+						:size="configItem.size"></uv-icon>
+					<view class="txt" :style="{color:currentThemeStyle.mainFontColor}">{{configItem.name}}</view>
 				</view>
 			</view>
 		</view>
@@ -78,9 +57,10 @@
 	import {
 		ref,
 		onMounted,
-		reactive
+		reactive,
+		computed,
 	} from "vue"
-	import EventBus from "../../utiles/eventBus.js"
+	import EventBus from "@/utiles/eventBus.js"
 	import {
 		onShow
 	} from '@dcloudio/uni-app'
@@ -90,9 +70,15 @@
 	import {
 		getBookShellCount,
 		getBrowseCount
-	} from "../../api";
-
+	} from "@/api";
+	import useTheme from "@/hooks/useTheme.js"
+	import {
+		configItemList
+	} from "./props.js";
+	import themeSwitchVue from "./components/theme-switch.vue";
+	import themeStyle from "@/theme/index.js";
 	const store = useStore()
+	const currentThemeStyle = computed(() => themeStyle[store.state.theme])
 	const readInfo = reactive({
 		collectionCount: 0,
 		browseCount: 0
@@ -107,39 +93,23 @@
 		}] = await getBrowseCount()
 		readInfo.browseCount = browseCount
 	})
-	// 分享APP
-	const handelShareApp = () => {
-		uni.shareWithSystem({
-			summary: '番猫小说\n免费开源好用得阅读APP\n热门小说、漫画免费看\n官网地址：https://www.douyin.com/?recommend=1\ngithub地址：https://github.com/ITSTRONGERMAN/novel-app',
-			success() {
-
-			},
-		})
-	}
-	// 关于APP
-	const handelAboutApp = () => {
-		uni.navigateTo({
-			url: "/pages/aboutus/aboutus"
-		})
-	}
-	// 前往浏览历史
-	const goToHistory = () => {
-		uni.navigateTo({
-			url: "/pages/history/history"
-		})
-	}
 	// 前往登录页
 	const goToLogin = () => {
 		uni.navigateTo({
 			url: "/pages/login/login"
 		})
 	}
-	// 打赏
-	const reward = () => {
-		uni.navigateTo({
-			url: "/pages/reward/reward"
+	onMounted(() => {
+		// tabBar主题切换
+		EventBus.on("changeTabBarTheme", (style) => {
+			uni.setTabBarStyle({
+				...style,
+				fail(e) {
+					console.log(e);
+				}
+			})
 		})
-	}
+	})
 </script>
 
 <style lang="scss" scoped>
@@ -249,6 +219,7 @@
 			.inner-box {
 				display: grid;
 				grid-gap: 20rpx;
+				align-items: center;
 				grid-template-columns: repeat(3, 1fr);
 
 				.config-list-item {

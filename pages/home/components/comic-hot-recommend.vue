@@ -1,20 +1,20 @@
 <template>
-	<view class="hot">
-		<view class="hot-top">
+	<view class="hot" :style="{backgroundColor:currentTheme.componentBcg}">
+		<view class="hot-top" :style="{color:currentTheme.mainFontColor}">
 			<view class="l">
 				<uv-icon name="fire" color="red" custom-prefix="custom-icon" size="16"></uv-icon>
 				{{title}}
 			</view>
 			<view class="r">
 				更多
-				<uv-icon name="arrow-right" color="#000" size="12" bold></uv-icon>
+				<uv-icon name="arrow-right" size="24rpx" bold></uv-icon>
 			</view>
 		</view>
 		<view class="comic-list">
 			<view @tap="goToDetail(item)" class="comic-item" v-for="item,index in comicList" :key="item.id*(index+1)">
 				<uv-image :src="`http://192.168.0.100/comic/cover/${item.name}.png`" lazy-load observeLazyLoad fade
 					radius="5" width="100%" height="150"></uv-image>
-				<view class="name">
+				<view class="name" :style="{color:currentTheme.mainFontColor}">
 					{{item.name}}
 				</view>
 				<view class="genre-list">
@@ -33,7 +33,12 @@
 		onMounted,
 		defineProps
 	} from 'vue'
-	import commonHook from '../../../hooks/common'
+	import commonHook from '@/hooks/common'
+	import useTheme from '@/hooks/useTheme'
+	const {
+		currentTheme,
+		theme
+	} = useTheme()
 	const {
 		goToDetail
 	} = commonHook()

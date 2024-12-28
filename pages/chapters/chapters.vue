@@ -1,21 +1,14 @@
 <template>
-	<view class="chapters_container">
-		<pageLoadingVue @reload="reload" :status="loadError?'error':'loading'" v-if="loading"></pageLoadingVue>
-		<view class="header">
-			<view class="status-bar"></view>
-			<view class="inner-box">
-				<uv-icon @tap="back" name="arrow-left" size="46rpx"></uv-icon>
-				<view class="name">
-					{{currentBookName}}
-				</view>
-				<view class="placeholder"></view>
-			</view>
+	<pageLoadingVue :backgroundColor="currentTheme.mainBcg" @reload="reload" :status="loadError?'error':'loading'"
+		v-if="loading"></pageLoadingVue>
+	<pageWithHeaderVue :theme="theme" :header-bcg="currentTheme?.secondaryBcg" :body-bcg="currentTheme?.mainBcg"
+		:titleColor="currentTheme?.mainFontColor" :title="currentBookName">
+		<template #header-bottom>
 			<view class="order">
 				<view class="l">
-					更新至 {{fromPage == 'detail' ? novel.chapters[novel.chapters?.length - 1].chapter_name :
-			chapters[chapters?.length - 1]?.chapter_name}}
+					更新至 {{latestChapterName}}
 				</view>
-				<view class="r" @tap="chapters_reverse">
+				<view class="r" @tap="chapters_reverse" :style="{color:currentTheme.mainFontColor}">
 					<view class="icon">
 						<uv-icon name="arrow-up-fill" size="20rpx"></uv-icon>
 						<uv-icon name="arrow-down-fill" size="20rpx"></uv-icon>
@@ -23,15 +16,15 @@
 					{{isReverse?'逆序':'正序'}}
 				</view>
 			</view>
-		</view>
-		<scroll-view scroll-y="true" :style="{height:scrollViewHeight+'px'}">
-			<view class="chapter-list">
+		</template>
+		<template #body>
+			<view class="chapter-list" :style="{color:currentTheme.mainFontColor}">
 				<view @tap="goToRead(item)" class="chapter-list-item" v-for="item in chapterList" :key="item.id">
 					{{item.chapter_name}}
 				</view>
 			</view>
-		</scroll-view>
-	</view>
+		</template>
+	</pageWithHeaderVue>
 </template>
 
 <script setup>
@@ -47,13 +40,22 @@
 	import {
 		useStore
 	} from 'vuex'
-	import getSystemInfo from '../../utiles/getSystemInfo'
-	import getSelectorInfo from '../../utiles/getSelectorInfo'
-	import pageLoadingVue from '../../components/common/page-loading.vue'
+	import getSystemInfo from '@/utiles/getSystemInfo'
+	import getSelectorInfo from '@/utiles/getSelectorInfo'
+	import pageLoadingVue from '@/components/loading/page-loading.vue'
+	import pageWithHeaderVue from '@/components/pageWithHeader/pageWithHeader.vue'
+	import {
+		getChapterList as getCacheChapterList
+	} from "@/hooks/useCache.js"
 	import {
 		getComicChapters,
 		getNovelChapters
-	} from '../../api'
+	} from '@/api'
+	import useTheme from '@/hooks/useTheme'
+	const {
+		theme,
+		currentTheme
+	} = useTheme()
 	onLoad(async (param) => {
 		loading.value = param.from === 'bookshell'
 		fromPage.value = param.from
@@ -71,6 +73,11 @@
 	// 小说信息
 	const novel = computed(() => store.state.currentNovelChapters)
 	const novelInfo = computed(() => store.state.currentNovelDetail)
+	const latestChapterName = ref(
+		fromPage.value == 'detail' ?
+		novel.value.chapters[novel.value.chapters?.length - 1].chapter_name :
+		chapters.value[chapters.value.length - 1]?.chapter_name
+	)
 	// 章节列表
 	const chapterList = computed(() => {
 		return fromPage.value == 'detail' ? novel.value.chapters : chapters.value
@@ -78,31 +85,20 @@
 	const currentBookName = computed(() => {
 		return fromPage.value == 'detail' ? novel.value.name : novel_name.value
 	})
-	// 组件实例
-	const instance = getCurrentInstance()
 	// 是否逆序
 	const isReverse = ref(false)
-	const scrollViewHeight = ref(0)
-	onMounted(async () => {
-		const sysInfo = await getSystemInfo()
-		const headerInfo = await getSelectorInfo(instance, '.header')
-		scrollViewHeight.value = sysInfo.windowHeight - headerInfo.height
-	})
 	// 章节内容顺序逆转
 	const chapters_reverse = () => {
 		if (fromPage.value == 'detail') novel.value.chapters = novel.value.chapters.reverse()
 		else chapters.value = chapters.value.reverse()
 		isReverse.value = !isReverse.value
 	}
-	const back = () => {
-		uni.navigateBack()
-	}
 	// 获取章节列表
 	const getChapterList = async (id, type) => {
 		try {
 			if (type == "novel") {
-				const novelChapterRes = await getNovelChapters(id)
-				chapters.value = novelChapterRes.data
+				const novelChapterRes = await getCacheChapterList(id)
+				chapters.value = novelChapterRes
 			} else if (type == "comic") {
 				const comicChapterRes = await getComicChapters(id)
 				chapters.value = comicChapterRes.data.data
@@ -112,6 +108,7 @@
 			loadError.value = true
 		}
 	}
+	// 前往阅读页
 	const goToRead = (chapterInfo) => {
 		const type = novelInfo.value.type
 		const id = novelInfo.value.id
@@ -119,6 +116,7 @@
 			url: `/pages/${type}-read/${type}-read?${type}_id=${id}&chapter_n=${chapterInfo.chapter_n}&appoint=true`
 		})
 	}
+	// 重新加载
 	const reload = async () => {
 		loadError.value = false
 		await getChapterList(novelInfo.value.id, novelInfo.value.type)
@@ -126,66 +124,49 @@
 </script>
 
 <style lang="scss" scoped>
-	.chapters_container {
+	.order {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		width: 100%;
+		padding: 20rpx;
+		padding-bottom: 10rpx;
+		gap: 20rpx;
 
-		.header {
-			padding-bottom: 10rpx;
-			border-bottom: 2rpx solid #eee;
-			background-color: #fff;
-
-			.inner-box {
-				padding: 0 20rpx;
-				display: grid;
-				grid-template-columns: repeat(3, 1fr);
-				align-items: center;
-
-				view {
-					text-align: center;
-				}
-
-				.name {
-					font-size: 32rpx;
-				}
-			}
-
-			.order {
-				display: flex;
-				justify-content: space-between;
-				align-items: center;
-				width: 100%;
-				padding: 20rpx;
-				padding-bottom: 10rpx;
-				background-color: #fff;
-				gap: 20rpx;
-
-				.l {
-					flex: 1;
-					font-size: 28rpx;
-					color: rgb(143, 143, 143);
-					display: -webkit-box;
-					-webkit-box-orient: vertical;
-					-webkit-line-clamp: 1;
-					text-overflow: ellipsis;
-					overflow: hidden;
-				}
-
-				.r {
-					font-size: 24rpx;
-					display: flex;
-					align-items: center;
-					gap: 10rpx;
-				}
-			}
+		.l {
+			flex: 1;
+			font-size: 28rpx;
+			color: rgb(143, 143, 143);
+			display: -webkit-box;
+			-webkit-box-orient: vertical;
+			-webkit-line-clamp: 1;
+			text-overflow: ellipsis;
+			overflow: hidden;
 		}
 
-		.chapter-list {
+		.r {
+			font-size: 24rpx;
 			display: flex;
-			flex-direction: column;
-			padding: 20rpx;
+			align-items: center;
+			gap: 10rpx;
+		}
+	}
 
-			.chapter-list-item {
-				padding: 20rpx 0;
-				font-size: 30rpx;
+	.chapter-list {
+		display: flex;
+		flex-direction: column;
+		padding: 30rpx;
+
+		.chapter-list-item {
+			padding: 20rpx 0;
+			font-size: 30rpx;
+
+			&:first-child {
+				padding-top: 0;
+			}
+
+			&:last-child {
+				padding-bottom: 0;
 			}
 		}
 	}

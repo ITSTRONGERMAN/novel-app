@@ -1,10 +1,10 @@
 <template>
-	<uv-popup :round="10" ref="modal" bgColor="#fff" :closeOnClickOverlay="closeOnClickOverlay">
+	<uv-popup :round="10" ref="modal" :bgColor="modalStyle[theme]?.bcg" :closeOnClickOverlay="closeOnClickOverlay">
 		<view class="modal" mode="center">
 			<view class="content" v-html="title"></view>
 			<view :class="['btn',btnReverse?'reverse':'']">
-				<view class="btn-left" @tap="confirm">{{confirmText}}</view>
-				<view class="btn-right" @tap="cancel">取消</view>
+				<view :style="{border:modalStyle[theme]?.border}" class="btn-left" @tap="confirm">{{confirmText}}</view>
+				<view :style="{border:modalStyle[theme]?.border}" class="btn-right" @tap="cancel">取消</view>
 			</view>
 		</view>
 	</uv-popup>
@@ -15,10 +15,26 @@
 		ref,
 		defineExpose,
 		defineEmits,
-		defineProps
+		defineProps,
+		computed
 	} from 'vue'
 	const modal = ref(null)
 	const emits = defineEmits(['confirm'])
+	import useTheme from '@/hooks/useTheme'
+	const {
+		theme,
+		currentTheme
+	} = useTheme()
+	const modalStyle = computed(() => ({
+		light: {
+			bcg: "#fff",
+			border: '2rpx solid #EDEDED'
+		},
+		dark: {
+			bcg: currentTheme.value.secondaryBcg,
+			border: "2rpx solid #242424"
+		}
+	}))
 	defineProps({
 		title: { // modal标题
 			default: "hello",
@@ -65,7 +81,7 @@
 			font-size: 28rpx;
 			text-align: center;
 			line-height: 1.5;
-			font-weight: 700;
+			font-weight: 500;
 		}
 
 		.reverse {
@@ -74,7 +90,7 @@
 
 		.btn {
 			display: flex;
-			font-weight: 700;
+			font-weight: 500;
 
 			view {
 				flex: 1;
@@ -85,16 +101,13 @@
 				font-size: 32rpx;
 				border: 2rpx solid #EDEDED;
 				border-collapse: collapse;
-
-				&:active {
-					background-color: rgba(0, 0, 0, 0.05);
-				}
 			}
 
 			.btn-left {
 				border-right: none;
 				color: #F19D37;
 			}
+
 		}
 	}
 </style>

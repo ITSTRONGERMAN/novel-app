@@ -7,15 +7,15 @@ const server = (
 	return new Promise((resolve, reject) => {
 		uni.request({
 			url: BASEURL + url,
-			data,
 			method,
+			data,
 			timeout: 5000,
 			success(res) {
 				resolve(res)
 			},
 			fail(err) {
 				reject(err)
-				throw new Error('网络请求失败');
+				throw new Error('网络请求失败：' + err.message);
 			}
 		})
 	})

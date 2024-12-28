@@ -1,0 +1,7 @@
+export const mainBcg = "#F6F6F6"
+export const secondaryBcg = "#fff"
+export const mainFontColor = "#000"
+export const secondaryFontColor = "#6C6C6E"
+export const tabBarItemColor = "#808080"
+export const tarBarItemSelectedColor = "#000"
+export const componentBcg = "#fff"

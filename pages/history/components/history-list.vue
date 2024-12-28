@@ -1,6 +1,6 @@
 <template>
 	<view class="history-list" :style="{paddingBottom:isEditMode?operationContanierHeight+'px':0}">
-		<l-empty v-if="historyList.length===0" description="没有找到相关内容" />
+		<emptyVue v-if="historyList.length===0" :color="currentTheme.mainFontColor" desc="没有找到相关内容" />
 		<view v-else @tap="selectBook(index,book)" @longpress="handelLongPress(index)" class="history-list-item"
 			v-for="book,index in historyList" :key="book.id">
 			<view class="l">
@@ -10,7 +10,7 @@
 						height="200rpx"></uv-image>
 				</view>
 				<view class="info">
-					<view class="name">{{book.name}}</view>
+					<view class="name" :style="{color:currentTheme.mainFontColor}">{{book.name}}</view>
 					<view class="b">
 						<view class="chapter">{{book.chapter_name}}</view>
 						<view class="time">浏览时间：{{parseTime(book.read_time)}}</view>
@@ -20,8 +20,10 @@
 			<view class="r">
 				<uv-icon v-if="isEditMode" :color="book.checked?'#F66B32':'#7E7E7E'" name="checkmark-circle-fill"
 					size="24"></uv-icon>
-				<view @tap.stop="addToBookShell({index,...book})" v-else
-					:class="['addBookShell',book.isInBookShell?'hasAdded':'']">
+				<view :style="{
+					backgroundColor:theme=='light'?'':currentTheme.secondaryBcg,
+					color:theme=='light'?'':currentTheme.mainFontColor
+				}" @tap.stop="addToBookShell({index,...book})" v-else :class="['addBookShell',book.isInBookShell?'hasAdded':'']">
 					{{book.isInBookShell?'已加':'加入'}}书架
 				</view>
 			</view>
@@ -39,6 +41,12 @@
 		reactive
 	} from 'vue'
 	import commonHook from "../../../hooks/common"
+	import useTheme from "@/hooks/useTheme.js"
+	import emptyVue from '@/components/empty/empty.vue';
+	const {
+		currentTheme,
+		theme
+	} = useTheme()
 	const {
 		exceptDetailPageGoToRead
 	} = commonHook()
@@ -143,7 +151,7 @@
 
 			.r {
 				flex: 1;
-				justify-content: center;
+				justify-content: flex-end;
 				display: flex;
 				align-items: center;
 

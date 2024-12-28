@@ -1,12 +1,13 @@
 <template>
 	<view class="more-recomend">
-		<view class="title">专属你的热门推荐</view>
+		<view class="title" :style="{color:currentTheme.mainFontColor}">专属你的热门推荐</view>
 		<view class="comic-list">
-			<view @tap="goToDetail(item)" class="comic-item" v-for="item,index in comicList" :key="item.id">
+			<view :style="{backgroundColor:currentTheme.componentBcg}" @tap="goToDetail(item)" class="comic-item"
+				v-for="item,index in comicList" :key="item.id">
 				<uv-image bgColor="#fff" :src="`http://192.168.0.100/comic/cover/${item.name}.png`" lazy-load
 					observeLazyLoad fade width="100%" height="250"></uv-image>
 				<view class="bottom">
-					<view class="comic-name">{{item.name}}</view>
+					<view class="comic-name" :style="{color:currentTheme.mainFontColor}">{{item.name}}</view>
 					<view class="comic-genre">
 						<view v-for="genre,index in item.genre.split(',')" :key="index">{{genre}}</view>
 					</view>
@@ -23,7 +24,12 @@
 	import {
 		useStore
 	} from 'vuex'
+	import useTheme from '@/hooks/useTheme'
+	const {
+		currentTheme
+	} = useTheme()
 	const store = useStore()
+
 	defineProps({
 		comicList: {
 			type: Array,

@@ -1,12 +1,13 @@
 <template>
 	<view class="mask" :style="{backgroundColor:`rgba(0,0,0,${brightness/100})`}"></view>
 	<!-- 顶部弹出层 -->
-	<uv-popup :overlay="false" bgColor="#fff" ref="popupTop" mode="top" :overlayOpacity="0" @change="handelChange">
-		<view class="comic-menu-top">
+	<uv-popup :overlay="false" :bgColor="currentTheme.componentBcg" ref="popupTop" mode="top" :overlayOpacity="0"
+		@change="handelChange">
+		<view class="comic-menu-top" :style="{color:currentTheme.mainFontColor}">
 			<view class="status-bar"></view>
 			<view class="action">
 				<view class="action-left">
-					<uv-icon name="arrow-left" color="#000" bold size="20" @tap="back"></uv-icon>
+					<uv-icon name="arrow-left" bold size="40rpx" @tap="back"></uv-icon>
 					<view class="title">{{title}}</view>
 				</view>
 				<view class="action-right">
@@ -16,8 +17,8 @@
 		</view>
 	</uv-popup>
 	<!-- 底部弹出层 -->
-	<uv-popup :overlay="false" bgColor="#fff" ref="popupBottom" mode="bottom" :overlayOpacity="0">
-		<view class="slider-box">
+	<uv-popup :overlay="false" :bgColor="currentTheme.componentBcg" ref="popupBottom" mode="bottom" :overlayOpacity="0">
+		<view class="slider-box" :style="{color:currentTheme.mainFontColor}">
 			<view class="btn" @tap="changeChapter(currentChapter_n-1)">上一话</view>
 			<view class="mid">
 				<uv-slider activeColor="#F59F70" v-model="chapterSlideValue" block-size="25" :min="1"
@@ -27,24 +28,24 @@
 			<view class="btn" @tap="changeChapter(currentChapter_n+1)">下一话</view>
 		</view>
 		<view class="comic-popup-bottom">
-			<view class="item" @tap="showChapter">
-				<uv-icon name="content" custom-prefix="custom-icon" size="20" color="#000"></uv-icon>
+			<view class="item" @tap="showChapter" :style="{color:currentTheme.mainFontColor}">
+				<uv-icon name="content" custom-prefix="custom-icon" size="40rpx"></uv-icon>
 				目录
 			</view>
-			<view class="item" @tap="changeDark">
-				<uv-icon :name="brightness>=50?'sun':'moon'" custom-prefix="custom-icon" size="20"
-					color="#000"></uv-icon>
+			<view class="item" @tap="changeDark" :style="{color:currentTheme.mainFontColor}">
+				<uv-icon :name="brightness>=50?'sun':'moon'" custom-prefix="custom-icon" size="40rpx"></uv-icon>
 				{{brightness>=50?'日间':'夜间'}}
 			</view>
-			<view class="item" @tap="openConfigPopup">
-				<uv-icon name="setting" color="#000" size="24"></uv-icon>
+			<view class="item" @tap="openConfigPopup" :style="{color:currentTheme.mainFontColor}">
+				<uv-icon name="setting" size="48rpx"></uv-icon>
 				设置
 			</view>
 		</view>
 	</uv-popup>
 	<!-- 目录弹层 -->
-	<view :class="['chapter-popup',popupChapterShow?'show':'']">
-		<view class="top">
+	<view :class="['chapter-popup',popupChapterShow?'show':'']"
+		:style="{backgroundColor:currentTheme.secondaryBcg,color:currentTheme.mainFontColor}">
+		<view class="top" :style="{backgroundColor:currentTheme.mainBcg}">
 			<view class="status-bar"></view>
 			<view class="comic-name">狐妖小红娘</view>
 			<view class="info">
@@ -53,8 +54,8 @@
 				</view>
 				<view class="info-right" @tap="reverseChapter">
 					<view class="icon">
-						<uv-icon name="arrow-up-fill" size="10"></uv-icon>
-						<uv-icon name="arrow-down-fill" size="10"></uv-icon>
+						<uv-icon name="arrow-up-fill" size="20rpx"></uv-icon>
+						<uv-icon name="arrow-down-fill" size="20rpx"></uv-icon>
 					</view>
 					{{isReverse?'逆序':'正序'}}
 				</view>
@@ -71,10 +72,11 @@
 	<uv-transition :show="popupChapterShow||configShow" custom-class="chapter-mask" @tap="tapMask">
 	</uv-transition>
 	<!-- 设置弹出层 -->
-	<uv-popup round="10" :overlay="false" bgColor="#fff" ref="configPopup" mode="bottom" :overlayOpacity="0">
+	<uv-popup round="10" :overlay="false" :bgColor="currentTheme.componentBcg" ref="configPopup" mode="bottom"
+		:overlayOpacity="0">
 		<view class="config-popup">
 			<view class="config-list">
-				<view class="config-item">
+				<view class="config-item" :style="{color:currentTheme.mainFontColor}">
 					<view class="name">亮度</view>
 					<view class="action">
 						<uv-icon name="moon" custom-prefix="custom-icon" size="20" color="#8A8A8A"></uv-icon>
@@ -85,7 +87,7 @@
 						<uv-icon name="sun" custom-prefix="custom-icon" size="20" color="#8A8A8A"></uv-icon>
 					</view>
 				</view>
-				<view class="config-item">
+				<view class="config-item" :style="{color:currentTheme.mainFontColor}">
 					<view class="name">允许缩放</view>
 					<view class="action">
 						<uv-switch v-model="premitScale" inactiveColor="#8A8A8A" activeColor="#F59F70"></uv-switch>
@@ -108,10 +110,15 @@
 		watch,
 		computed
 	} from 'vue'
-	import getSystemInfo from '../../../utiles/getSystemInfo'
-	import getSelectorInfo from '../../../utiles/getSelectorInfo'
+	import getSystemInfo from '@/utiles/getSystemInfo'
+	import getSelectorInfo from '@/utiles/getSelectorInfo'
 	import useAddBookShell from '../hooks/useAddBookShell'
-	import modal from "../../../components/modal/modal.vue"
+	import modal from "@/components/modal/modal.vue"
+	import useTheme from '@/hooks/useTheme';
+	const {
+		currentTheme,
+		theme
+	} = useTheme()
 	const removeFromBookShellModal = ref(null)
 	const {
 		addBookShell,
@@ -365,7 +372,6 @@
 			.info {
 				font-size: 24rpx;
 				padding: 10rpx 15rpx;
-				background-color: #F4F4F4;
 				display: flex;
 				justify-content: space-between;
 				align-items: center;

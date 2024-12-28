@@ -1,24 +1,25 @@
 <template>
-	<view class="bookshell-page">
-		<view class="header">
+	<view class="bookshell-page" :style="{backgroundColor:theme=='light'?'#fff':currentTheme.mainBcg}">
+		<view :class="['header',`${theme}-bcg`]">
 			<view class="status-bar"></view>
 			<view class="action-container">
 				<view class="class-list">
-					<view @tap="currentActiveTabbar=index" :class="['item', currentActiveTabbar==index?'active':'']"
+					<view @tap="currentActiveTabbar=index"
+						:class="['item', currentActiveTabbar==index?theme+'-active':'']"
 						v-for="item,index in bookClasses" :key="index">{{item}}</view>
 				</view>
 				<view class="btn">
-					<uv-icon @tap="goToSearch" size="60rpx" name="search" color="#000"></uv-icon>
-					<uv-icon @tap="changeLayoutStyle" size="60rpx" :name="isList?'list-dot':'grid'"
-						color="#000"></uv-icon>
+					<uv-icon @tap="goToSearch" size="60rpx" name="search"></uv-icon>
+					<uv-icon @tap="changeLayoutStyle" size="60rpx" :name="isList?'list-dot':'grid'"></uv-icon>
 				</view>
 			</view>
 		</view>
-		<midAreaVue background="#fff" :height="bookShellContainerHeight" :length="2" :current="currentActiveTabbar"
-			@pageChange="pageChange">
+		<midAreaVue :background="theme=='light'?'#fff':currentTheme.mainBcg" :height="bookShellContainerHeight"
+			:length="2" :current="currentActiveTabbar" @pageChange="pageChange">
 			<mid-area-item-vue v-for="({key,value},index) in bookShellTitle" :key="index" :refresh="false"
 				:customStyle="{ padding:0 }">
-				<emptyVue @onNoDataBtn="onNoDataBtn" v-if="bookShellList[key].length==0" :desc="`书架暂无${value}`">
+				<emptyVue :color="currentTheme.mainFontColor" @onNoDataBtn="onNoDataBtn"
+					v-if="bookShellList[key].length==0" :desc="`书架暂无${value}`">
 				</emptyVue>
 				<template v-else>
 					<rowVue :bookList="bookShellList[key]" @operate="handelAct" v-if="isList"></rowVue>
@@ -45,21 +46,25 @@
 		getBookShellList,
 		isExistHistory,
 		setTopInBookShell
-	} from '../../api';
-	import getSystemInfo from '../../utiles/getSystemInfo.js'
-	import getSelectorInfo from '../../utiles/getSelectorInfo.js'
+	} from '@/api';
+	import getSystemInfo from '@/utiles/getSystemInfo.js'
+	import getSelectorInfo from '@/utiles/getSelectorInfo.js'
 	import rowVue from './components/row.vue';
 	import columnVue from './components/column.vue';
 	import operationVue from './components/operation.vue';
 	import emptyVue from './components/empty.vue';
-	import midAreaVue from '../../components/home/mid-area/mid-area.vue';
-	import midAreaItemVue from '../../components/home/mid-area/mid-area-item.vue';
+	import midAreaVue from '@/components/mid-area/mid-area.vue';
+	import midAreaItemVue from '@/components/mid-area/mid-area-item.vue';
 	import {
 		onShow
 	} from '@dcloudio/uni-app'
-	import novelListVue from '../../components/common/novel-list.vue';
 	import useSlide from '../../hooks/useSlide';
 	import EventBus from '../../utiles/eventBus';
+	import useTheme from '../../hooks/useTheme';
+	const {
+		currentTheme,
+		theme
+	} = useTheme()
 	import {
 		parseBookList
 	} from './utils';
@@ -147,8 +152,19 @@
 
 <style lang="scss" scoped>
 	.bookshell-page {
-		.header {
+		width: 100vw;
+		height: 100vh;
+
+		.light-bcg {
 			background-image: $linear-color;
+			background-color: none;
+		}
+
+		.dark-bcg {
+			background-color: #1A1A1A;
+		}
+
+		.header {
 
 			.action-container {
 				display: flex;
@@ -162,9 +178,14 @@
 					align-items: center;
 					gap: 60rpx;
 
-					.active {
+					.light-active {
 						transform: scale(1.2);
 						color: #000 !important;
+					}
+
+					.dark-active {
+						transform: scale(1.2);
+						color: #fff !important;
 					}
 
 					.item {

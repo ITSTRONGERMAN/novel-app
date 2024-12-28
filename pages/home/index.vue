@@ -1,9 +1,10 @@
 <template>
-	<view class="home bcg-color-white">
-		<view class="home-top" :style="{background:topBackground[currentActiveTabbar]}">
+	<view class="home" :style="{backgroundColor:currentTheme.mainBcg}">
+		<view class="home-top"
+			:style="{background:theme=='light'?topBackground[currentActiveTabbar]:currentTheme.mainBcg}">
 			<view class="status-bar"></view>
-			<view class="search-box bcg-color-white" @tap="goToSearch">
-				<uv-icon name="search" color="#989898" size="24"></uv-icon>
+			<view class="search-box" :style="{backgroundColor:currentTheme.secondaryBcg}" @tap="goToSearch">
+				<uv-icon name="search" size="48rpx"></uv-icon>
 				<swiper @change="handelSwiperChange" disable-touch :indicator-dots="false" :autoplay="true" circular
 					vertical :interval="3000" :duration="1000">
 					<swiper-item v-for="item,index in searchRecommendList" :key="item.id">
@@ -12,11 +13,12 @@
 				</swiper>
 			</view>
 			<!-- 顶部导航栏 -->
-			<topTabbarVue :tabBarList="tabBarList" :value="currentActiveTabbar" @change="handelTopChange" />
+			<topTabbarVue :theme="theme" :tabBarList="tabBarList" :value="currentActiveTabbar"
+				@change="handelTopChange" />
 		</view>
 		<!-- 中部内容显示区 -->
-		<midAreaVue :height="midAreaHeight" :length="tabBarList.length" :pageName="curentPage.name"
-			:current="currentActiveTabbar" @pageChange="pageChange">
+		<midAreaVue :background="currentTheme.mainBcg" :height="midAreaHeight" :length="tabBarList.length"
+			:pageName="curentPage.name" :current="currentActiveTabbar" @pageChange="pageChange">
 			<!-- 小说模块 -->
 			<novelVue />
 			<!-- 漫画模块 -->
@@ -26,12 +28,13 @@
 </template>
 
 <script setup>
-	import topTabbarVue from '../../components/common/top-tabbar/top-tabbar.vue';
-	import midAreaVue from '../../components/home/mid-area/mid-area.vue';
-	import getSystemInfo from '../../utiles/getSystemInfo';
-	import getSelectorInfo from '../../utiles/getSelectorInfo';
-	import novelVue from '../../components/home/novel.vue';
+	import topTabbarVue from '@/components/top-tabbar/top-tabbar.vue';
+	import midAreaVue from '@/components/mid-area/mid-area.vue';
+	import getSystemInfo from '@/utiles/getSystemInfo';
+	import getSelectorInfo from '@/utiles/getSelectorInfo';
+	import novelVue from './components/novel.vue';
 	import comicVue from './components/comic.vue';
+	import themeStyle from "@/theme/index.js"
 	import {
 		useStore
 	} from 'vuex';
@@ -45,9 +48,14 @@
 	} from 'vue'
 	import {
 		getHotNovelList
-	} from '../../api';
-	import useSlide from '../../hooks/useSlide';
-	import EventBus from '../../utiles/eventBus';
+	} from '@/api';
+	import useSlide from '@/hooks/useSlide';
+	import EventBus from '@/utiles/eventBus';
+	import useTheme from '@/hooks/useTheme';
+	const {
+		currentTheme,
+		theme
+	} = useTheme()
 	const {
 		currentActiveTabbar,
 		pageChange,
@@ -75,6 +83,16 @@
 	// 搜索推荐小说
 	const searchRecommendList = ref([])
 	onMounted(async () => {
+		setTimeout(() => {
+			uni.setTabBarStyle({
+				color: themeStyle[store.state.theme].mainFontColor,
+				selectedColor: themeStyle[store.state.theme].tarBarItemSelectedColor,
+				backgroundColor: themeStyle[store.state.theme].secondaryBcg,
+				fail(e) {
+					console.log(e);
+				}
+			})
+		}, 0)
 		getMidAreaHeight()
 		const res = await getHotNovelList()
 		searchRecommendList.value = res.data.data
@@ -105,6 +123,9 @@
 
 <style lang="scss" scoped>
 	.home {
+		width: 100vw;
+		height: 100vh;
+
 		.home-top {
 			transition: all 0.3s;
 

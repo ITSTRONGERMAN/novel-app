@@ -1,31 +1,21 @@
 <template>
-	<view class="about-contanier bcg-color">
+	<view class="about-contanier" :style="{backgroundColor:currentTheme?.mainBcg}">
 		<view class="header">
 			<view class="status-bar"></view>
 			<view class="inner-box">
-				<uv-icon @tap="back" color="#000" name="arrow-left" size="50rpx"></uv-icon>
+				<uv-icon @tap="back" name="arrow-left" size="50rpx"></uv-icon>
 			</view>
 		</view>
 		<view class="icon-box">
 			<image src="../../static/images/logo.png" mode=""></image>
-			<view class="name">番猫免费小说 </view>
+			<view class="name" :style="{color:currentTheme?.mainFontColor}">番猫免费小说
+			</view>
 		</view>
 		<view class="about-list">
-			<view class="about-item">
-				<view class="name">版本信息：{{appVersion}}</view>
-				<uv-icon color="#000" name="arrow-right" size="32rpx"></uv-icon>
-			</view>
-			<view class="about-item" @tap="goToGitHub">
-				<view class="name">
-					github地址：
-				</view>
-				<view class="content">
-					https://github.com/ITSTRONGERMAN/novel-app
-				</view>
-			</view>
-			<view class="about-item" @tap="goToDisclaimer">
-				<view class="name">
-					免责声明
+			<view @tap="item.onTap()" class="about-item" v-for="item,index in aboutList" :key="index"
+				:style="{backgroundColor:currentTheme?.secondaryBcg,border:theme=='light'?'':'none'}">
+				<view class="name" :style="{color:currentTheme?.mainFontColor}">
+					{{item.name}}
 				</view>
 				<uv-icon color="#000" name="arrow-right" size="32rpx"></uv-icon>
 			</view>
@@ -39,6 +29,14 @@
 		onMounted
 	} from 'vue'
 	import getSystemInfo from '../../utiles/getSystemInfo'
+	import useTheme from '../../hooks/useTheme'
+	import {
+		aboutList
+	} from './props.js'
+	const {
+		currentTheme,
+		theme
+	} = useTheme()
 	const appVersion = ref('')
 	onMounted(async () => {
 		const sysInfo = await getSystemInfo()
@@ -47,15 +45,6 @@
 	// 返回上一页
 	const back = () => {
 		uni.navigateBack()
-	}
-	// 打开外部浏览器，并进入GitHub地址
-	const goToGitHub = () => {
-		plus.runtime.openURL(encodeURI("https://github.com/ITSTRONGERMAN/novel-app"));
-	}
-	const goToDisclaimer = () => {
-		uni.navigateTo({
-			url: "/pages/aboutus/childpage/disclaimer/disclaimer"
-		})
 	}
 </script>
 

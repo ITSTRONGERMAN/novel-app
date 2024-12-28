@@ -3,6 +3,7 @@ const setBottomNavigationBarColor = (bcg) => {
 	plus.android.importClass("android.view.Window");
 	var mainActivity = plus.android.runtimeMainActivity();
 	var window_android = mainActivity.getWindow();
-	window_android.setNavigationBarColor(Color.parseColor(bcg));
+	if (typeof bcg === 'string') window_android.setNavigationBarColor(Color.parseColor(bcg));
+	else if (typeof bcg === 'number') window_android.setNavigationBarColor(bcg)
 }
 export default setBottomNavigationBarColor

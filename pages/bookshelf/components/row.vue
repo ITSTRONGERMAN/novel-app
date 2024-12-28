@@ -10,7 +10,8 @@
 					</view>
 				</view>
 				<view class="info">
-					<view class="name">{{item.name}}</view>
+					<view class="name" :style="{color:theme=='light'?'#000':currentTheme.mainFontColor}">{{item.name}}
+					</view>
 					<view class="hasRead">{{item.hasRead?`读到：${item.hasRead}`:'未读'}}</view>
 					<view class="status">{{item.status}}</view>
 				</view>
@@ -28,11 +29,16 @@
 		defineProps,
 		defineEmits
 	} from 'vue'
-	import commonHook from '../../../hooks/common'
+	import commonHook from '@/hooks/common'
 	const {
 		exceptDetailPageGoToRead
 	} = commonHook()
 	const emits = defineEmits(["operate"])
+	import useTheme from '@/hooks/useTheme'
+	const {
+		theme,
+		currentTheme
+	} = useTheme()
 	defineProps({
 		bookList: {
 			default: Array,

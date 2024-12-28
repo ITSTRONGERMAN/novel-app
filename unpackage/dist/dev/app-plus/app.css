@@ -20,13 +20,14 @@
 	position: absolute;
 	left: 0;
 	top: 0;
-	background: rgba(255, 255, 255, 0.2);
+	background-color: rgba(255, 255, 255, 0.5);
 	padding: 30px;
 	text-align: center;
-	-webkit-backdrop-filter: blur(50px);
-	        backdrop-filter: blur(50px);
+	-webkit-backdrop-filter: blur(3.125rem);
+	        backdrop-filter: blur(3.125rem);
 	z-index: 0;
 }
+	/* 字体图标 */
 @font-face {
 	font-family: "custom-icon";
 	src:

@@ -1,10 +1,11 @@
 <template>
 	<view class="search-result-page">
 		<view id="top">
-			<topTabbar :tabBarList="tabBarList" :value="currentActiveTabbar" @change="handelTopChange" id="top_bar" />
+			<topTabbar :theme="theme" :tabBarList="tabBarList" :value="currentActiveTabbar" @change="handelTopChange"
+				id="top_bar" />
 		</view>
-		<midArea background="#fff" :height="scrollViewHeight" :length="tabBarList.length" :current="currentActiveTabbar"
-			@pageChange="pageChange">
+		<midArea :background="currentTheme.componentBcg" :height="scrollViewHeight" :length="tabBarList.length"
+			:current="currentActiveTabbar" @pageChange="pageChange">
 			<!-- 小说 -->
 			<midAreaItem v-for="page,index in pageList" :key="index" :refresh="false" @onScrollToLower="getNovelList">
 				<l-empty @tap="reload" v-if="searchResultList[page.name].loadError" image="network"
@@ -15,7 +16,7 @@
 						<l-empty v-if="searchResultList[page.name].list.length==0" description="没有找到相关内容" />
 						<template v-else>
 							<novelList :novelList="searchResultList[page.name].list" @onLayout="onNovelListLayout" />
-							<uv-load-more v-if="searchResultList[page.name].listHeight>scrollViewHeight"
+							<uv-load-more v-if="searchResultList[page.name]?.listHeight>scrollViewHeight"
 								:status="searchResultList[page.name].loadingStatus" loading-text="努力加载中"
 								loadmore-text="轻轻上拉" nomore-text="实在没有了" />
 						</template>
@@ -35,13 +36,18 @@
 		reactive,
 		watch
 	} from 'vue'
-	import topTabbar from "../../../components/common/top-tabbar/top-tabbar.vue"
-	import novelList from '../../../components/common/novel-list.vue';
-	import getSelectorInfo from '../../../utiles/getSelectorInfo';
-	import midArea from '../../../components/home/mid-area/mid-area.vue';
-	import midAreaItem from '../../../components/home/mid-area/mid-area-item.vue';
-	import useSlide from '../../../hooks/useSlide.js'
-	import loadingVue from '../../../components/common/loading/loading.vue';
+	import topTabbar from "@/components/top-tabbar/top-tabbar.vue"
+	import novelList from '@/components/novellist/novel-list.vue';
+	import getSelectorInfo from '@/utiles/getSelectorInfo';
+	import midArea from '@/components/mid-area/mid-area.vue';
+	import midAreaItem from '@/components/mid-area/mid-area-item.vue';
+	import useSlide from '@/hooks/useSlide.js'
+	import loadingVue from '@/components/loading/loading.vue';
+	import useTheme from '@/hooks/useTheme';
+	const {
+		currentTheme,
+		theme
+	} = useTheme()
 	const {
 		currentActiveTabbar,
 		pageChange,

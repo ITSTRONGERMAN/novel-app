@@ -7,6 +7,7 @@ import {
 	onUnmounted
 } from 'vue'
 import setBottomNavigationBarColor from '../../../utiles/setBottomNavigationBarColor'
+import AppTheme from "@/theme/index.js"
 const useConfig = () => {
 	const config = reactive({
 		novel_id: -1, // 当前小说id
@@ -89,7 +90,7 @@ const useConfig = () => {
 		}, 300)
 	})
 	onUnmounted(() => {
-		setBottomNavigationBarColor("#ffffff")
+		setBottomNavigationBarColor(AppTheme[uni.getStorageSync("app-theme")].mainBcg)
 	})
 	return {
 		config,

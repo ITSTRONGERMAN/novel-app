@@ -1,26 +1,30 @@
 <template>
-	<uv-popup :safeAreaInsetBottom="false" :round="10" ref="popup" mode="bottom" bgColor="#F6F7F9">
+	<uv-popup :safeAreaInsetBottom="false" :round="10" ref="popup" mode="bottom" :bgColor="currentTheme.secondaryBcg">
 		<view class="handel-box">
 			<view class="top">
 				<uv-image :src="currentBook.cover" lazy-load observeLazyLoad fade radius="5" width="70"
 					height="90"></uv-image>
 				<view class="r">
-					<view class="name">{{currentBook.name}}</view>
+					<view class="name" :style="{color:currentTheme.mainFontColor}">{{currentBook.name}}</view>
 					<view class="author">{{currentBook.author}}</view>
 				</view>
 			</view>
 			<view class="handel-list">
 				<view class="handel-item" v-for="item,index in handelList" @tap="item.onTap" :key="index">
-					<view class="icon">
+					<view class="icon" :style="{backgroundColor:currentTheme.mainBcg}">
 						<uv-icon :size="item.size" :name="item.icon[currentBook.top]" v-if="!item.custom"></uv-icon>
 						<uv-icon :name="item.icon[currentBook.top]" custom-prefix="custom-icon" :size="item.size"
 							v-else></uv-icon>
 					</view>
-					<view class="name">{{item.name}}</view>
+					<view class="name" :style="{color:currentTheme.mainFontColor}">{{item.name}}</view>
 				</view>
 			</view>
 		</view>
-		<button style="margin: 10rpx;" @tap="popup.close()">取消</button>
+		<button :style="{
+			margin: '10rpx',
+			color:currentTheme.mainFontColor,
+			backgroundColor:currentTheme.mainBcg
+		}" @tap="popup.close()">取消</button>
 	</uv-popup>
 	<modalVue btnReverse ref="modal" title='确认将本书从书架移除' @confirm="confirm" confirmText="移除">
 	</modalVue>
@@ -37,7 +41,12 @@
 	import {
 		useStore
 	} from 'vuex'
-	import modalVue from '../../../components/modal/modal.vue'
+	import modalVue from '@/components/modal/modal.vue'
+	import useTheme from '@/hooks/useTheme'
+	const {
+		currentTheme,
+		theme
+	} = useTheme()
 	const store = useStore()
 	const popup = ref(null)
 	const modal = ref(null)
@@ -61,10 +70,13 @@
 						...props.currentBook,
 						id: props.currentBook.novel_id
 					})
-					uni.navigateTo({
-						url: `/pages/chapters/chapters?novel_name=${props.currentBook.name}&novel_id=${props.currentBook.novel_id}&from=bookshell&type=${props.currentBook.type}`,
+					uni.showTabBar({
+						animation: true,
 						success() {
 							popup.value.close()
+							uni.navigateTo({
+								url: `/pages/chapters/chapters?novel_name=${props.currentBook.name}&novel_id=${props.currentBook.novel_id}&from=bookshell&type=${props.currentBook.type}`,
+							})
 						}
 					})
 				}
@@ -75,7 +87,7 @@
 				size: '50rpx',
 				name: '下载本书',
 				onTap() {
-					console.log("dowload");
+					store.state.downloadWorker.postMessage(props.currentBook)
 				}
 			},
 			{
@@ -93,7 +105,6 @@
 				size: '50rpx',
 				name: '删除',
 				onTap: () => {
-					popup.value.close()
 					modal.value.open()
 				}
 			},
@@ -105,6 +116,7 @@
 	const emits = defineEmits(["confirmDelete", "topUpBook"])
 	const confirm = () => {
 		emits("confirmDelete")
+		popup.value.close()
 	}
 	const props = defineProps({
 		currentBook: {

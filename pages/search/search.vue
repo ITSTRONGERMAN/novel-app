@@ -1,8 +1,9 @@
 <template>
-	<view class="search-page">
+	<view class="search-page" :style="{backgroundColor:currentTheme.mainBcg}">
 		<view class="search-box">
 			<view class="status-bar"></view>
-			<uv-search @change="handelChange" height="38" clearabled @custom="handelSearch" @search="handelSearch" focus
+			<uv-search :actionStyle="{color:theme=='light' ?'#000':'#fff'}" :bgColor="currentTheme.componentBcg"
+				@change="handelChange" height="38" clearabled @custom="handelSearch" @search="handelSearch" focus
 				:placeholder="placeholder" v-model="searchVal">
 			</uv-search>
 		</view>
@@ -11,7 +12,7 @@
 			v-if="searchResult.length>0&&!issearchValEmpty&&!showResult">
 			<view @tap="goToDetail(item)" class="search-item" v-for="item in searchResult" :key="item.id">
 				<uv-icon size="22" name="search" color="#ccc"></uv-icon>
-				<view class="name" v-html="item.name"></view>
+				<view class="name" v-html="item.name" :style="{color:currentTheme.mainFontColor}"></view>
 				<view class="type">{{chineseName[item.type]}}</view>
 			</view>
 		</scroll-view>
@@ -42,13 +43,18 @@
 		getHotNovelList,
 		searchBook,
 		searchNovel
-	} from '../../api';
+	} from '@/api';
 	import defaultVue from './components/default.vue';
-	import getSystemInfo from '../../utiles/getSystemInfo';
-	import getSelectorInfo from '../../utiles/getSelectorInfo';
+	import getSystemInfo from '@/utiles/getSystemInfo';
+	import getSelectorInfo from '@/utiles/getSelectorInfo';
 	import useSearchHistory from './hooks/useSearchHistory';
 	import resultVue from './components/result.vue';
-	import commonHook from '../../hooks/common';
+	import commonHook from '@/hooks/common';
+	import useTheme from '@/hooks/useTheme';
+	const {
+		currentTheme,
+		theme
+	} = useTheme()
 	const {
 		goToDetail
 	} = commonHook()
@@ -135,6 +141,8 @@
 	.search-page {
 		display: flex;
 		flex-direction: column;
+		width: 100vw;
+		height: 100vh;
 
 		.search-box {
 			padding: 0 20rpx;

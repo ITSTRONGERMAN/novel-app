@@ -1,20 +1,20 @@
 <template>
-	<view class="gender-recommend">
+	<view :class="['gender-recommend',theme+'-bcg']">
 		<view class="recommend-top">
 			<view class="title-list">
-				<view :class="rankIndex==index?'active':''" @tap="changeRank(index)" v-for="item,index in rankTitle"
-					:key="index">{{item}}</view>
+				<view :class="rankIndex==index?theme+'-active':''" @tap="changeRank(index)"
+					v-for="item,index in rankTitle" :key="index">{{item}}</view>
 			</view>
-			<view class="more" @tap="changeAchange">
+			<view class="more" :style="{color:currentTheme.mainFontColor}" @tap="changeAchange">
 				<view>换一换</view>
-				<uv-icon name="reload" color="#000" size="14" bold></uv-icon>
+				<uv-icon name="reload" size="14" bold></uv-icon>
 			</view>
 		</view>
 		<view class="list">
 			<view @tap="goToDetail(item)" class="item" v-for="(item,index) in rankList" :key="item.id">
 				<uv-image :src="`http://192.168.0.100/comic/cover/${item.name}.png`" lazy-load observeLazyLoad fade
 					radius="5" width="100%" height="200rpx"></uv-image>
-				<view class="name">{{item.name}}</view>
+				<view class="name" :style="{color:currentTheme.mainFontColor}">{{item.name}}</view>
 			</view>
 		</view>
 	</view>
@@ -26,7 +26,13 @@
 		defineEmits,
 		defineProps
 	} from 'vue'
-	import commonHook from '../../../hooks/common'
+	import commonHook from '@/hooks/common'
+	import useTheme from '../../../hooks/useTheme'
+	const {
+		currentTheme,
+		theme
+	} = useTheme()
+
 	const {
 		goToDetail
 	} = commonHook()
@@ -49,9 +55,16 @@
 </script>
 
 <style lang="scss" scoped>
+	.light-bcg {
+		background-color: #D5E7FB;
+	}
+
+	.dark-bcg {
+		background-color: #1A1A1A;
+	}
+
 	.gender-recommend {
 		padding: 30rpx;
-		background-color: #D5E7FB;
 		border-radius: 20rpx;
 		display: flex;
 		flex-direction: column;
@@ -70,8 +83,12 @@
 				font-weight: 500;
 				color: $gray-color;
 
-				.active {
+				.light-active {
 					color: #000
+				}
+
+				.dark-active {
+					color: #fff
 				}
 			}
 

@@ -1,19 +1,20 @@
 <template>
-	<view class="class-page">
-		<view class="header">
+	<view class="class-page" :style="{backgroundColor:currentTheme.mainBcg}">
+		<view :class="['header',`${theme}-bcg`]">
 			<view class="status-bar"></view>
 			<view class="action-container">
 				<view class="class-list">
-					<view @tap="currentActiveTabbar=index" :class="['item', currentActiveTabbar==index?'active':'']"
+					<view @tap="currentActiveTabbar=index"
+						:class="['item', currentActiveTabbar==index?theme+'-active':'']"
 						v-for="item,index in tabBarList" :key="index">{{item}}</view>
 				</view>
 				<view class="btn">
-					<uv-icon @tap="goToSearch" size="60rpx" name="search" color="#000"></uv-icon>
+					<uv-icon @tap="goToSearch" size="60rpx" name="search"></uv-icon>
 				</view>
 			</view>
 		</view>
-		<midAreaVue :height="classContainerHeight" :length="tabBarList.length" :pageName="currentPage.name"
-			:current="currentActiveTabbar" @pageChange="pageChange">
+		<midAreaVue :background="currentTheme.mainBcg" :height="classContainerHeight" :length="tabBarList.length"
+			:pageName="currentPage.name" :current="currentActiveTabbar" @pageChange="pageChange">
 			<midAreaItemVue v-for="page,index in pageList" :key="index" :refresh="false" :customStyle="{padding:0}">
 				<classbodyVue @scrolltolower="getMoreClassList" @changeType="changeType"
 					:classContainerHeight="classContainerHeight"
@@ -26,11 +27,9 @@
 </template>
 
 <script setup>
-	import topbar from "../../components/common/top-tabbar/top-tabbar.vue"
-	import useSlider from "../../hooks/useSlide.js"
-	import pageLoadingVue from "../../components/common/page-loading.vue"
-	import midAreaVue from "../../components/home/mid-area/mid-area.vue"
-	import midAreaItemVue from "../../components/home/mid-area/mid-area-item.vue"
+	import useSlider from "@/hooks/useSlide.js"
+	import midAreaVue from "@/components/mid-area/mid-area.vue"
+	import midAreaItemVue from "@/components/mid-area/mid-area-item.vue"
 	import {
 		getCurrentInstance,
 		onMounted,
@@ -48,6 +47,11 @@
 		getNovelAllClass,
 		getNovelByGenre
 	} from "../../api"
+	import useTheme from "@/hooks/useTheme"
+	const {
+		currentTheme,
+		theme
+	} = useTheme()
 	const {
 		tabBarList,
 		currentPage,
@@ -182,9 +186,19 @@
 
 <style lang="scss" scoped>
 	.class-page {
-		.header {
-			background-image: $linear-color;
+		width: 100vw;
+		height: 100vh;
 
+		.light-bcg {
+			background-image: $linear-color;
+			background-color: none;
+		}
+
+		.dark-bcg {
+			background-color: #1A1A1A;
+		}
+
+		.header {
 			.action-container {
 				display: flex;
 				justify-content: space-between;
@@ -197,9 +211,14 @@
 					align-items: center;
 					gap: 60rpx;
 
-					.active {
+					.light-active {
 						transform: scale(1.2);
 						color: #000 !important;
+					}
+
+					.dark-active {
+						transform: scale(1.2);
+						color: #fff !important;
 					}
 
 					.item {

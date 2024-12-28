@@ -36,11 +36,7 @@
 			"path": "pages/aboutus/aboutus"
 		},
 		{
-			"path": "pages/aboutus/childpage/disclaimer/disclaimer",
-			"style": {
-				"navigationBarTitleText": "免责声明",
-				"navigationStyle": "default"
-			}
+			"path": "pages/aboutus/childpage/disclaimer/disclaimer"
 		},
 		{
 			"path": "pages/login/login",
@@ -49,10 +45,19 @@
 			}
 		},
 		{
-			"path": "pages/reward/reward",
+			"path": "pages/reward/reward"
+		},
+		{
+			"path": "pages/config/config",
 			"style": {
-				"navigationBarTitleText": "打赏作者",
-				"navigationStyle": "default"
+				"navigationBarTitleText": ""
+			}
+		},
+		{
+			"path" : "pages/download/download",
+			"style" : 
+			{
+				"navigationBarTitleText" : ""
 			}
 		}
 	],
